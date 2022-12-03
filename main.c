@@ -12,9 +12,33 @@ typedef struct node{
     struct node *next;
 }t_ev;
 
-void    xprt(t_ev *ev_h)
+void    xprt(t_ev **ev_h, char **args)
 {
+    // call xprt with args+1;
+    t_ev    *temp;
+    int     i;
 
+    i = 0;
+    temp = *ev_h;
+    if (!temp)
+    {
+        *ev_h = malloc(sizeof(t_ev));
+        temp = *ev_h;
+    }
+    while (args[i])
+    {
+        if (temp->next)
+        {
+            while (temp->next->next)
+                temp = temp->next;
+        }
+        else
+            temp->next = malloc(sizeof(t_ev));
+        temp->next->next = NULL;
+        temp->next->var = args[i];
+        i++;
+        temp = temp->next;
+    }
 }
 
 void    env(t_ev *ev_h)
@@ -104,12 +128,16 @@ int unset(t_ev **ev_h, char *str)
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
+    char    *args[] = {"audnv=23iru", "udvnav=32r8r3", "8231759715", 0};
 
     printf("this is env[0] %s\n\n", ev[0]);
     init(ev, &ev_h);
     env(ev_h);
     printf("\n\nunset\n\n");
-    unset(&ev_h, "XPC_SERVICE_NAME");
+    unset(&ev_h, "audnv");
+    unset(&ev_h, "hh");
+    xprt(&ev_h, args);
+    unset(&ev_h, "udvnav");
     env(ev_h);
-    //sleep(50);
+    sleep(50);
 }
