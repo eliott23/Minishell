@@ -64,7 +64,7 @@ int ev_cmp(char *s1, char *s2)
                 return (0);
             i++;
         }
-        if (s1[i] != '=' && (s1[i] || s2[i]))
+        if (s1[i] != '=' || s2[i])
             return (0);
         return (1);
     }
@@ -109,7 +109,7 @@ int main(int ac, char **av, char **ev)
     init(ev, &ev_h);
     env(ev_h);
     printf("\n\nunset\n\n");
-    unset(&ev_h, "TERM_PROGRAM");
+    unset(&ev_h, "XPC_SERVICE_NAME");
     env(ev_h);
-    sleep(50);
+    //sleep(50);
 }
