@@ -1,32 +1,76 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "m_shell.h"
 
-// typedef struct node{
-//     char **args;
-//     struct node *next;
-// }t_list;
+// int     srch_ev(t_ev *temp, char *arg, int i)
+// {
+//     int v;
 
-typedef struct node{
-    char *var;
-    struct node *next;
-}t_ev;
+//     v = 0;
+//     if (temp)
+//     {
+//         while (temp->next)
+//         {
+//             if (v)
+//             {
+//                 free(temp->var);
+//                 temp->var = 
+//             }
+//             temp = temp->next;
+//             v = ev_cmp(temp->var, arg);
+//         }
+//     }
+// }
+// int     xprt_h(t_ev **ev_h, char **args, int *i)
+// {
+//     t_ev    *temp;
 
-void    xprt(t_ev **ev_h, char **args)
+//     temp = *ev_h;
+//     if (!*ev_h)
+//     {
+//         *ev_h = malloc(sizeof(t_ev));
+//         temp = *ev_h;
+//         temp->var = args[*i];
+//         temp->next = NULL;
+//         (*i)++;
+//         return (0);
+//     }
+//     if (temp->next && !ev_cmp(temp->var, args[*i]))
+//     {
+//         while (!ev_cmp(temp->var, args[*i]) && temp->next->next)
+//             temp = temp->next;
+//         if (temp->next->next)
+//         {
+//             free(temp->var);
+//             temp->var = args[*i];
+//             (*i)++;
+//             return (0);
+//         }
+//         ev_alloc(temp, args[*i]);
+//         (*i)++;
+//         return (0);
+//     }
+//     else if (ev_cmp(temp->var, args[*i]))
+//     {
+//         free(temp->var);
+//         temp->var = ft_strdup(args[*i]);
+//         (*i)++;
+//         return (0);
+//     }
+// }
+
+void    xprt(t_ev **ev_h, char **args, int i)
 {
-    // call xprt with args+1;
     t_ev    *temp;
-    int     i;
 
-    i = 0;
     temp = *ev_h;
-    if (!temp)
-    {
-        *ev_h = malloc(sizeof(t_ev));
-        temp = *ev_h;
-    }
     while (args[i])
     {
+        if (!temp)
+        {
+            *ev_h = malloc(sizeof(t_ev));
+            temp = *ev_h;
+            temp->next = NULL;
+            temp->var = NULL;
+        }
         if (temp->next)
         {
             while (temp->next->next)
@@ -35,7 +79,9 @@ void    xprt(t_ev **ev_h, char **args)
         else
             temp->next = malloc(sizeof(t_ev));
         temp->next->next = NULL;
-        temp->next->var = args[i];
+        // free(temp->next->var);
+        temp->next->var = ft_strdup(args[i]);
+        // sleep(50);
         i++;
         temp = temp->next;
     }
@@ -66,8 +112,7 @@ void    init(char **ev, t_ev **ev_h)
         temp->var = ev[0];
         while (ev[i])
         {
-            temp->next = malloc(sizeof(t_ev));
-            temp->next->var = ev[i];
+            ev_alloc(temp, ev[i]);
             temp = temp->next;
             i++;
         }
@@ -75,26 +120,7 @@ void    init(char **ev, t_ev **ev_h)
     }
 }
 
-int ev_cmp(char *s1, char *s2)
-{
-    int i;
 
-    i = 0;
-    if (s1 && s2)
-    {
-        while (s1[i] && s2[i] && s1[i] != '=')
-        {
-            if (s1[i] != s2[i])
-                return (0);
-            i++;
-        }
-        if (s1[i] != '=' || s2[i])
-            return (0);
-        return (1);
-    }
-    printf("unexpected behavior\n");
-    return (0);
-}
 
 int unset(t_ev **ev_h, char *str)
 {
@@ -130,14 +156,25 @@ int main(int ac, char **av, char **ev)
     t_ev    *ev_h;
     char    *args[] = {"audnv=23iru", "udvnav=32r8r3", "8231759715", 0};
 
+    ev_h = NULL;
     printf("this is env[0] %s\n\n", ev[0]);
-    init(ev, &ev_h);
+    // init(ev, &ev_h);
     env(ev_h);
     printf("\n\nunset\n\n");
     unset(&ev_h, "audnv");
     unset(&ev_h, "hh");
-    xprt(&ev_h, args);
+    xprt(&ev_h, args, 0);
     unset(&ev_h, "udvnav");
+    unset(&ev_h, "udvnav");
+    // call xprt with args+1;
+    // xprt(&ev_h, args, 0);
+    // xprt(&ev_h, args);
     env(ev_h);
     sleep(50);
 }
+
+/*
+    validing the identifier
+    reassignment of existing variables
+    manipulation behavior of bash
+*/
