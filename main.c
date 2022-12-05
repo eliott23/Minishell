@@ -35,12 +35,21 @@ int     xprt_h(t_ev **ev_h, char *arg)
     {
         if (ev_cmp(temp->var, arg))
         {
+            printf("xprt found and chenged\n");
             free(temp->var);
             temp->var = ft_strdup(arg);
             return (0);
         }
+        if (!temp->next)
+        {
+            printf("xprt added\n");
+            ev_alloc(temp,arg);
+            temp->next->next = NULL;
+            return (0);
+        }
         temp = temp->next;
     }
+    return (1);
 }
 
 void    xprt(t_ev **ev_h, char **args, int i)
@@ -88,8 +97,6 @@ void    init(char **ev, t_ev **ev_h)
     }
 }
 
-
-
 int unset(t_ev **ev_h, char *str)
 {
     t_ev    *temp;
@@ -122,23 +129,21 @@ int unset(t_ev **ev_h, char *str)
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
-    char    *args[] = {"audnv=23iru", "udvnav=32r8r3", "8231759715", 0};
+    char    *args[] = {"audnv====23iru", "udvnav=32r8r3", "8231759715=tebf", 0};
+    char    *args2[] = {"audnv", "udvnav", "8231759715=dfbb", 0};
 
     ev_h = NULL;
     printf("this is env[0] %s\n\n", ev[0]);
-    // init(ev, &ev_h);
+    init(ev, &ev_h);
+    xprt(&ev_h, args, 0);
+    xprt(&ev_h, args, 0);
     env(ev_h);
     printf("\n\nunset\n\n");
-    unset(&ev_h, "audnv");
-    unset(&ev_h, "hh");
-    xprt(&ev_h, args, 0);
-    unset(&ev_h, "udvnav");
-    unset(&ev_h, "udvnav");
+    unset(&ev_h, "udvnav=");
     // call xprt with args+1;
-    // xprt(&ev_h, args, 0);
+    // xprt(&ev_h, args2, 0);
     // xprt(&ev_h, args);
     env(ev_h);
-    sleep(50);
 }
 
 /*
