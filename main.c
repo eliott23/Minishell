@@ -19,43 +19,29 @@
 //         }
 //     }
 // }
-// int     xprt_h(t_ev **ev_h, char **args, int *i)
-// {
-//     t_ev    *temp;
 
-//     temp = *ev_h;
-//     if (!*ev_h)
-//     {
-//         *ev_h = malloc(sizeof(t_ev));
-//         temp = *ev_h;
-//         temp->var = args[*i];
-//         temp->next = NULL;
-//         (*i)++;
-//         return (0);
-//     }
-//     if (temp->next && !ev_cmp(temp->var, args[*i]))
-//     {
-//         while (!ev_cmp(temp->var, args[*i]) && temp->next->next)
-//             temp = temp->next;
-//         if (temp->next->next)
-//         {
-//             free(temp->var);
-//             temp->var = args[*i];
-//             (*i)++;
-//             return (0);
-//         }
-//         ev_alloc(temp, args[*i]);
-//         (*i)++;
-//         return (0);
-//     }
-//     else if (ev_cmp(temp->var, args[*i]))
-//     {
-//         free(temp->var);
-//         temp->var = ft_strdup(args[*i]);
-//         (*i)++;
-//         return (0);
-//     }
-// }
+int     xprt_h(t_ev **ev_h, char *arg)
+{
+    t_ev    *temp;
+
+    if (!(*ev_h))
+    {   *ev_h = malloc(sizeof(t_ev));
+        (*ev_h)->var = ft_strdup(arg);
+        (*ev_h)->next = NULL;
+        return (0);
+    }
+    temp = *ev_h;
+    while (temp)
+    {
+        if (ev_cmp(temp->var, arg))
+        {
+            free(temp->var);
+            temp->var = ft_strdup(arg);
+            return (0);
+        }
+        temp = temp->next;
+    }
+}
 
 void    xprt(t_ev **ev_h, char **args, int i)
 {
@@ -64,26 +50,8 @@ void    xprt(t_ev **ev_h, char **args, int i)
     temp = *ev_h;
     while (args[i])
     {
-        if (!temp)
-        {
-            *ev_h = malloc(sizeof(t_ev));
-            temp = *ev_h;
-            temp->next = NULL;
-            temp->var = NULL;
-        }
-        if (temp->next)
-        {
-            while (temp->next->next)
-                temp = temp->next;
-        }
-        else
-            temp->next = malloc(sizeof(t_ev));
-        temp->next->next = NULL;
-        // free(temp->next->var);
-        temp->next->var = ft_strdup(args[i]);
-        // sleep(50);
+        xprt_h(ev_h, args[i]);
         i++;
-        temp = temp->next;
     }
 }
 

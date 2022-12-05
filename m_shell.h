@@ -10,8 +10,8 @@ typedef struct node{
     struct node *next;
 }t_ev;
 
-int	ft_strcmp(char *s1, char *s2);
-int	ev_cmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
+int		ev_cmp(char *s1, char *s2);
 char    *ft_strdup(const char *s1);
 void    ev_alloc(t_ev *ev, char *var);
 
