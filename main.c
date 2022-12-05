@@ -20,32 +20,25 @@
 //     }
 // }
 
-int     xprt_h(t_ev **ev_h, char *arg)
+int     xprt_h(t_ev **ev_h, char *arg, t_ev *temp)
 {
-    t_ev    *temp;
-
-    if (!(*ev_h))
-    {   *ev_h = malloc(sizeof(t_ev));
-        (*ev_h)->var = ft_strdup(arg);
-        (*ev_h)->next = NULL;
-        return (0);
-    }
-    temp = *ev_h;
     while (temp)
     {
-        if (ev_cmp(temp->var, arg))
+        if (ev_cmp(temp->var, arg) && ft_srch(arg, '='))
         {
-            printf("xprt found and chenged\n");
             free(temp->var);
             temp->var = ft_strdup(arg);
             return (0);
         }
         if (!temp->next)
         {
-            printf("xprt added\n");
-            ev_alloc(temp,arg);
-            temp->next->next = NULL;
-            return (0);
+            if (ft_srch(arg, '='))
+            {
+                ev_alloc(temp,arg);
+                temp->next->next = NULL;
+                return (0);
+            }
+            // else call the add_to_xprt_ev;
         }
         temp = temp->next;
     }
@@ -56,12 +49,22 @@ void    xprt(t_ev **ev_h, char **args, int i)
 {
     t_ev    *temp;
 
-    temp = *ev_h;
     while (args[i])
     {
-        xprt_h(ev_h, args[i]);
-        i++;
+        if (!(*ev_h))
+        {   *ev_h = malloc(sizeof(t_ev));
+            (*ev_h)->var = ft_strdup(args[i]);
+            (*ev_h)->next = NULL;
+            i++;
+        }
+        if (args[i])
+        {
+            temp = *ev_h;
+            xprt_h(ev_h, args[i], temp);
+            i++;
+        }
     }
+    // if i == 0;
 }
 
 void    env(t_ev *ev_h)
@@ -129,17 +132,17 @@ int unset(t_ev **ev_h, char *str)
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
-    char    *args[] = {"audnv====23iru", "udvnav=32r8r3", "8231759715=tebf", 0};
-    char    *args2[] = {"audnv", "udvnav", "8231759715=dfbb", 0};
+    char    *args[] = {"audnv====23iru", "udvnav===32r8r3", "to_change=tebf", 0};
+    char    *args2[] = {"udvnav", "to_change=dfbb","audnv======","empty=","no_equal_sign", 0};
 
     ev_h = NULL;
     printf("this is env[0] %s\n\n", ev[0]);
     init(ev, &ev_h);
     xprt(&ev_h, args, 0);
-    xprt(&ev_h, args, 0);
+    xprt(&ev_h, args2, 0);
     env(ev_h);
     printf("\n\nunset\n\n");
-    unset(&ev_h, "udvnav=");
+    unset(&ev_h, "8231759715");
     // call xprt with args+1;
     // xprt(&ev_h, args2, 0);
     // xprt(&ev_h, args);

@@ -6,11 +6,27 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 20:51:46 by aababach          #+#    #+#             */
-/*   Updated: 2022/12/04 17:12:00 by aababach         ###   ########.fr       */
+/*   Updated: 2022/12/05 18:14:36 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_shell.h"
+
+int	ft_srch(char *s, char c)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		if (c == s[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 size_t  ft_strlen(const char *s)
 {
