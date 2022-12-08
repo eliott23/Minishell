@@ -1,24 +1,24 @@
 #include "m_shell.h"
 
-// int     srch_ev(t_ev *temp, char *arg, int i)
-// {
-//     int v;
+void    unset(t_ev **ev_h, char **args)
+{
+    int i;
+    int v;
 
-//     v = 0;
-//     if (temp)
-//     {
-//         while (temp->next)
-//         {
-//             if (v)
-//             {
-//                 free(temp->var);
-//                 temp->var = 
-//             }
-//             temp = temp->next;
-//             v = ev_cmp(temp->var, arg);
-//         }
-//     }
-// }
+    i = 0;
+    if (args)
+    {
+        while (args[i])
+        {
+            v = v_exp(args[i]);
+            if (v == 1)
+                unset_h(ev_h, args[i]);
+            else
+                printf("unset: `%s': not a valid identifier\n",args[i]);
+            i++;
+        }
+    }
+}
 
 int     xprt_h(t_ev **ev_h, char *arg, t_ev *temp)
 {
@@ -51,7 +51,13 @@ void    xprt(t_ev **ev_h, char **args, int i)
 
     while (args[i])
     {
-        if (!(*ev_h))
+        if (!v_exp(args[i]))
+        {
+            printf("export: `%s': not a valid identifier\n",args[i]);
+            // set the erno to 1;
+            i++;
+        }
+        if (args[i] && !(*ev_h))
         {   *ev_h = malloc(sizeof(t_ev));
             (*ev_h)->var = ft_strdup(args[i]);
             (*ev_h)->next = NULL;
@@ -59,8 +65,11 @@ void    xprt(t_ev **ev_h, char **args, int i)
         }
         if (args[i])
         {
-            temp = *ev_h;
-            xprt_h(ev_h, args[i], temp);
+            if (v_exp(args[i]))
+            {   
+                temp = *ev_h;
+                xprt_h(ev_h, args[i], temp);
+            }
             i++;
         }
     }
@@ -100,7 +109,7 @@ void    init(char **ev, t_ev **ev_h)
     }
 }
 
-int unset(t_ev **ev_h, char *str)
+int unset_h(t_ev **ev_h, char *str)
 {
     t_ev    *temp;
     t_ev    *temp2;
@@ -111,6 +120,7 @@ int unset(t_ev **ev_h, char *str)
         if (ev_cmp(temp->var, str))
         {
             *ev_h = (*ev_h)->next;
+            free(temp->var);
             free(temp);
             return (0);
         }
@@ -120,6 +130,7 @@ int unset(t_ev **ev_h, char *str)
             {
                 temp2 = temp->next;
                 temp->next = temp->next->next;
+                free(temp2->var);
                 free(temp2);
                 return (0);
             }
@@ -132,21 +143,23 @@ int unset(t_ev **ev_h, char *str)
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
-    char    *args[] = {"audnv====23iru", "udvnav===32r8r3", "to_change=tebf", 0};
-    char    *args2[] = {"udvnav", "to_change=dfbb","audnv======","empty=","no_equal_sign", 0};
+    char    *args[] = {0};
+    char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
+    char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
 
     ev_h = NULL;
     printf("this is env[0] %s\n\n", ev[0]);
-    init(ev, &ev_h);
+    // init(ev, &ev_h);
     xprt(&ev_h, args, 0);
     xprt(&ev_h, args2, 0);
     env(ev_h);
     printf("\n\nunset\n\n");
-    unset(&ev_h, "8231759715");
+    unset(&ev_h, args3);
     // call xprt with args+1;
     // xprt(&ev_h, args2, 0);
     // xprt(&ev_h, args);
     env(ev_h);
+    sleep(500);
 }
 
 /*
