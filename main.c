@@ -78,6 +78,30 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
         }
 }
 
+int     xprt_hx(t_ev **ev_h, char *arg, t_ev *temp)
+{
+    while (temp)
+    {
+        if (ev_cmp(temp->var, arg))
+        {
+            free(temp->var);
+            temp->var = ft_strdup(arg);
+            return (0);
+        }
+        if (!temp->next)
+        {
+            if (ft_srch(arg, '='))
+            {
+                ev_alloc(temp,arg);
+                temp->next->next = NULL;
+                return (0);
+            }
+        }
+        temp = temp->next;
+    }
+    return (1);
+}
+
 void    xprt_x(t_ev **x_ev_h, char **args, int i)
 {
 
@@ -90,7 +114,7 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
         xprt_e(ev_h, args, &i);
     }
     if (i == 0)
-        env (*x_ev_join);
+        env (*x_ev_h);
 }
 
 
@@ -164,7 +188,7 @@ int main(int ac, char **av, char **ev)
 
     ev_h = NULL;
     x_ev_h = NULL;
-    // printf("env= ---> %s\n", x_ev_join("env="));
+    printf("env= ---> %s\n", x_ev_join("env"));
     // init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args2, 0);
     // xprt(&ev_h, &x_ev_h, args3, 0);

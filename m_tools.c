@@ -87,7 +87,7 @@ void	ev_alloc(t_ev *ev, char *var)
 
 char	*x_ev_join(char *s)
 {
-	int		i;
+	int			i;
 	int			j;
 	static char	pref[12]="declare -x ";
 	char		*res;
@@ -102,12 +102,16 @@ char	*x_ev_join(char *s)
 		res[i] = pref[i];
 		i++;
 	}
+	printf("i = %d and j = %d\n", i, j);
+	sleep(500);
 	while (s[j] && s[j] != '=')
 		res[i++] = s[j++];
-	res[i++] = s[j++];
+	res[i++] = s[j];
 	res[i++] = '"';
+	if (s[j])
+		j++;
 	while (s[j])
-		res[i++] = s[j++];
+		s[i++] = s[j++];
 	res[i++] = '"';
 	res[i] = 0;
 	return (res);
