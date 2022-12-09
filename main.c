@@ -138,7 +138,7 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
         // else
         //     xprt_x(x_ev_h, args, &i);
     }
-            sleep(100);
+    sleep(100);
     if (i == 0)
         env (*x_ev_h);
 }
