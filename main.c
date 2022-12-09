@@ -188,7 +188,7 @@ int main(int ac, char **av, char **ev)
 
     ev_h = NULL;
     x_ev_h = NULL;
-    printf("env= ---> %s\n", x_ev_join("env"));
+    printf("env= ---> %s\n", x_ev_join("envbssgfbsfgbsgbsb"));
     // init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args2, 0);
     // xprt(&ev_h, &x_ev_h, args3, 0);

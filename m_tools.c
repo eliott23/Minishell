@@ -89,21 +89,19 @@ char	*x_ev_join(char *s)
 {
 	int			i;
 	int			j;
-	static char	pref[12]="declare -x ";
+	static char	pref[12]="declare -x \0";
 	char		*res;
 
 	if (!s)
 		return (0);
 	j = 0;
 	i = 0;
-	res = malloc(sizeof(char) * (14 + len(s)));
+	res = malloc(sizeof(char) * (15 + len(s)));
 	while (pref[i])
 	{
 		res[i] = pref[i];
 		i++;
 	}
-	printf("i = %d and j = %d\n", i, j);
-	sleep(500);
 	while (s[j] && s[j] != '=')
 		res[i++] = s[j++];
 	res[i++] = s[j];
