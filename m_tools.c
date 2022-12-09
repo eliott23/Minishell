@@ -106,6 +106,8 @@ char	*x_ev_join(char *s)
 		res[i++] = s[j++];
 	res[i++] = s[j];
 	res[i++] = '"';
+	printf("this is i %d and j %d\n", i, j);
+	sleep(100);
 	if (s[j])
 		j++;
 	while (s[j])

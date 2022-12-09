@@ -30,7 +30,7 @@ void    unset(t_ev **ev_h, char **args)
     }
 }
 
-int     xprt_he(t_ev **ev_h, char *arg, t_ev *temp)
+int     xprt_he(char *arg, t_ev *temp)
 {
     while (temp)
     {
@@ -48,6 +48,29 @@ int     xprt_he(t_ev **ev_h, char *arg, t_ev *temp)
                 temp->next->next = NULL;
                 return (0);
             }
+        }
+        temp = temp->next;
+    }
+    return (1);
+}
+
+
+int     xprt_hx(char *arg, t_ev *temp)
+{
+    while (temp)
+    {
+        if (ev_cmp(temp->var, arg))
+        {
+            free(temp->var);
+            temp->var = x_ev_join(arg);
+            return (0);
+        }
+        if (!temp->next)
+        {
+            temp->next = malloc(sizeof(t_ev));
+            temp->var = x_ev_join(arg);
+            temp->next->next = NULL;
+            return (0);
         }
         temp = temp->next;
     }
@@ -72,46 +95,48 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
             if (v_exp(args[(*i)], 0))
             {
                 temp = *ev_h;
-                xprt_he(ev_h, args[(*i)], temp);
+                xprt_he(args[(*i)], temp);
             }
             (*i)++;
         }
 }
 
-int     xprt_hx(t_ev **ev_h, char *arg, t_ev *temp)
+void    xprt_x(t_ev **x_ev_h, char **args, int *i)
 {
-    while (temp)
-    {
-        if (ev_cmp(temp->var, arg))
+    t_ev    *temp;
+
+    while (args[(*i)] && !v_exp(args[(*i)], 0))
+        (*i)++;
+    if (args[(*i)] && !(*x_ev_h))
         {
-            free(temp->var);
-            temp->var = ft_strdup(arg);
-            return (0);
+            *x_ev_h = malloc(sizeof(t_ev));
+            sleep(100);
+            (*x_ev_h)->var = x_ev_join(args[(*i)]);
+            (*x_ev_h)->next = NULL;
+            (*i)++;
         }
-        if (!temp->next)
+    if (args[(*i)])
         {
-            if (ft_srch(arg, '='))
+            if (v_exp(args[(*i)], 0))
             {
-                ev_alloc(temp,arg);
-                temp->next->next = NULL;
-                return (0);
+                temp = *x_ev_h;
+                xprt_hx(args[(*i)], temp);
             }
+            (*i)++;
         }
-        temp = temp->next;
-    }
-    return (1);
-}
-
-void    xprt_x(t_ev **x_ev_h, char **args, int i)
-{
-
 }
 
 void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 {
     while (args[i])
     {
-        xprt_e(ev_h, args, &i);
+        // if (ft_srch(args[i], '='))
+        // {
+            // xprt_e(ev_h, args, &i);
+            xprt_x(x_ev_h, args, &i);
+        // }
+        // else
+        //     xprt_x(x_ev_h, args, &i);
     }
     if (i == 0)
         env (*x_ev_h);
@@ -188,9 +213,9 @@ int main(int ac, char **av, char **ev)
 
     ev_h = NULL;
     x_ev_h = NULL;
-    printf("env= ---> %s\n", x_ev_join("envbssgfbsfgbsgbsb"));
+    printf("env= ---> %s\n", x_ev_join("to_change=dfbb"));
     // init(ev, &ev_h, &x_ev_h);
-    xprt(&ev_h, &x_ev_h, args2, 0);
+    // xprt(&ev_h, &x_ev_h, args2, 0);
     // xprt(&ev_h, &x_ev_h, args3, 0);
     env(ev_h);
     printf("\n\nunset\n\n");
