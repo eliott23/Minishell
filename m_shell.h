@@ -15,7 +15,8 @@ int		ev_cmp(char *s1, char *s2);
 char    *ft_strdup(const char *s1);
 void    ev_alloc(t_ev *ev, char *var);
 int		ft_srch(char *s, char c);
-int		v_exp(char *s);
+int		v_exp(char *s, int caller);
 int		unset_h(t_ev **ev_h, char *str);
+char	*x_ev_join(char *s);
 
 #endif
