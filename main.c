@@ -110,10 +110,10 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
     if (args[(*i)] && !(*x_ev_h))
         {
             *x_ev_h = malloc(sizeof(t_ev));
-            sleep(100);
             (*x_ev_h)->var = x_ev_join(args[(*i)]);
             (*x_ev_h)->next = NULL;
             (*i)++;
+            // sleep(100);
         }
     if (args[(*i)])
         {
@@ -138,6 +138,7 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
         // else
         //     xprt_x(x_ev_h, args, &i);
     }
+            sleep(100);
     if (i == 0)
         env (*x_ev_h);
 }
@@ -213,10 +214,11 @@ int main(int ac, char **av, char **ev)
 
     ev_h = NULL;
     x_ev_h = NULL;
-    printf("env= ---> %s\n", x_ev_join("to_change=dfbb"));
+    // printf("env= ---> %s\n", x_ev_join("to_changkbjdvnkmfrehguhmrvklmdfvjiorejfijweojf90u3490i5901i9056i90iu690iu690kjvikrejmve=dfbdfnvvdfnjnvafvfb"));
     // init(ev, &ev_h, &x_ev_h);
-    // xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, args2, 0);
     // xprt(&ev_h, &x_ev_h, args3, 0);
+    sleep(500);
     env(ev_h);
     printf("\n\nunset\n\n");
     // free(ev[1]);
@@ -225,7 +227,6 @@ int main(int ac, char **av, char **ev)
     // xprt(&ev_h, args2, 0);
     // xprt(&ev_h, args);
     env(ev_h);
-    sleep(500);
 }
 
 /*
