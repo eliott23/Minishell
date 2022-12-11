@@ -146,7 +146,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
         while (ev[i])
         {
             ev_alloc(temp, ev[i]);
-            ev_alloc(temp2, x_ev_join(ev[i]));
+            ev_alloc(temp2, x_ev_join(ev[i])); //leak
             temp = temp->next;
             temp2 = temp2->next;
             i++;
@@ -216,7 +216,7 @@ int main(int ac, char **av, char **ev)
 
     ev_h = NULL;
     x_ev_h = NULL;
-    // init(ev, &ev_h, &x_ev_h);
+    init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0); //empty export
     env(ev_h);
     xprt(&ev_h, &x_ev_h, args2, 0);
