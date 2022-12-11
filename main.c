@@ -40,35 +40,9 @@ int     xprt_he(char *arg, t_ev *temp)
             temp->var = ft_strdup(arg);
             return (0);
         }
-        if (!temp->next)
+        if (!temp->next && ft_srch(arg, '='))
         {
-            if (ft_srch(arg, '='))
-            {
-                ev_alloc(temp,arg);
-                temp->next->next = NULL;
-                return (0);
-            }
-        }
-        temp = temp->next;
-    }
-    return (1);
-}
-
-
-int     xprt_hx(char *arg, t_ev *temp)
-{
-    while (temp)
-    {
-        if (ev_cmp(temp->var, arg))
-        {
-            free(temp->var);
-            temp->var = x_ev_join(arg);
-            return (0);
-        }
-        if (!temp->next)
-        {
-            temp->next = malloc(sizeof(t_ev));
-            temp->var = x_ev_join(arg);
+            ev_alloc(temp,arg);
             temp->next->next = NULL;
             return (0);
         }
@@ -76,7 +50,6 @@ int     xprt_hx(char *arg, t_ev *temp)
     }
     return (1);
 }
-
 void    xprt_e(t_ev **ev_h, char **args, int *i)
 {
     t_ev    *temp;
@@ -101,6 +74,34 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
         }
 }
 
+int     xprt_hx(char *arg, t_ev *temp)
+{
+    static int n = 0;
+    while (temp)
+    {
+        printf("looped around n=%d and this is temp->var=|%s|\n--->and this is what ev_cmpr returned %d after\
+        comparing it to arg=|%s|\n", ++n,temp->var, ev_cmp(temp->var, "09"), "99");
+        sleep(5);
+        if (ev_cmp(temp->var, arg))
+        {
+            free(temp->var);
+            temp->var = x_ev_join(arg);
+            printf("comparing after freeing temp->var=%s\n", temp->var);
+            return (0);
+        }
+        if (!temp->next)
+        {
+            printf("then yes it went here\n");
+            temp->next = malloc(sizeof(t_ev));
+            temp->var = x_ev_join(arg);
+            printf("but why seg fault temp->var=|%s|\n", temp->var);
+            temp->next->next = NULL;
+            return (0);
+        }
+        temp = temp->next;
+    }
+    return (1);
+}
 void    xprt_x(t_ev **x_ev_h, char **args, int *i)
 {
     t_ev    *temp;
@@ -113,34 +114,43 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
             (*x_ev_h)->var = x_ev_join(args[(*i)]);
             (*x_ev_h)->next = NULL;
             (*i)++;
+            printf("went here and this is i now %d\n", *i);
             // sleep(100);
         }
     if (args[(*i)])
+    {
+        if (v_exp(args[(*i)], 0))
         {
-            if (v_exp(args[(*i)], 0))
-            {
-                temp = *x_ev_h;
-                xprt_hx(args[(*i)], temp);
-            }
-            (*i)++;
+        printf("jhh\n");
+            temp = *x_ev_h;
+            xprt_hx(args[(*i)], temp);
         }
+        (*i)++;
+    }
 }
 
 void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 {
-    while (args[i])
+    static char *OLDPWD[2] = {"OLDPWD",0};
+
+    while (args[i] != NULL)
     {
         // if (ft_srch(args[i], '='))
         // {
             // xprt_e(ev_h, args, &i);
-            xprt_x(x_ev_h, args, &i);
+        xprt_x(x_ev_h, args, &i);
+        printf("this is i outside %d so this is args[i]=%s\n", i,args[i]);
+        if (args[i])
+            printf("siiick\n");
+        if (args[i])
+            printf("siiick\n");
         // }
         // else
         //     xprt_x(x_ev_h, args, &i);
     }
-    sleep(100);
     if (i == 0)
-        env (*x_ev_h);
+        env (*x_ev_h); //also add the OLDPWD;
+    printf("hadi mchat mchat\n\n");
 }
 
 
@@ -149,7 +159,6 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
     int     i;
     t_ev    *temp;
     t_ev    *temp2;
-
 
     if (ev && ev_h)
     {
@@ -208,7 +217,7 @@ int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
-    char    *args[] = { "9audnvi=", "btb", "audnv",0};
+    char    *args[2] = {"ahahah",0};
     char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
     char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
 
@@ -216,11 +225,13 @@ int main(int ac, char **av, char **ev)
     x_ev_h = NULL;
     // printf("env= ---> %s\n", x_ev_join("to_changkbjdvnkmfrehguhmrvklmdfvjiorejfijweojf90u3490i5901i9056i90iu690iu690kjvikrejmve=dfbdfnvvdfnjnvafvfb"));
     // init(ev, &ev_h, &x_ev_h);
-    xprt(&ev_h, &x_ev_h, args2, 0);
-    // xprt(&ev_h, &x_ev_h, args3, 0);
-    sleep(500);
-    env(ev_h);
-    printf("\n\nunset\n\n");
+    xprt(&ev_h, &x_ev_h, args, 0); //empty export
+    xprt(&ev_h, &x_ev_h, args, 0);
+    xprt(&ev_h, &x_ev_h, args, 0);
+    // xprt(&ev_h, &x_ev_h, args, 0);
+    // sleep(500);
+    // env(x_ev_h);
+    // printf("\n\nunset\n\n");
     // free(ev[1]);
     unset(&ev_h, args);
     // call xprt with args+1;
