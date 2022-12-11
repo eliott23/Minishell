@@ -80,7 +80,7 @@ int     xprt_hx(char *arg, t_ev *temp)
     while (temp)
     {
         printf("looped around n=%d and this is temp->var=|%s|\n--->and this is what ev_cmpr returned %d after\
-        comparing it to arg=|%s|\n", ++n,temp->var, ev_cmp(temp->var, "09"), "99");
+        comparing it to arg=|%s|\n", ++n,temp->var, ev_cmp(temp->var, "99"), "99");
         sleep(5);
         if (ev_cmp(temp->var, arg))
         {
@@ -226,18 +226,21 @@ int main(int ac, char **av, char **ev)
     // printf("env= ---> %s\n", x_ev_join("to_changkbjdvnkmfrehguhmrvklmdfvjiorejfijweojf90u3490i5901i9056i90iu690iu690kjvikrejmve=dfbdfnvvdfnjnvafvfb"));
     // init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0); //empty export
+    // env(x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0);
-    xprt(&ev_h, &x_ev_h, args, 0);
+    env(x_ev_h);
+    // xprt(&ev_h, &x_ev_h, args, 0);
+    // env(x_ev_h);
     // xprt(&ev_h, &x_ev_h, args, 0);
     // sleep(500);
     // env(x_ev_h);
     // printf("\n\nunset\n\n");
     // free(ev[1]);
-    unset(&ev_h, args);
+    // unset(&ev_h, args);
     // call xprt with args+1;
     // xprt(&ev_h, args2, 0);
     // xprt(&ev_h, args);
-    env(ev_h);
+    // env(ev_h);
 }
 
 /*

@@ -18,6 +18,8 @@ int ev_cmp(char *s1, char *s2)
 {
 	if (s2[0] == '9')
 		printf("yeeeep\n");
+	if (s2[0] == 'a')
+		printf("noooo\n");
     int i;
 
     i = 0;
