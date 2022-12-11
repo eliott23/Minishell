@@ -12,23 +12,6 @@ void    env(t_ev *ev_h)
     }
 }
 
-void    unset(t_ev **ev_h, char **args)
-{
-    int i;
-    int v;
-
-    i = 0;
-    if (args)
-    {
-        while (args[i])
-        {
-            v = v_exp(args[i], 1);
-            if (v == 1)
-                unset_h(ev_h, args[i]);
-            i++;
-        }
-    }
-}
 
 int     xprt_he(char *arg, t_ev *temp)
 {
@@ -196,6 +179,23 @@ int unset_h(t_ev **ev_h, char *str)
     }
     return (0);
 }
+void    unset(t_ev **ev_h, char **args)
+{
+    int i;
+    int v;
+
+    i = 0;
+    if (args)
+    {
+        while (args[i])
+        {
+            v = v_exp(args[i], 1);
+            if (v == 1)
+                unset_h(ev_h, args[i]);
+            i++;
+        }
+    }
+}
 
 int main(int ac, char **av, char **ev)
 {
@@ -211,12 +211,15 @@ int main(int ac, char **av, char **ev)
     x_ev_h = NULL;
     // init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0); //empty export
-    // env(x_ev_h);
-    xprt(&ev_h, &x_ev_h, args, 0);
-    // xprt(&ev_h, &x_ev_h, args, 0);
     xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, args, 0); //empty export
+    // xprt(&ev_h, &x_ev_h, args2, 0);
     xprt(&ev_h, &x_ev_h, noarg, 0);
-    env(x_ev_h);
+    env(ev_h);
     // unset(&ev_h, args);
     // call xprt with args+1;
     // env(ev_h);
