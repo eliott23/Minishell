@@ -105,12 +105,15 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
 void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 {
     static char *OLDPWD[2] = {"OLDPWD",0};
+    int t;
 
     while (args[i] != NULL)
     {
         if (ft_srch(args[i], '='))
         {
+            t = i;
             xprt_e(ev_h, args, &i);
+            i = t;
             xprt_x(x_ev_h, args, &i);
         }
         else
@@ -202,7 +205,7 @@ int main(int ac, char **av, char **ev)
     t_ev    *ev_h;
     t_ev    *x_ev_h;
     char    *noarg[] = {0};
-    char    *args[2] = {"ahahah",0};
+    char    *args[] = {"ahahah","only_in_export","in_both=",0};
     char    *args2[2] = {"ahahah=",0};
     // char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
     // char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
