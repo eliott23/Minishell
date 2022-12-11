@@ -76,25 +76,18 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
 
 int     xprt_hx(char *arg, t_ev *temp)
 {
-    static int n = 0;
     while (temp)
     {
-        printf("looped around n=%d and this is temp->var=|%s|\n--->and this is what ev_cmpr returned %d after\
-        comparing it to arg=|%s|\n", ++n,temp->var, ev_cmp(temp->var, "99"), "99");
-        sleep(5);
-        if (ev_cmp(temp->var, arg))
+        if (ev_cmp(temp->var + 11, arg))
         {
             free(temp->var);
             temp->var = x_ev_join(arg);
-            printf("comparing after freeing temp->var=%s\n", temp->var);
             return (0);
         }
         if (!temp->next)
         {
-            printf("then yes it went here\n");
             temp->next = malloc(sizeof(t_ev));
-            temp->var = x_ev_join(arg);
-            printf("but why seg fault temp->var=|%s|\n", temp->var);
+            temp->next->var = x_ev_join(arg);
             temp->next->next = NULL;
             return (0);
         }
@@ -114,14 +107,11 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
             (*x_ev_h)->var = x_ev_join(args[(*i)]);
             (*x_ev_h)->next = NULL;
             (*i)++;
-            printf("went here and this is i now %d\n", *i);
-            // sleep(100);
         }
     if (args[(*i)])
     {
         if (v_exp(args[(*i)], 0))
         {
-        printf("jhh\n");
             temp = *x_ev_h;
             xprt_hx(args[(*i)], temp);
         }
@@ -135,22 +125,16 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 
     while (args[i] != NULL)
     {
-        // if (ft_srch(args[i], '='))
-        // {
-            // xprt_e(ev_h, args, &i);
-        xprt_x(x_ev_h, args, &i);
-        printf("this is i outside %d so this is args[i]=%s\n", i,args[i]);
-        if (args[i])
-            printf("siiick\n");
-        if (args[i])
-            printf("siiick\n");
-        // }
-        // else
-        //     xprt_x(x_ev_h, args, &i);
+        if (ft_srch(args[i], '='))
+        {
+            xprt_e(ev_h, args, &i);
+            xprt_x(x_ev_h, args, &i);
+        }
+        else
+            xprt_x(x_ev_h, args, &i);
     }
     if (i == 0)
         env (*x_ev_h); //also add the OLDPWD;
-    printf("hadi mchat mchat\n\n");
 }
 
 
@@ -217,29 +201,24 @@ int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
+    char    *noarg[] = {0};
     char    *args[2] = {"ahahah",0};
-    char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
-    char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
+    char    *args2[2] = {"ahahah=",0};
+    // char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
+    // char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
 
     ev_h = NULL;
     x_ev_h = NULL;
-    // printf("env= ---> %s\n", x_ev_join("to_changkbjdvnkmfrehguhmrvklmdfvjiorejfijweojf90u3490i5901i9056i90iu690iu690kjvikrejmve=dfbdfnvvdfnjnvafvfb"));
     // init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0); //empty export
     // env(x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0);
+    // xprt(&ev_h, &x_ev_h, args, 0);
+    xprt(&ev_h, &x_ev_h, args2, 0);
+    xprt(&ev_h, &x_ev_h, noarg, 0);
     env(x_ev_h);
-    // xprt(&ev_h, &x_ev_h, args, 0);
-    // env(x_ev_h);
-    // xprt(&ev_h, &x_ev_h, args, 0);
-    // sleep(500);
-    // env(x_ev_h);
-    // printf("\n\nunset\n\n");
-    // free(ev[1]);
     // unset(&ev_h, args);
     // call xprt with args+1;
-    // xprt(&ev_h, args2, 0);
-    // xprt(&ev_h, args);
     // env(ev_h);
 }
 
