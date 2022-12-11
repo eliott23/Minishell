@@ -61,10 +61,14 @@ int     xprt_hx(char *arg, t_ev *temp)
 {
     while (temp)
     {
+        // printf("comparing arg=|%s| and temp->var = 11 |%s|\n--->res=%d\n", arg, temp->var + 11, ev_cmp(temp->var + 11, arg));
         if (ev_cmp(temp->var + 11, arg))
         {
-            free(temp->var);
-            temp->var = x_ev_join(arg);
+            if (ft_srch(arg, '='))
+            {
+                free(temp->var);
+                temp->var = x_ev_join(arg);
+            }
             return (0);
         }
         if (!temp->next)
@@ -214,10 +218,7 @@ int main(int ac, char **av, char **ev)
     x_ev_h = NULL;
     // init(ev, &ev_h, &x_ev_h);
     xprt(&ev_h, &x_ev_h, args, 0); //empty export
-    xprt(&ev_h, &x_ev_h, args2, 0);
-    xprt(&ev_h, &x_ev_h, args2, 0);
-    xprt(&ev_h, &x_ev_h, args2, 0);
-    xprt(&ev_h, &x_ev_h, args2, 0);
+    env(ev_h);
     xprt(&ev_h, &x_ev_h, args2, 0);
     xprt(&ev_h, &x_ev_h, args, 0); //empty export
     // xprt(&ev_h, &x_ev_h, args2, 0);
@@ -225,7 +226,7 @@ int main(int ac, char **av, char **ev)
     env(ev_h);
     // unset(&ev_h, args);
     // call xprt with args+1;
-    // env(ev_h);
+    sleep(200);
 }
 
 /*
