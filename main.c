@@ -208,23 +208,42 @@ void    unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
     }
 }
 
+void    freesplit(char **s)
+{
+    int i;
+
+    i = 0;
+    if (s)
+    {
+        while (s[i])
+        {
+            free(s[i]);
+            i++;
+        }
+        free(s);
+    }
+}
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
 
     int     v;
-    char    *str; 
+    char    *str = NULL;
     char    *noarg[] = {0};
-    char    **args;
+    char    **args = NULL;
     // char    *args[] = {"ahahah","only_in_export","in_both=",0};
     char    *args2[2] = {"ahahah=",0};
     ev_h = NULL;
     x_ev_h = NULL;
-    init(ev, &ev_h, &x_ev_h);
+    // init(ev, &ev_h, &x_ev_h);
     while (1)
     {
+        if (str)
+            free(str);
         str = readline("Minishell>");
+        if (args)
+            freesplit(args);
         args = ft_split(str, ' ');
         v = m_parsing(args);
         if (v == 0)
