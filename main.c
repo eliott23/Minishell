@@ -144,7 +144,8 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
         while (ev[i])
         {
             ev_alloc(temp, ev[i]);
-            ev_alloc(temp2, x_ev_join(ev[i])); //leak
+            temp2->next = malloc(sizeof(t_ev));
+            temp2->next->var = x_ev_join(ev[i]);
             temp = temp->next;
             temp2 = temp2->next;
             i++;
@@ -236,7 +237,7 @@ int main(int ac, char **av, char **ev)
     char    *args2[2] = {"ahahah=",0};
     ev_h = NULL;
     x_ev_h = NULL;
-    // init(ev, &ev_h, &x_ev_h);
+    init(ev, &ev_h, &x_ev_h);
     while (1)
     {
         if (str)
