@@ -105,7 +105,6 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
         (*i)++;
     }
 }
-
 void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 {
     static char *OLDPWD[2] = {"OLDPWD",0};
@@ -126,7 +125,6 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
     if (i == 0)
         env (*x_ev_h); //also add the OLDPWD;
 }
-
 
 void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
 {
@@ -186,10 +184,11 @@ int unset_h(t_ev **ev_h, char *str)
     }
     return (0);
 }
-void    unset(t_ev **ev_h, char **args)
+void    unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
-    int i;
-    int v;
+    int     i;
+    int     v;
+    char    *temp;
 
     i = 0;
     if (args)
@@ -198,7 +197,12 @@ void    unset(t_ev **ev_h, char **args)
         {
             v = v_exp(args[i], 1);
             if (v == 1)
+            {
                 unset_h(ev_h, args[i]);
+                temp = x_ev_join(args[i]);
+                unset_h(x_ev_h, temp);
+                free(temp);
+            }
             i++;
         }
     }
@@ -208,25 +212,35 @@ int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
-    char    *noarg[] = {0};
-    char    *args[] = {"ahahah","only_in_export","in_both=",0};
-    char    *args2[2] = {"ahahah=",0};
-    // char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
-    // char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
 
+    int     v;
+    char    *str; 
+    char    *noarg[] = {0};
+    char    **args;
+    // char    *args[] = {"ahahah","only_in_export","in_both=",0};
+    char    *args2[2] = {"ahahah=",0};
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
-    xprt(&ev_h, &x_ev_h, args, 0); //empty export
-    env(ev_h);
-    xprt(&ev_h, &x_ev_h, args2, 0);
-    xprt(&ev_h, &x_ev_h, args, 0); //empty export
-    // xprt(&ev_h, &x_ev_h, args2, 0);
-    xprt(&ev_h, &x_ev_h, noarg, 0);
-    env(ev_h);
-    // unset(&ev_h, args);
+    while (1)
+    {
+        str = readline("Minishell>");
+        args = ft_split(str, ' ');
+        v = m_parsing(args);
+        if (v == 0)
+            xprt(&ev_h, &x_ev_h, args + 1, 0);
+        if (v == 1)
+            unset(&ev_h, &x_ev_h, args + 1);
+        if (v == 2)
+            env(ev_h);
+        // args = ft_split(str, ' ');
+    }
+    // if (v == 0)
+    //     unset (ev_h,);
+    // char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
+    // char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
+
     // call xprt with args+1;
-    sleep(200);
 }
 
 /*
