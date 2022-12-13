@@ -224,6 +224,46 @@ void    freesplit(char **s)
         free(s);
     }
 }
+void    ft_expand(char **args, t_ev *ev_h)
+{
+    int i;
+    int j;
+
+    i = 1;
+    j = 0;
+    if (args)
+    {
+        while (args[i])
+        {
+            if (args[i][0] == '$')
+            {
+                while (ev_h)
+                {
+                    if (ev_cmp(ev_h->var, &args[i][1]))
+                    {
+                        free(args[i]);
+                        j = 0;
+                        while ((ev_h->var)[j])
+                        {
+                            if ((ev_h->var)[j] == '=')
+                            {
+                                while ((ev_h->var)[j])
+                                {
+
+                                    j++;
+                                }
+                            }
+                            j++;
+                        }
+                        args[i] = ft_strdup("");
+                    }
+                    ev_h = ev_h->next;
+                }
+            }
+            i++;
+        }
+    }
+}
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -243,6 +283,8 @@ int main(int ac, char **av, char **ev)
         if (str)
             free(str);
         str = readline("Minishell>");
+        add_history(str);
+        //expand;
         if (args)
             freesplit(args);
         args = ft_split(str, ' ');
