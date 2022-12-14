@@ -131,6 +131,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
     int     i;
     t_ev    *temp;
     t_ev    *temp2;
+    char    *OLDPWD[] = {"OLDPWD", 0};
 
     if (ev && ev_h)
     {
@@ -153,6 +154,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
         temp->next = NULL;
         temp2->next = NULL;
     }
+    xprt(ev_h, x_ev_h, OLDPWD, 0);
 }
 
 int unset_h(t_ev **ev_h, char *str)
@@ -275,7 +277,7 @@ int main(int ac, char **av, char **ev)
     char    *args2[2] = {"ahahah=",0};
     ev_h = NULL;
     x_ev_h = NULL;
-    // init(ev, &ev_h, &x_ev_h);
+    init(ev, &ev_h, &x_ev_h);
     while (1)
     {
         if (str)
