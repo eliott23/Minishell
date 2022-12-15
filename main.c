@@ -1,10 +1,6 @@
 #include "m_shell.h"
 int erno;
 
-void    cd(t_ev *ev_h, t_ev *x_ev_h)
-{
-    char    *temp;
-}
 void    env(t_ev *ev_h)
 {
     if (ev_h)
@@ -266,7 +262,31 @@ void    freesplit(char **s)
 //         }
 //     }
 // }
+void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
+{
+    char    *t_OLDPWD;
+    char    *t_PWD;
+    char    **OLD_PWD;
 
+    t_OLDPWD = NULL;
+    t_PWD = NULL;
+    getcwd(t_OLDPWD, 0);
+    if (args && args[0])
+    {
+        if (args[1])
+        {
+            erno = chdir(args[1]);
+            if (!erno)
+            {
+                OLD_PWD = malloc(sizeof(char) * 3);
+                OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+                OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
+                OLD_PWD[2] = 0;
+                xprt(ev_h, x_ev_h, OLD_PWD, 0);
+            }
+        }
+    }
+}
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -276,8 +296,6 @@ int main(int ac, char **av, char **ev)
     char    *str = NULL;
     char    *noarg[] = {0};
     char    **args = NULL;
-    // char    *args[] = {"ahahah","only_in_export","in_both=",0};
-    char    *args2[2] = {"ahahah=",0};
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -287,7 +305,6 @@ int main(int ac, char **av, char **ev)
             free(str);
         str = readline("Minishell>");
         add_history(str);
-        //expand; //naah u should call it after checking with every command
         if (args)
             freesplit(args);
         args = ft_split(str, ' ');
@@ -298,6 +315,8 @@ int main(int ac, char **av, char **ev)
             unset(&ev_h, &x_ev_h, args + 1);
         if (v == 2)
             env(ev_h);
+        if (v == 3)
+            cd(ev_h, x_ev_h, arg);
         // args = ft_split(str, ' ');
     }
     // if (v == 0)
