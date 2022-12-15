@@ -1,5 +1,10 @@
 #include "m_shell.h"
+int erno;
 
+void    cd(t_ev *ev_h, t_ev *x_ev_h)
+{
+    char    *temp;
+}
 void    env(t_ev *ev_h)
 {
     if (ev_h)
@@ -11,7 +16,6 @@ void    env(t_ev *ev_h)
         }
     }
 }
-
 
 int     xprt_he(char *arg, t_ev *temp)
 {
@@ -107,7 +111,6 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
 }
 void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 {
-    static char *OLDPWD[2] = {"OLDPWD",0};
     int t;
 
     while (args[i] != NULL)
@@ -123,7 +126,7 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
             xprt_x(x_ev_h, args, &i);
     }
     if (i == 0)
-        env (*x_ev_h); //also add the OLDPWD;
+        env (*x_ev_h);
 }
 
 void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
