@@ -270,7 +270,8 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 
     t_OLDPWD = NULL;
     t_PWD = NULL;
-    getcwd(t_OLDPWD, 0);
+    t_OLDPWD = getcwd(t_OLDPWD, 0);
+    printf("this is OLDPWD %s\n", t_OLDPWD);
     if (args && args[0])
     {
         if (args[1])
@@ -278,7 +279,8 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
             erno = chdir(args[1]);
             if (!erno)
             {
-                OLD_PWD = malloc(sizeof(char) * 3);
+                OLD_PWD = malloc(sizeof(char *) * 3);
+                // sleep(500);
                 OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
                 OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
                 OLD_PWD[2] = 0;
@@ -316,7 +318,7 @@ int main(int ac, char **av, char **ev)
         if (v == 2)
             env(ev_h);
         if (v == 3)
-            cd(ev_h, x_ev_h, arg);
+            cd(&ev_h, &x_ev_h, args);
         // args = ft_split(str, ' ');
     }
     // if (v == 0)

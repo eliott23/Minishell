@@ -1,10 +1,13 @@
 #include <unistd.h>
+#include <stdio.h>
 
 int	main()
 {
 	char *buffer;
 
 	buffer = NULL;
-	chdir("/..");
-	printf("%s\n", getcwd(buffer, 1024));
+//	chdir("..");
+	getcwd(buffer, 0);
+	printf("%s\n", getcwd(buffer, 0));
+	printf("%s\n",buffer); 
 }
