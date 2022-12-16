@@ -302,8 +302,7 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
         } 
         temp = temp->next;
     }
-    //else
-    // throw home not set error unless it's a ~ character, so we should probably store the HOME var elsewhere;
+    printf("cd: HOME not set\n");
     return (0);
 }
 int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
