@@ -266,8 +266,14 @@ void    freesplit(char **s)
 int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
 {
     t_ev    *temp;
+    char    *t_OLDPWD;
+    char    *t_PWD;
+    char    **OLD_PWD;
     int     i;
 
+    t_PWD = NULL;
+    t_OLDPWD = NULL;
+    t_OLDPWD = getcwd(t_OLDPWD, 0);
     i = 0;
     temp = *ev_h;
     while (temp)
@@ -278,8 +284,19 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
             {
                 if (temp->var[i] == '=')
                 {
-                    return (0);
-                }
+					erno = chdir(&temp->var[i + 1]);
+					if (erno)
+					{
+					    // throw the error;
+					    return (0);
+					}
+					OLD_PWD = malloc(sizeof(char *) * 3);
+					OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+					OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
+					OLD_PWD[2] = 0;
+					xprt(ev_h, x_ev_h, OLD_PWD, 0);
+					return (0);
+				}
                 i++;
             }
         } 
@@ -305,7 +322,7 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
             erno = chdir(args[1]);
            if (erno)
            {
-                // throw the error;
+                printf("this is the error code %d\n", erno);
                 return (0);
            }
            OLD_PWD = malloc(sizeof(char *) * 3);
@@ -315,20 +332,8 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
            xprt(ev_h, x_ev_h, OLD_PWD, 0);
         }
         else
-        {
-            erno = chdir("~");
-            printf("went here\n");
-            if (erno)
-            {
-                // throw the error;
-                return (0);
-            }
-           OLD_PWD = malloc(sizeof(char *) * 3);
-           OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
-           OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
-           OLD_PWD[2] = 0;
-           xprt(ev_h, x_ev_h, OLD_PWD, 0);
-        }
+            cd_h(ev_h, x_ev_h);
+        
     }
     return (0);
 }
@@ -373,6 +378,8 @@ int main(int ac, char **av, char **ev)
             cd(&ev_h, &x_ev_h, args);
         if (v == 4)
             pwd();
+        else
+            printf("%s: command not found\n", args[0]);
         // args = ft_split(str, ' ');
     }
     // if (v == 0)
