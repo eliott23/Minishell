@@ -370,13 +370,13 @@ int main(int ac, char **av, char **ev)
         v = m_parsing(args);
         if (v == 0)
             xprt(&ev_h, &x_ev_h, args + 1, 0);
-        if (v == 1)
+        else if (v == 1)
             unset(&ev_h, &x_ev_h, args + 1);
-        if (v == 2)
+        else if (v == 2)
             env(ev_h);
-        if (v == 3)
+        else if(v == 3)
             cd(&ev_h, &x_ev_h, args);
-        if (v == 4)
+        else if (v == 4)
             pwd();
         else
             printf("%s: command not found\n", args[0]);
