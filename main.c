@@ -282,8 +282,6 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
             {
                 OLD_PWD = malloc(sizeof(char *) * 3);
                 OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
-                // printf("---> %s\n\n\n", t_OLDPWD);
-                // sleep(100);
                 OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
                 OLD_PWD[2] = 0;
                 xprt(ev_h, x_ev_h, OLD_PWD, 0);
@@ -291,28 +289,13 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
         }
     }
 }
-int pwd(t_ev *ev_h)
+int pwd()
 {
-    int i;
+    char    *PWD;
 
-    i = 0;
-    while (ev_h)
-    {
-        if (ev_cmp(ev_h->var, "PWD"))
-        {
-            while (ev_h->var[i])
-            {
-                if (ev_h->var[i] == '=')
-                {
-                    printf("%s\n", &ev_h->var[i + 1]);
-                    return (0);
-                }
-                i++;
-            }
-            return (0);
-        }
-        ev_h = ev_h->next;
-    }
+    PWD = NULL;
+    PWD = getcwd(PWD, 0);
+    printf("%s\n", PWD);
     return (0);
 }
 int main(int ac, char **av, char **ev)
@@ -346,7 +329,7 @@ int main(int ac, char **av, char **ev)
         if (v == 3)
             cd(&ev_h, &x_ev_h, args);
         if (v == 4)
-            pwd(ev_h);
+            pwd();
         // args = ft_split(str, ' ');
     }
     // if (v == 0)
