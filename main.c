@@ -263,7 +263,33 @@ void    freesplit(char **s)
 //         }
 //     }
 // }
-void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
+int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
+{
+    t_ev    *temp;
+    int     i;
+
+    i = 0;
+    temp = *ev_h;
+    while (temp)
+    {
+        if (ev_cmp(temp->var, "HOME"))
+        {
+            while (temp->var[i])
+            {
+                if (temp->var[i] == '=')
+                {
+                    return (0);
+                }
+                i++;
+            }
+        } 
+        temp = temp->next;
+    }
+    //else
+    // throw home not set error unless it's a ~ character, so we should probably store the HOME var elsewhere;
+    return (0);
+}
+int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     char    *t_OLDPWD;
     char    *t_PWD;
@@ -272,22 +298,39 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
     t_PWD = NULL;
     t_OLDPWD = NULL;
     t_OLDPWD = getcwd(t_OLDPWD, 0);
-    printf("this is OLDPWD %s\n", t_OLDPWD);
     if (args && args[0])
     {
         if (args[1])
         {
             erno = chdir(args[1]);
-            if (!erno)
+           if (erno)
+           {
+                // throw the error;
+                return (0);
+           }
+           OLD_PWD = malloc(sizeof(char *) * 3);
+           OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+           OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
+           OLD_PWD[2] = 0;
+           xprt(ev_h, x_ev_h, OLD_PWD, 0);
+        }
+        else
+        {
+            erno = chdir("~");
+            printf("went here\n");
+            if (erno)
             {
-                OLD_PWD = malloc(sizeof(char *) * 3);
-                OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
-                OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
-                OLD_PWD[2] = 0;
-                xprt(ev_h, x_ev_h, OLD_PWD, 0);
+                // throw the error;
+                return (0);
             }
+           OLD_PWD = malloc(sizeof(char *) * 3);
+           OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+           OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
+           OLD_PWD[2] = 0;
+           xprt(ev_h, x_ev_h, OLD_PWD, 0);
         }
     }
+    return (0);
 }
 int pwd()
 {
