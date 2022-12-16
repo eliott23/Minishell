@@ -6,8 +6,7 @@ int	main()
 	char *buffer;
 
 	buffer = NULL;
-//	chdir("..");
+	chdir("");
 	getcwd(buffer, 0);
 	printf("%s\n", getcwd(buffer, 0));
-	printf("%s\n",buffer); 
 }
