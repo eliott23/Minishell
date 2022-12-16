@@ -125,36 +125,6 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
         env (*x_ev_h);
 }
 
-void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
-{
-    int     i;
-    t_ev    *temp;
-    t_ev    *temp2;
-    char    *OLDPWD[] = {"OLDPWD", 0};
-
-    if (ev && ev_h)
-    {
-        i = 1;
-        *ev_h = malloc(sizeof(t_ev));
-        *x_ev_h = malloc(sizeof(t_ev));
-        temp = *ev_h;
-        temp2 = *x_ev_h;
-        temp->var = ft_strdup(ev[0]);
-        temp2->var = x_ev_join(ev[0]);
-        while (ev[i])
-        {
-            ev_alloc(temp, ev[i]);
-            temp2->next = malloc(sizeof(t_ev));
-            temp2->next->var = x_ev_join(ev[i]);
-            temp = temp->next;
-            temp2 = temp2->next;
-            i++;
-        }
-        temp->next = NULL;
-        temp2->next = NULL;
-    }
-    xprt(ev_h, x_ev_h, OLDPWD, 0);
-}
 
 int unset_h(t_ev **ev_h, char *str)
 {
@@ -210,6 +180,37 @@ void    unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
     }
 }
 
+void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
+{
+    int     i;
+    t_ev    *temp;
+    t_ev    *temp2;
+    char    *OLDPWD[] = {"OLDPWD", 0};
+
+    if (ev && ev_h)
+    {
+        i = 1;
+        *ev_h = malloc(sizeof(t_ev));
+        *x_ev_h = malloc(sizeof(t_ev));
+        temp = *ev_h;
+        temp2 = *x_ev_h;
+        temp->var = ft_strdup(ev[0]);
+        temp2->var = x_ev_join(ev[0]);
+        while (ev[i])
+        {
+            ev_alloc(temp, ev[i]);
+            temp2->next = malloc(sizeof(t_ev));
+            temp2->next->var = x_ev_join(ev[i]);
+            temp = temp->next;
+            temp2 = temp2->next;
+            i++;
+        }
+        temp->next = NULL;
+        temp2->next = NULL;
+    }
+    unset(ev_h, x_ev_h, OLDPWD);
+    xprt(ev_h, x_ev_h, OLDPWD, 0);
+}
 void    freesplit(char **s)
 {
     int i;
@@ -269,6 +270,7 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
     char    **OLD_PWD;
 
     t_PWD = NULL;
+    t_OLDPWD = NULL;
     t_OLDPWD = getcwd(t_OLDPWD, 0);
     printf("this is OLDPWD %s\n", t_OLDPWD);
     if (args && args[0])
@@ -280,6 +282,8 @@ void    cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
             {
                 OLD_PWD = malloc(sizeof(char *) * 3);
                 OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+                // printf("---> %s\n\n\n", t_OLDPWD);
+                // sleep(100);
                 OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
                 OLD_PWD[2] = 0;
                 xprt(ev_h, x_ev_h, OLD_PWD, 0);
@@ -342,7 +346,7 @@ int main(int ac, char **av, char **ev)
         if (v == 3)
             cd(&ev_h, &x_ev_h, args);
         if (v == 4)
-            env(ev_h);
+            pwd(ev_h);
         // args = ft_split(str, ' ');
     }
     // if (v == 0)
