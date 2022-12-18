@@ -345,6 +345,47 @@ int pwd()
     printf("%s\n", PWD);
     return (0);
 }
+int is_an_option(char *str)
+{
+    int i;
+
+    if (!str)
+        return (0);
+    i = 1;
+    if (str[0] != '-')
+        return (0);
+    while (str[i] == 'n')
+        i++;
+    if (!str[i] && i > 1)
+        return (1);
+    return (0);
+}
+int echo(char **args)
+{
+    int i;
+    int n_l;
+
+    i = 0;
+    n_l = 1;
+    if (args)
+    {
+        if (is_an_option(args[i]))
+        {
+            n_l = 0;
+            i++;
+        }
+        while (args[i])
+        {
+            printf("%s", args[i]);
+            i++;
+            if (args[i])
+                printf(" ");
+        }
+        if (n_l)
+            printf("\n");
+    }
+    return (0);
+}
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -377,16 +418,11 @@ int main(int ac, char **av, char **ev)
             cd(&ev_h, &x_ev_h, args);
         else if (v == 4)
             pwd();
+        else if (v == 5)
+            echo(args + 1);
         else
             printf("%s: command not found\n", args[0]);
-        // args = ft_split(str, ' ');
     }
-    // if (v == 0)
-    //     unset (ev_h,);
-    // char    *args2[] = {"9udvnav", "to_change=dfbb","audnv======","empty","no_equal_sign", "=", 0};
-    // char    *args3[] = {"9udvnav","9empty", "=", "empty", 0};
-
-    // call xprt with args+1;
 }
 
 /*
