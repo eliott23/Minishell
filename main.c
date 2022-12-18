@@ -287,7 +287,7 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
 					erno = chdir(&temp->var[i + 1]);
 					if (erno)
 					{
-					    // throw the error;
+                        printf("cd : %s: %s\n", &temp->var[i + 1], strerror(errno));
 					    return (0);
 					}
 					OLD_PWD = malloc(sizeof(char *) * 3);
@@ -321,7 +321,7 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
             erno = chdir(args[1]);
            if (erno)
            {
-                printf("this is the error code %d\n", erno);
+                printf("cd : %s: %s\n", args[1] , strerror(errno));
                 return (0);
            }
            OLD_PWD = malloc(sizeof(char *) * 3);

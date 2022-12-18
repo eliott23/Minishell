@@ -1,9 +1,11 @@
 #ifndef M_SHELL_H
 # define M_SHELL_H
 
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include <readline/readline.h> 
 
 typedef struct node{
