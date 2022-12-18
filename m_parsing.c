@@ -22,7 +22,7 @@ int		ft_strcmp(char *s1, char *s2)
 
 int	m_parsing(char **av)
 {
-	char 	*x[] = {"export", "unset", "env", "cd", "pwd", "echo",0};
+	char 	*x[] = {"export", "unset", "env", "cd", "pwd", "echo", "exit",0};
 	int	i = 0;
 
 	while (x[i] && !ft_strcmp(av[0], x[i]))

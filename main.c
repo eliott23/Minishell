@@ -61,7 +61,6 @@ int     xprt_hx(char *arg, t_ev *temp)
 {
     while (temp)
     {
-        // printf("comparing arg=|%s| and temp->var = 11 |%s|\n--->res=%d\n", arg, temp->var + 11, ev_cmp(temp->var + 11, arg));
         if (ev_cmp(temp->var + 11, arg))
         {
             if (ft_srch(arg, '='))
@@ -420,6 +419,11 @@ int main(int ac, char **av, char **ev)
             pwd();
         else if (v == 5)
             echo(args + 1);
+        else if (v == 6)
+        {
+            printf("exit\n");
+            return (0);
+        }
         else
             printf("%s: command not found\n", args[0]);
     }
