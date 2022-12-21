@@ -270,7 +270,6 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
     char    **OLD_PWD;
     int     i;
 
-    t_PWD = NULL;
     t_OLDPWD = NULL;
     t_OLDPWD = getcwd(t_OLDPWD, 0);
     i = 0;
@@ -291,9 +290,13 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
 					}
 					OLD_PWD = malloc(sizeof(char *) * 3);
 					OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
-					OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
+                    free(t_OLDPWD);
+                    t_PWD = getcwd(t_PWD, 0);
+					OLD_PWD[1] = ft_strjoin("PWD=",t_PWD);
+                    free(t_PWD);
 					OLD_PWD[2] = 0;
 					xprt(ev_h, x_ev_h, OLD_PWD, 0);
+                    freesplit(OLD_PWD);
 					return (0);
 				}
                 i++;
@@ -310,9 +313,7 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
     char    *t_PWD;
     char    **OLD_PWD;
 
-    t_PWD = NULL;
     t_OLDPWD = NULL;
-    t_OLDPWD = getcwd(t_OLDPWD, 0);
     if (args && args[0])
     {
         if (args[1])
@@ -324,10 +325,15 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
                 return (0);
            }
            OLD_PWD = malloc(sizeof(char *) * 3);
+           t_OLDPWD = getcwd(t_OLDPWD, 0);
            OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
-           OLD_PWD[1] = ft_strjoin("PWD=",getcwd(t_PWD,0));
+           free(t_OLDPWD);
+           t_PWD = getcwd(t_PWD, 0);
+           OLD_PWD[1] = ft_strjoin("PWD=", t_PWD);
+           free(t_PWD);
            OLD_PWD[2] = 0;
            xprt(ev_h, x_ev_h, OLD_PWD, 0);
+           freesplit(OLD_PWD);
         }
         else
             cd_h(ev_h, x_ev_h);
@@ -342,6 +348,7 @@ int pwd()
     PWD = NULL;
     PWD = getcwd(PWD, 0);
     printf("%s\n", PWD);
+    free(PWD);
     return (0);
 }
 int is_an_option(char *str)
@@ -412,7 +419,7 @@ int main(int ac, char **av, char **ev)
         else if (v == 1)
             unset(&ev_h, &x_ev_h, args + 1);
         else if (v == 2)
-            env(ev_h);
+            env(ev_h); //pottential issue regarding if an unwanted argument was provided;
         else if(v == 3)
             cd(&ev_h, &x_ev_h, args);
         else if (v == 4)
