@@ -271,7 +271,6 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
     int     i;
 
     t_OLDPWD = NULL;
-    t_OLDPWD = getcwd(t_OLDPWD, 0);
     i = 0;
     temp = *ev_h;
     while (temp)
@@ -289,6 +288,7 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
 					    return (0);
 					}
 					OLD_PWD = malloc(sizeof(char *) * 3);
+                    t_OLDPWD = getcwd(t_OLDPWD, 0);
 					OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
                     free(t_OLDPWD);
                     t_PWD = getcwd(t_PWD, 0);
