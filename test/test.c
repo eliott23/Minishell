@@ -1,10 +1,12 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	main()
+int	main(int ac, char **av, char **ev)
 {
-	char *buffer;
-
-	buffer = NULL;
-	printf("%s\n", getcwd(NULL, 0));
+	char	*arg[] = {0};
+	int	id = fork();
+	if (!id)
+		execve("/bin/cat", NULL, NULL);
+	else
+		sleep(1);
 }
