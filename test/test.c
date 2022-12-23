@@ -8,12 +8,12 @@ int	main(int ac, char **av, char **ev)
 	char	*arg[] = {"at", "est.c",0};
 	int	id = fork();
 	int	stat= 0;
-	char *path  = "/bin/at";
+	char *path  = "./hh";
 	if (!id)
 	{
 		if (access(path, X_OK))
 		{
-			printf("%s\n", strerror(erno));
+			printf("%s errno=%d\n", strerror(errno),);
 			return (0);
 		}
 		execve(path, arg, NULL);
