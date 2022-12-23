@@ -431,6 +431,7 @@ int main(int ac, char **av, char **ev)
             printf("exit\n");
             return (0);
         }
+
         else
             printf("%s: command not found\n", args[0]);
     }
