@@ -438,7 +438,6 @@ char *exec_h(t_ev *ev, char *com)
                 }
                 else
                 {
-                    printf("%s\n", com + 1);
                     return (ft_strdup(com + 1));
                 }
             }
@@ -448,7 +447,7 @@ char *exec_h(t_ev *ev, char *com)
     printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
-int exec(char **args, t_ev *ev)
+int exec(char **args, t_ev *ev, char **e_v)
 {
     char    *path;
     char    *com;
@@ -463,19 +462,16 @@ int exec(char **args, t_ev *ev)
     id =fork();
     if (id)
     {
-        printf("this is the path %s\n", path);
-        // if (path)
-            // free(path);
+        if (path)
+            free(path);
     }
 	if (!id)
     {
-        printf("hi am the child process\n");
-        execve(path , args, NULL);
+        execve(path , args, e_v);
         printf("hi am the child process\n");
         exit(0);
     }
 	waitpid(id, &stat, 0);
-    // printf("this is the path %s\n", path);
     return (0);
 }
 
@@ -519,7 +515,7 @@ int main(int ac, char **av, char **ev)
             exit (0);
         }
         else
-            exec(args, ev_h);
+            exec(args, ev_h, ev);
     }
 }
 
