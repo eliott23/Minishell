@@ -13,7 +13,7 @@ int	main(int ac, char **av, char **ev)
 	{
 		if (access(path, X_OK))
 		{
-			printf("%s errno=%d\n", strerror(errno),);
+			printf("%s errno=%d\n", strerror(errno));
 			return (0);
 		}
 		execve(path, arg, NULL);

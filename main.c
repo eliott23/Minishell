@@ -392,6 +392,66 @@ int echo(char **args)
     }
     return (0);
 }
+
+char *exec_h(t_ev *ev, char *com)
+{
+    char    *PATH;
+    char    **PATHS;
+    int     i;
+
+    i = 0;
+    while (ev)
+    {
+        if (ev_cmp(ev->var, "PATH"))
+        {
+            PATH = ft_strdup(ev->var + 5);
+            PATHS = ft_split(PATH, ':');
+            free(PATH);
+            while (PATHS[i])
+            {
+                PATH = ft_strjoin(PATHS[i], com);
+                if (!access(PATH, F_OK))
+                {
+                    if (!access(PATH, X_OK))
+                        return (PATH);
+                    else
+                    {
+                        // printf("%s: %s\n", com, strerror(erno));
+                        free(PATH);
+                        freesplit(PATHS);
+                        return (0);
+                    }
+                }
+                // printf("%s\n", strerror(erno));
+                i++;
+                free(PATH);
+            }
+        }
+        ev = ev->next;
+    }
+    return (0);
+}
+int exec(char **args, t_ev *ev)
+{
+    char    *path;
+    char    *com;
+    int     id;
+    int     stat;
+
+    com = ft_strjoin("/", args[0]);
+    path = exec_h(ev, com);
+    free(com);
+    if (!path)
+    {
+        return (0);
+    }
+    id =fork();
+	if (!id)
+        execve(path, args, NULL);
+	waitpid(id, &stat, 0);
+    return (0);
+}
+
 int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -431,9 +491,8 @@ int main(int ac, char **av, char **ev)
             printf("exit\n");
             return (0);
         }
-
         else
-            printf("%s: command not found\n", args[0]);
+            exec(args, ev_h);
     }
 }
 
