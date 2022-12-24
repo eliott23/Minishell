@@ -416,7 +416,7 @@ char *exec_h(t_ev *ev, char *com)
                         return (PATH);
                     else
                     {
-                        // printf("%s: %s\n", com, strerror(erno));
+                        printf("%s: %s\n", com, strerror(erno));
                         free(PATH);
                         freesplit(PATHS);
                         return (0);
