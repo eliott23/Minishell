@@ -437,7 +437,10 @@ char *exec_h(t_ev *ev, char *com)
                     return (0);
                 }
                 else
-                    return (com + 1);
+                {
+                    printf("%s\n", com + 1);
+                    return (ft_strdup(com + 1));
+                }
             }
         }
         ev = ev->next;
@@ -458,10 +461,21 @@ int exec(char **args, t_ev *ev)
     if (!path)
         return (0);
     id =fork();
+    if (id)
+    {
+        printf("this is the path %s\n", path);
+        // if (path)
+            // free(path);
+    }
 	if (!id)
-        execve(path, args, NULL);
+    {
+        printf("hi am the child process\n");
+        execve(path , args, NULL);
+        printf("hi am the child process\n");
+        exit(0);
+    }
 	waitpid(id, &stat, 0);
-    printf("this is the path %s\n", path);
+    // printf("this is the path %s\n", path);
     return (0);
 }
 
@@ -502,7 +516,7 @@ int main(int ac, char **av, char **ev)
         else if (v == 6)
         {
             printf("exit\n");
-            return (0);
+            exit (0);
         }
         else
             exec(args, ev_h);
