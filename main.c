@@ -375,7 +375,7 @@ int echo(char **args)
     n_l = 1;
     if (args)
     {
-        if (is_an_option(args[i]))
+        while (args[i] && is_an_option(args[i]))
         {
             n_l = 0;
             i++;
@@ -413,7 +413,10 @@ char *exec_h(t_ev *ev, char *com)
                 if (!access(PATH, F_OK))
                 {
                     if (!access(PATH, X_OK))
+                    {
+                        freesplit(PATHS);
                         return (PATH);
+                    }
                     else
                     {
                         printf("%s: %s\n", com, strerror(erno));
@@ -422,13 +425,24 @@ char *exec_h(t_ev *ev, char *com)
                         return (0);
                     }
                 }
-                // printf("%s\n", strerror(erno));
                 i++;
                 free(PATH);
+            }
+            if (!access(com + 1, F_OK))
+            {
+                if (access(com + 1, X_OK))
+                {
+                    printf("%s: %s\n", com + 1, strerror(errno));
+                    freesplit(PATHS);
+                    return (0);
+                }
+                else
+                    return (com + 1);
             }
         }
         ev = ev->next;
     }
+    printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
 int exec(char **args, t_ev *ev)
@@ -442,13 +456,12 @@ int exec(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     if (!path)
-    {
         return (0);
-    }
     id =fork();
 	if (!id)
         execve(path, args, NULL);
 	waitpid(id, &stat, 0);
+    free(path);
     return (0);
 }
 

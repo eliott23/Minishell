@@ -5,19 +5,23 @@
 
 int	main(int ac, char **av, char **ev)
 {
-	char	*arg[] = {"at", "est.c",0};
-	int	id = fork();
+	char	**arg = av + 1;
+	int	id = 0;
 	int	stat= 0;
-	char *path  = "./hh";
+	char *path  = av[1];
 	if (!id)
 	{
+		if (access(path, F_OK))
+		{
+			printf("%s : command not found\n", path);	
+			return (0);
+		}
 		if (access(path, X_OK))
 		{
-			printf("%s errno=%d\n", strerror(errno));
+			printf("%s errno=%d\n", strerror(errno), errno);
 			return (0);
 		}
 		execve(path, arg, NULL);
-		printf("%s: %s\n", arg[0],strerror(errno));
 		return (0);
 	}
 	waitpid(id, &stat, 0);
