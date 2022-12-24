@@ -447,12 +447,36 @@ char *exec_h(t_ev *ev, char *com)
     printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
-int exec(char **args, t_ev *ev, char **e_v)
+char    **ft_conv(t_ev *ev)
+{
+    char    **env;
+    t_ev    *temp;
+    int     i;
+
+    temp = ev;
+    while (temp)
+    {
+        temp = temp->next;
+        i++;
+    }
+    env = malloc(sizeof(char *) * (i + 1));
+    i = 0;
+    while (ev)
+    {
+        env[i] = ft_strdup(ev->var);
+        i++;
+        ev = ev->next;
+    }
+    env[i] = 0;
+    return (env);
+}
+int exec(char **args, t_ev *ev)
 {
     char    *path;
     char    *com;
     int     id;
     int     stat;
+    char    **e_v;
 
     com = ft_strjoin("/", args[0]);
     path = exec_h(ev, com);
@@ -467,7 +491,7 @@ int exec(char **args, t_ev *ev, char **e_v)
     }
 	if (!id)
     {
-        execve(path , args, e_v);
+        execve(path , args, ft_conv(ev));
         printf("hi am the child process\n");
         exit(0);
     }
@@ -515,7 +539,7 @@ int main(int ac, char **av, char **ev)
             exit (0);
         }
         else
-            exec(args, ev_h, ev);
+            exec(args, ev_h);
     }
 }
 
