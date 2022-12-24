@@ -461,7 +461,7 @@ int exec(char **args, t_ev *ev)
 	if (!id)
         execve(path, args, NULL);
 	waitpid(id, &stat, 0);
-    free(path);
+    printf("this is the path %s\n", path);
     return (0);
 }
 
