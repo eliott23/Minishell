@@ -520,10 +520,10 @@ int main(int ac, char **av, char **ev)
         str = readline("Minishell>");
         while (str && !str[0])
         {
-        free(str);
-        str = readline("Minishell>");
-        add_history(str);
+            free(str);
+            str = readline("Minishell>");
         }
+        add_history(str);
         if (args)
             freesplit(args);
         args = ft_split(str, ' ');
