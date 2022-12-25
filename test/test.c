@@ -5,31 +5,18 @@
 
 int	main(int ac, char **av, char **ev)
 {
-	char	**arg = av + 1;
-	int	pipes = 3;
-	int	id = 1;
+	char	*arg = malloc(sizeof(char) * 10);
+	int	id = 0;
 	int	stat= 0;
-	char *path  = av[1];
-	while (id && pipes)
-	{
-		id = fork();
-		printf("hi %d\n", id);
-		pipes--;
-	}
+	int	filedes[2];
+	pipe(filedes);
+	dup2(filedes[1], 1);
+	printf("ahahaha\n");
+	id = fork();
 	if (!id)
 	{
-		if (access(path, F_OK))
-		{
-			printf("%s : command not found\n", path);	
-			return (0);
-		}
-		if (access(path, X_OK))
-		{
-			printf("%s errno=%d\n", strerror(errno), errno);
-			return (0);
-		}
-		execve(path, arg, NULL);
-		return (0);
+		read(filedes[0], arg, sizeof(char) * 3);
+		printf("%s\n", arg);
 	}
 	waitpid(-1, &stat, 0);
 }
