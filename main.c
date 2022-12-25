@@ -438,12 +438,14 @@ char *exec_h(t_ev *ev, char *com)
                 }
                 else
                 {
+                    freesplit(PATHS);
                     return (ft_strdup(com + 1));
                 }
             }
         }
         ev = ev->next;
     }
+    freesplit(PATHS);
     printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
