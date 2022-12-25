@@ -518,11 +518,17 @@ int main(int ac, char **av, char **ev)
         if (str)
             free(str);
         str = readline("Minishell>");
+            printf("this is the returned value %s\n", str);
+        if (!str)
+            exit(0);
         while (str && !str[0])
         {
             free(str);
             str = readline("Minishell>");
+            printf("this is the returned value %s\n", str);
         }
+            if (!str)
+                exit(0);
         add_history(str);
         if (args)
             freesplit(args);
