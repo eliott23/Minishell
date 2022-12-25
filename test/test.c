@@ -6,9 +6,16 @@
 int	main(int ac, char **av, char **ev)
 {
 	char	**arg = av + 1;
-	int	id = 0;
+	int	pipes = 3;
+	int	id = 1;
 	int	stat= 0;
 	char *path  = av[1];
+	while (id && pipes)
+	{
+		id = fork();
+		printf("hi %d\n", id);
+		pipes--;
+	}
 	if (!id)
 	{
 		if (access(path, F_OK))
@@ -24,5 +31,5 @@ int	main(int ac, char **av, char **ev)
 		execve(path, arg, NULL);
 		return (0);
 	}
-	waitpid(id, &stat, 0);
+	waitpid(-1, &stat, 0);
 }

@@ -271,6 +271,7 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
     int     i;
 
     t_OLDPWD = NULL;
+    t_PWD = NULL;
     i = 0;
     temp = *ev_h;
     while (temp)
@@ -281,14 +282,15 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
             {
                 if (temp->var[i] == '=')
                 {
+                    t_OLDPWD = getcwd(t_OLDPWD, 0);
 					erno = chdir(&temp->var[i + 1]);
 					if (erno)
 					{
                         printf("cd : %s: %s\n", &temp->var[i + 1], strerror(errno));
+                        free(t_OLDPWD); 
 					    return (0);
 					}
 					OLD_PWD = malloc(sizeof(char *) * 3);
-                    t_OLDPWD = getcwd(t_OLDPWD, 0);
 					OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
                     free(t_OLDPWD);
                     t_PWD = getcwd(t_PWD, 0);
@@ -314,18 +316,20 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
     char    **OLD_PWD;
 
     t_OLDPWD = NULL;
+    t_PWD = NULL;
     if (args && args[0])
     {
         if (args[1])
         {
-            erno = chdir(args[1]);
+           t_OLDPWD = getcwd(t_OLDPWD, 0);
+           erno = chdir(args[1]);
            if (erno)
            {
                 printf("cd : %s: %s\n", args[1] , strerror(errno));
+                free(t_OLDPWD); 
                 return (0);
            }
            OLD_PWD = malloc(sizeof(char *) * 3);
-           t_OLDPWD = getcwd(t_OLDPWD, 0);
            OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
            free(t_OLDPWD);
            t_PWD = getcwd(t_PWD, 0);
@@ -518,14 +522,12 @@ int main(int ac, char **av, char **ev)
         if (str)
             free(str);
         str = readline("Minishell>");
-            printf("this is the returned value %s\n", str);
         if (!str)
             exit(0);
         while (str && !str[0])
         {
             free(str);
             str = readline("Minishell>");
-            printf("this is the returned value %s\n", str);
         }
             if (!str)
                 exit(0);
