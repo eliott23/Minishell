@@ -29,7 +29,7 @@ int	main(int ac, char **av, char **ev)
 	char	*ls[] = {"ls", 0};
 	char	*cat[] = {"cat", 0};
 	char	*cata[] = {"cat", "a", 0};
-	char	*echo
+	char	*echo[] = {"echo", "sdav", 0};
 	int	id = 0;
 	int	stat = 0;
 	int	i = 0;
@@ -54,11 +54,13 @@ int	main(int ac, char **av, char **ev)
 			dup2(filedes[i + 1], 1);
 		else
 			dup2(save, 1);
-		if (i == 0)
-			execve("/bin/grep", grep, NULL);
-		else
-			execve("/bin/ls", ls, NULL);
+		// if (i == 0)
+		fprintf(stderr, "%d\n", filedes[i + 1]);
+			execve("/bin/echo", echo, NULL);
+		// else
+			// execve("/bin/ls", ls, NULL);
 	}
+	sleep(1);
 	i += 2;
 	}
 
