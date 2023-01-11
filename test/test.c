@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+
 void	putstr(char *str)
 {
 	int	i;
@@ -26,31 +27,38 @@ int	main(int ac, char **av, char **ev)
 	// char	*cat[] = {NULL};
 	char	*grep[] = {"grep", "a", NULL};
 	char	*ls[] = {"ls", 0};
-	int	id = 0;
+	int	id = 1;
 	int	stat= 0;
+	int	i = 0;
+	int	t = 0;
 	//create an array of intigers;
-	int	filedes[4];
-	pipe(filedes);
-	pipe(filedes + 2);
-	// loop {
-		// waitpid(-1, &stat, 0);
-	dup2(filedes[1], 1);
-	id = fork();
-	if (!id)
+	int	filedes[8];
+	while (i < 5)
 	{
-		execve("/bin/ls", ls, NULL);
-		exit(0);
+		if (id)
+		{
+
+		}
+		id = fork();
+		if (!id)
+		{
+			dup2(filedes[i], 0);
+			//dup the prev pipe to 0;
+			dup2(filedes[i + 1], 1); // vvariable
+			execve("/bin/ls", ls, NULL);
+			exit(0);
+		}
+		close(filedes[1]);
+		close(1);
+		i += 2;
 	}
-	waitpid(-1, &stat, 0);
-	close(filedes[1]);
-	close(1);
-	//loop}
-	id = fork();
-	if (!id)
-	{
-		dup2(filedes[2], 0);
-		dup2(save, 1);
-		execve("/usr/bin/grep", grep, NULL);
-	}
-	waitpid(-1, &stat, 0);
+
+	// id = fork();
+	// if (!id)
+	// {
+	// 	dup2(filedes[2], 0);
+	// 	dup2(save, 1);
+	// 	execve("/usr/bin/grep", grep, NULL);
+	// }
+	// waitpid(-1, &stat, 0);
 }
