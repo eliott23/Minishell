@@ -27,8 +27,11 @@ int	main(int ac, char **av, char **ev)
 	// char	*cat[] = {NULL};
 	char	*grep[] = {"grep", "a", NULL};
 	char	*ls[] = {"ls", 0};
+	char	*cat[] = {"cat", 0};
+	char	*cata[] = {"cat", "a", 0};
+	char	*echo
 	int	id = 0;
-	int	stat= 0;
+	int	stat = 0;
 	int	i = 0;
 	int	t = 0;
 	//create an array of intigers;
@@ -39,18 +42,22 @@ int	main(int ac, char **av, char **ev)
 		pipe(filedes + 1 + t*2);
 		t++;
 	}
-	while (i < 10)
+	t = 0;
+	while (i < 4)
 	{
 	id = fork();
 	if (!id)
 	{
 		if (i)
 			dup2(filedes[i], 0);
-		if (i < 8)
+		if (i < 2)
 			dup2(filedes[i + 1], 1);
 		else
 			dup2(save, 1);
-		execve("/bin/ls", ls, NULL);
+		if (i == 0)
+			execve("/bin/grep", grep, NULL);
+		else
+			execve("/bin/ls", ls, NULL);
 	}
 	i += 2;
 	}
