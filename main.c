@@ -529,8 +529,8 @@ int main(int ac, char **av, char **ev)
             free(str);
             str = readline("Minishell>");
         }
-            if (!str)
-                exit(0);
+        if (!str)
+            exit(0);
         add_history(str);
         if (args)
             freesplit(args);
