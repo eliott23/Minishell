@@ -27,30 +27,32 @@ int	main(int ac, char **av, char **ev)
 	// char	*cat[] = {NULL};
 	char	*grep[] = {"grep", "a", NULL};
 	char	*ls[] = {"ls", 0};
-	int	id = 1;
+	int	id = 0;
 	int	stat= 0;
 	int	i = 0;
 	int	t = 0;
 	//create an array of intigers;
-	int	filedes[8];
-	while (i < 5)
+	int	filedes[8 + 1];
+	filedes[0] = 0;
+	while (t < 4)
 	{
-		if (id)
-		{
-
-		}
-		id = fork();
-		if (!id)
-		{
+		pipe(filedes + 1 + t*2);
+		t++;
+	}
+	while (i < 10)
+	{
+	id = fork();
+	if (!id)
+	{
+		if (i)
 			dup2(filedes[i], 0);
-			//dup the prev pipe to 0;
-			dup2(filedes[i + 1], 1); // vvariable
-			execve("/bin/ls", ls, NULL);
-			exit(0);
-		}
-		close(filedes[1]);
-		close(1);
-		i += 2;
+		if (i < 8)
+			dup2(filedes[i + 1], 1);
+		else
+			dup2(save, 1);
+		execve("/bin/ls", ls, NULL);
+	}
+	i += 2;
 	}
 
 	// id = fork();
