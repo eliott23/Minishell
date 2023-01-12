@@ -27,6 +27,7 @@ int	main(int ac, char **av, char **ev)
 	char	*grep[] = {"grep", "a", NULL};
 	char	*ls[] = {"ls", 0};
 	char	*cat[] = {"cat", 0};
+	char	*cd[] = {"cd", 0};
 	char	*cata[] = {"cat", "a", 0};
 	char	*echo[] = {"echo", "ahahahah", 0};
 	int	id = 0;
@@ -42,25 +43,35 @@ int	main(int ac, char **av, char **ev)
 	}
 	// id = fork();
 	// if (!id)
-// {	
-	// dup2(filedes[2], 1);
-	// execve("/bin/cat", cat, NULL);
-	// exit(0);
-// }
-// dup2(filedes[1], 0);
-	// execve("/bin/cat", cat, NULL);
-	t = 0;
+	// {
+	// 	dup2(filedes[2], 1);
+	// 	execve("/bin/cat", cat, NULL);
+	// 	exit(0);
+	// }
+	// id = fork();
+	// if (!id)
+	// {
+	// 	dup2(filedes[1], 0);
+	// 	dup2(save, 1);
+	// 	sleep(1);
+	// 	execve("bin/ls", ls, NULL);
+	// 	exit(0);
+	// }
+	// waitpid(-1, &stat, 0);
 	while (i < 4)
 	{
 	id = fork();
 	if (!id)
 	{
 		if (i)
+		{
 			dup2(filedes[i - 1], 0);
+			fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
+		}
 		if (i < 2)
 		{
 			dup2(filedes[i + 2], 1);
-			fprintf(stderr, "went here at i=%d\n", i);
+			fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
 		}
 		else
 		{
@@ -69,23 +80,11 @@ int	main(int ac, char **av, char **ev)
 		}
 		if (i == 0)
 			execve("/bin/cat", cat, NULL);
-		// fprintf(stderr, "%d\n", i;
-			// execve("/bin/ls", ls, NULL);
 		else
-			execve("/bin/cat", cat, NULL);
+			execve("/bin/ls", ls, NULL);
 		exit(0);
 	}
-	sleep(1);
 	i += 2;
 	}
 	waitpid(-1, &stat, 0);
-
-	// id = fork();
-	// if (!id)
-	// {
-	// 	dup2(filedes[2], 0);
-	// 	dup2(save, 1);
-	// 	execve("/usr/bin/grep", grep, NULL);
-	// }
-	// waitpid(-1, &stat, 0);
 }
