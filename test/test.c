@@ -45,22 +45,27 @@ int	main(int ac, char **av, char **ev)
 	if (!id)
 	{
 		dup2(filedes[2], 1);
-		execve("/usr/bin/grep", grep, NULL);
+		// execve("/usr/bin/grep", grep, NULL);
+		execve("/bin/cat", cat, NULL);
+		exit(0);
 	}
 	id = fork();
 	if (!id)
 	{
 		dup2(filedes[1], 0);
 		dup2(save, 1);
-		// execve("/bin/ls", ls, NULL);
-		execve("/bin/cat", cat, NULL);
+		execve("/bin/ls", ls, NULL);
 		// close(filedes[2]);
 		// close(save);
 		// close(1);
 		// sleep(34);
-		exit(0);
 	}
-	waitpid(-1, &stat, 0);
+	i = 0;
+	while (i < 2)
+	{
+		waitpid(-1, &stat, 0);
+		i++;
+	}
 	// while (i < 4)
 	// {
 	// id = fork();
@@ -88,5 +93,4 @@ int	main(int ac, char **av, char **ev)
 	// }
 	// i += 2;
 	// }
-	waitpid(-1, &stat, 0);
 }
