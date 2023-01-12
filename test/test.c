@@ -55,8 +55,9 @@ int	main(int ac, char **av, char **ev)
 		else
 			dup2(save, 1);
 		// if (i == 0)
-		fprintf(stderr, "%d\n", filedes[i + 1]);
+		fprintf(stderr, "%d\n", i);
 			execve("/bin/echo", echo, NULL);
+			// execve("/bin/ls", ls, NULL);
 		// else
 			// execve("/bin/ls", ls, NULL);
 	}
