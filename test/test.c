@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **ev)
 {
 	char	*arg = malloc(sizeof(char) * 10);
 	int		save =  dup(1);
-	char	*grep[] = {"grep", "a", NULL};
+	char	*grep[] = {"grep", "b", NULL};
 	char	*ls[] = {"ls", 0};
 	char	*cat[] = {"cat", 0};
 	char	*cd[] = {"cd", 0};
@@ -44,17 +44,16 @@ int	main(int ac, char **av, char **ev)
 	// id = fork();
 	// if (!id)
 	// {
-	// 	dup2(filedes[2], 1);
-	// 	execve("/bin/cat", cat, NULL);
-	// 	exit(0);
+		// dup2(filedes[2], 1);
+	// 	execve("/bin/ls", ls, NULL);
 	// }
 	// id = fork();
 	// if (!id)
 	// {
-	// 	dup2(filedes[1], 0);
-	// 	dup2(save, 1);
+	// 	// dup2(filedes[1], 0);
+	// 	// dup2(save, 1);
 	// 	sleep(1);
-	// 	execve("bin/ls", ls, NULL);
+	// 	// execve("bin/ls", ls, NULL);
 	// 	exit(0);
 	// }
 	// waitpid(-1, &stat, 0);
@@ -78,11 +77,10 @@ int	main(int ac, char **av, char **ev)
 			dup2(save, 1);
 			fprintf(stderr, "went heere at i=%d\n", i);
 		}
-		if (i == 0)
-			execve("/bin/cat", cat, NULL);
-		else
+		// if (i == 0)
 			execve("/bin/ls", ls, NULL);
-		exit(0);
+		// else
+			// execve("/bin/cat", cat, NULL);
 	}
 	i += 2;
 	}
