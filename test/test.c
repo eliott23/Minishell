@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **ev)
 {
 	char	*arg = malloc(sizeof(char) * 10);
 	int		save =  dup(1);
-	char	*grep[] = {"grep", "b", NULL};
+	char	*grep[] = {"grep", "a", NULL};
 	char	*ls[] = {"ls", 0};
 	char	*cat[] = {"cat", 0};
 	char	*cd[] = {"cd", 0};
@@ -41,48 +41,52 @@ int	main(int ac, char **av, char **ev)
 		pipe(filedes + 1 + t);
 		t += 2;
 	}
-	// id = fork();
-	// if (!id)
-	// {
-	// 	dup2(filedes[2], 1);
-	// 	execve("/bin/cat", cat, NULL);
-	// }
-	// id = fork();
-	// if (!id)
-	// {
-	// 	dup2(filedes[1], 0);
-	// 	dup2(save, 1);
-	// 	execve("bin/ls", ls, NULL);
-	// 	// sleep(34);
-	// 	exit(0);
-	// }
-	// waitpid(-1, &stat, 0);
-	while (i < 4)
-	{
 	id = fork();
 	if (!id)
 	{
-		if (i)
-		{
-			dup2(filedes[i - 1], 0);
-			fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
-		}
-		if (i < 2)
-		{
-			dup2(filedes[i + 2], 1);
-			fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
-		}
-		else
-		{
-			dup2(save, 1);
-			fprintf(stderr, "went heere at i=%d\n", i);
-		}
-		if (i == 0)
-			execve("/bin/cat", cat, NULL);
-		else
-			execve("/bin/ls", ls, NULL);
+		dup2(filedes[2], 1);
+		execve("/usr/bin/grep", grep, NULL);
 	}
-	i += 2;
+	id = fork();
+	if (!id)
+	{
+		dup2(filedes[1], 0);
+		dup2(save, 1);
+		// execve("/bin/ls", ls, NULL);
+		execve("/bin/cat", cat, NULL);
+		// close(filedes[2]);
+		// close(save);
+		// close(1);
+		// sleep(34);
+		exit(0);
 	}
+	waitpid(-1, &stat, 0);
+	// while (i < 4)
+	// {
+	// id = fork();
+	// if (!id)
+	// {
+	// 	if (i)
+	// 	{
+	// 		dup2(filedes[i - 1], 0);
+	// 		fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
+	// 	}
+	// 	if (i < 2)
+	// 	{
+	// 		dup2(filedes[i + 2], 1);
+	// 		fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
+	// 	}
+	// 	else
+	// 	{
+	// 		dup2(save, 1);
+	// 		fprintf(stderr, "went heere at i=%d\n", i);
+	// 	}
+	// 	if (i == 0)
+	// 		execve("/bin/cat", cat, NULL);
+	// 	else
+	// 		execve("/bin/ls", ls, NULL);
+	// }
+	// i += 2;
+	// }
 	waitpid(-1, &stat, 0);
 }
