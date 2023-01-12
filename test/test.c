@@ -44,16 +44,16 @@ int	main(int ac, char **av, char **ev)
 	// id = fork();
 	// if (!id)
 	// {
-		// dup2(filedes[2], 1);
-	// 	execve("/bin/ls", ls, NULL);
+	// 	dup2(filedes[2], 1);
+	// 	execve("/bin/cat", cat, NULL);
 	// }
 	// id = fork();
 	// if (!id)
 	// {
-	// 	// dup2(filedes[1], 0);
-	// 	// dup2(save, 1);
-	// 	sleep(1);
-	// 	// execve("bin/ls", ls, NULL);
+	// 	dup2(filedes[1], 0);
+	// 	dup2(save, 1);
+	// 	execve("bin/ls", ls, NULL);
+	// 	// sleep(34);
 	// 	exit(0);
 	// }
 	// waitpid(-1, &stat, 0);
@@ -77,10 +77,10 @@ int	main(int ac, char **av, char **ev)
 			dup2(save, 1);
 			fprintf(stderr, "went heere at i=%d\n", i);
 		}
-		// if (i == 0)
+		if (i == 0)
+			execve("/bin/cat", cat, NULL);
+		else
 			execve("/bin/ls", ls, NULL);
-		// else
-			// execve("/bin/cat", cat, NULL);
 	}
 	i += 2;
 	}
