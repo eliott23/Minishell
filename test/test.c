@@ -70,12 +70,12 @@ int	main(int ac, char **av, char **ev)
 		if (i)
 		{
 			dup2(filedes[i - 1], 0);
-			// fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
+			fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
 		}
 		if (i < 2)
 		{
 			dup2(filedes[i + 2], 1);
-			// fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
+			fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
 		}
 		else
 		{
@@ -86,13 +86,13 @@ int	main(int ac, char **av, char **ev)
 		{
 			close(filedes[i + 2]);
 			close(filedes[i + 1]);
-			execve("/bin/cat", cat, NULL);
+			execve("/usr/bin/grep", grep, NULL);
 		}
 		else
 		{
 			close(filedes[i - 1]);
 			close(filedes[i]);
-			execve("/bin/ls", ls, NULL);
+			execve("/bin/cat", cat, NULL);
 		}
 	}
 	i += 2;
