@@ -92,6 +92,8 @@ int	main(int ac, char **av, char **ev)
 		{
 			close(filedes[i - 1]);
 			close(filedes[i]);
+			close(filedes[i + 2]);
+			close(filedes[i + 1]);
 			execve("/bin/cat", cat, NULL);
 		}
 		else
