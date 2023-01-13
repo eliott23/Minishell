@@ -42,14 +42,14 @@ int	main(int ac, char **av, char **ev)
 	// 	pipe(filedes + 1 + t);
 	// 	t += 2;
 	// }
-	// int fd_in = dup(STDIN_FILENO);
 	id = fork();
 	if (!id)
 	{
 		dup2(filedes[1], 1);
 		close (filedes[0]);
-		close (filedes[1]);
-		execve("usr/bin/grep", grep, NULL);
+		// close (filedes[1]);
+		// execve("usr/bin/grep", grep, NULL);
+		execve("/bin/cat", cat, NULL);
 	}
 	id = fork();
 	if (!id)
@@ -57,13 +57,13 @@ int	main(int ac, char **av, char **ev)
 		dup2(filedes[0], 0);
 		close (filedes[0]);
 		close (filedes[1]);
-		execve("/bin/cat", cat, NULL);
+		// execve("/bin/cat", cat, NULL);
+		execve("/bin/ls", ls, NULL);
 	}
 	else
 	{
 		close (filedes[0]);
 		close (filedes[1]);
-		// close (fd_in);
 		while (waitpid(-1, NULL, WUNTRACED) != -1);
 	}
 	// i = 0;
