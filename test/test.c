@@ -34,8 +34,7 @@ int	main(int ac, char **av, char **ev)
 	int	stat = 0;
 	int	i = 0;
 	int	t = 0;
-	int	*filedes = malloc(sizeof(int) * 2);
-	pipe(filedes);
+	int	*filedes = malloc(sizeof(int) * 3);
 	filedes[0] = 0;
 	while (t < 2)
 	{
@@ -62,9 +61,6 @@ int	main(int ac, char **av, char **ev)
 	// }
 	// else
 	// {
-	// 	close (filedes[0]);
-	// 	close (filedes[1]);
-	// 	while (waitpid(-1, NULL, WUNTRACED) != -1);
 	// }
 	while (i < 4)
 	{
@@ -74,25 +70,34 @@ int	main(int ac, char **av, char **ev)
 		if (i)
 		{
 			dup2(filedes[i - 1], 0);
-			fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
+			// fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
 		}
 		if (i < 2)
 		{
 			dup2(filedes[i + 2], 1);
-			fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
+			// fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
 		}
 		else
 		{
 			dup2(save, 1);
-			fprintf(stderr, "went heere at i=%d\n", i);
+			// fprintf(stderr, "went heere at i=%d\n", i);
 		}
 		if (i == 0)
-			execve("/bin/cat", cata, NULL);
+		{
+			close(filedes[i + 2]);
+			close(filedes[i + 1]);
+			execve("/bin/cat", cat, NULL);
+		}
 		else
+		{
+			close(filedes[i - 1]);
+			close(filedes[i]);
 			execve("/bin/ls", ls, NULL);
+		}
 	}
 	i += 2;
 	}
-	i = 0;
-
+	close (filedes[1]);
+	close (filedes[2]);
+	while (waitpid(-1, NULL, WUNTRACED) != -1);
 }
