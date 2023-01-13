@@ -47,9 +47,9 @@ int	main(int ac, char **av, char **ev)
 	{
 		dup2(filedes[1], 1);
 		close (filedes[0]);
-		// close (filedes[1]);
+		close (filedes[1]);
 		// execve("usr/bin/grep", grep, NULL);
-		execve("/bin/cat", cat, NULL);
+		execve("/usr/bin/grep", grep, NULL);
 	}
 	id = fork();
 	if (!id)
@@ -57,8 +57,8 @@ int	main(int ac, char **av, char **ev)
 		dup2(filedes[0], 0);
 		close (filedes[0]);
 		close (filedes[1]);
-		// execve("/bin/cat", cat, NULL);
-		execve("/bin/ls", ls, NULL);
+		execve("/bin/cat", cat, NULL);
+		// execve("/bin/ls", ls, NULL);
 	}
 	else
 	{
