@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-void	putstr(char *str)
+void	putstr(char *str, int fd)
 {
 	int	i;
 
@@ -14,7 +14,7 @@ void	putstr(char *str)
 	{
 		while (str[i])
 		{
-			write(1, &str[i], 1);
+			write(fd, &str[i], 1);
 			i++;
 		}
 	}
@@ -108,7 +108,8 @@ int	main(int ac, char **av, char **ev)
 			close(filedes[2]);
 			close(filedes[3]);
 			close(filedes[4]);
-			execve("/bin/cat", cat, NULL);
+			putstr("yarbi salama\n", 2);
+			exit(0);
 		}
 		else if (i == 2)
 		{

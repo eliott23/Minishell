@@ -557,9 +557,7 @@ int main(int ac, char **av, char **ev)
             exec(args, ev_h);
     }
 }
-
 /*
     validing the identifier
-    reassignment of existing variables
     manipulation behavior of bash
 */
