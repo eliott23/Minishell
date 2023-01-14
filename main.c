@@ -504,8 +504,7 @@ int exec(char **args, t_ev *ev)
 	waitpid(id, &stat, 0);
     return (0);
 }
-
-int main(int ac, char **av, char **ev)
+int mini_hell(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
@@ -556,6 +555,11 @@ int main(int ac, char **av, char **ev)
         else
             exec(args, ev_h);
     }
+}
+
+int main(int ac, char **av, char **ev)
+{
+    mini_hell(ac, av, ev);
 }
 /*
     validing the identifier
