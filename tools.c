@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 20:51:46 by aababach          #+#    #+#             */
-/*   Updated: 2022/12/24 06:45:49 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/14 18:19:33 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ size_t  ft_strlen(const char *s)
         return (i);
 }
 
-char    *ft_strjoin(char const *s1, char const *s2)
+char    *myft_strjoin(char const *s1, char const *s2)
 {
         size_t  len;
         char    *str;

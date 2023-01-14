@@ -1,4 +1,6 @@
 #include "m_shell.h"
+#include "./Header/minishell.h"
+
 int erno;
 
 void    env(t_ev *ev_h)
@@ -291,10 +293,10 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
 					    return (0);
 					}
 					OLD_PWD = malloc(sizeof(char *) * 3);
-					OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+					OLD_PWD[0] = myft_strjoin("OLDPWD=",t_OLDPWD);
                     free(t_OLDPWD);
                     t_PWD = getcwd(t_PWD, 0);
-					OLD_PWD[1] = ft_strjoin("PWD=",t_PWD);
+					OLD_PWD[1] = myft_strjoin("PWD=",t_PWD);
                     free(t_PWD);
 					OLD_PWD[2] = 0;
 					xprt(ev_h, x_ev_h, OLD_PWD, 0);
@@ -330,10 +332,10 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
                 return (0);
            }
            OLD_PWD = malloc(sizeof(char *) * 3);
-           OLD_PWD[0] = ft_strjoin("OLDPWD=",t_OLDPWD);
+           OLD_PWD[0] = myft_strjoin("OLDPWD=",t_OLDPWD);
            free(t_OLDPWD);
            t_PWD = getcwd(t_PWD, 0);
-           OLD_PWD[1] = ft_strjoin("PWD=", t_PWD);
+           OLD_PWD[1] = myft_strjoin("PWD=", t_PWD);
            free(t_PWD);
            OLD_PWD[2] = 0;
            xprt(ev_h, x_ev_h, OLD_PWD, 0);
@@ -413,7 +415,7 @@ char *exec_h(t_ev *ev, char *com)
             free(PATH);
             while (PATHS[i])
             {
-                PATH = ft_strjoin(PATHS[i], com);
+                PATH = myft_strjoin(PATHS[i], com);
                 if (!access(PATH, F_OK))
                 {
                     if (!access(PATH, X_OK))
@@ -484,7 +486,7 @@ int exec(char **args, t_ev *ev)
     int     stat;
     char    **e_v;
 
-    com = ft_strjoin("/", args[0]);
+    com = myft_strjoin("/", args[0]);
     path = exec_h(ev, com);
     free(com);
     if (!path)
