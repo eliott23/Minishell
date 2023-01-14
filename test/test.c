@@ -23,7 +23,7 @@ void	putstr(char *str)
 int	main(int ac, char **av, char **ev)
 {
 	char	*arg = malloc(sizeof(char) * 10);
-	int		save =  dup(1);
+	// int		save =  dup(1);
 	char	*grep[] = {"grep", "a", NULL};
 	char	*ls[] = {"ls", 0};
 	char	*cat[] = {"cat", 0};
@@ -34,10 +34,10 @@ int	main(int ac, char **av, char **ev)
 	int	stat = 0;
 	int	i = 0;
 	int	t = 0;
-	int	lim = 4;
-	int	*filedes = malloc(sizeof(int) * (1 + lim));
-	filedes[0] = 0;
-	while (t < lim + 2)
+	int	lim = 1;
+	int	*filedes = malloc(sizeof(int) * (5));
+	// filedes[0] = 0;
+	while (t < 4)
 	{
 		pipe(filedes + 1 + t);
 		t += 2;
@@ -48,22 +48,46 @@ int	main(int ac, char **av, char **ev)
 	// 	dup2(filedes[1], 1);
 	// 	close (filedes[0]);
 	// 	close (filedes[1]);
+	// 	close(filedes[2]);
+	// 	close(filedes[3]);
 	// 	// execve("usr/bin/grep", grep, NULL);
-	// 	execve("/usr/bin/grep", grep, NULL);
+	// 	execve("/bin/cat", cat, NULL);
+	// 	exit(0);
 	// }
 	// id = fork();
 	// if (!id)
 	// {
 	// 	dup2(filedes[0], 0);
+	// 	dup2(filedes[3],1);
 	// 	close (filedes[0]);
 	// 	close (filedes[1]);
+	// 	close(filedes[3]);
+	// 	close(filedes[2]);
 	// 	execve("/bin/cat", cat, NULL);
 	// 	// execve("/bin/ls", ls, NULL);
+	// 	exit(0);
 	// }
+	// id = fork();
+	// if (!id)
+	// {
+	// 	dup2(filedes[2], 0);
+	// 	close (filedes[0]);
+	// 	close (filedes[1]);
+	// 	close(filedes[3]);
+	// 	close(filedes[2]);
+	// 	// execve("/bin/cat", cat, NULL);
+	// 	execve("/bin/ls", ls, NULL);
+	// 	exit(0);
+	// }
+	// 	close (filedes[0]);
+	// 	close (filedes[1]);
+	// 	close(filedes[3]);
+	// 	close(filedes[2]);
+	// 	while (waitpid(-1, NULL, WUNTRACED) != -1);
 	// else
 	// {
 	// }
-	while (i < lim)
+	while (i < 6)
 	{
 	id = fork();
 	if (!id)
@@ -73,31 +97,34 @@ int	main(int ac, char **av, char **ev)
 			dup2(filedes[i - 1], 0);
 			fprintf(stderr, "duped i - 1 =%d on 0\n", i - 1);
 		}
-		if (i < lim - 2)
+		if (i < 4)
 		{
 			dup2(filedes[i + 2], 1);
 			fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
 		}
-		else
-		{
-			dup2(save, 1);
-			// fprintf(stderr, "went heere at i=%d\n", i);
-		}
 		if (i == 0)
+		{
+			close(filedes[1]);
+			close(filedes[2]);
+			close(filedes[3]);
+			close(filedes[4]);
 			execve("/bin/cat", cat, NULL);
-		// else if (i == 2)
-		// {
-		// 	close(filedes[i - 1]);
-		// 	close(filedes[i]);
-		// 	close(filedes[i + 2]);
-		// 	close(filedes[i + 1]);
-		// 	execve("/bin/cat", cat, NULL);
-		// }
+		}
+		else if (i == 2)
+		{
+			close(filedes[1]);
+			close(filedes[2]);
+			close(filedes[3]);
+			close(filedes[4]);
+			execve("/bin/cat", cat, NULL);
+		}
 		else
 		{
 			// printf("it went here on i = %d\n", i);
-			// close(filedes[i - 1]);
-			// close(filedes[i]);
+			close(filedes[1]);
+			close(filedes[2]);
+			close(filedes[3]);
+			close(filedes[4]);
 			execve("/bin/ls", ls, NULL);
 		}
 	}
@@ -105,7 +132,7 @@ int	main(int ac, char **av, char **ev)
 	}
 	close (filedes[1]);
 	close (filedes[2]);
-	// close (filedes[3]);
-	// close (filedes[4]);
+	close (filedes[3]);
+	close (filedes[4]);
 	while (waitpid(-1, NULL, WUNTRACED) != -1);
 }
