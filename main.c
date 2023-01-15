@@ -615,6 +615,8 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
+                    // if (i == 1)
+                    //     sleep(40);
                     // if (i)
                     // {
 
@@ -629,6 +631,7 @@ int mini_hell(char **av, char **ev)
                     what_to_call(v, &ev_h, &x_ev_h, args);
                     exit(0);
                 }
+                sleep(1);
                 i++;
             }
             printf("waiting\n");
