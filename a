@@ -1,0 +1,18 @@
+Undefined symbols for architecture x86_64:
+  "_isbuiltin", referenced from:
+      _command_validity in errors-c9e931.o
+  "_notbuiltin", referenced from:
+      _cmd_case in parse_list-88015d.o
+  "_set_builtins_exit_status", referenced from:
+      _unclosed_quote in exp_util_6-c4634b.o
+      _error_printing in parse_list_utils_2-ad7276.o
+      _pipe_case in parse_list_utils_4-8029b7.o
+  "_set_commands_exit_status", referenced from:
+      _wait_all in utils_2-7ea0b5.o
+      _wait_all_pipeline in utils_2-7ea0b5.o
+  "_stderr_cmd_not_found", referenced from:
+      _command_validity in errors-c9e931.o
+  "_stderr_path_unset", referenced from:
+      _command_validity in errors-c9e931.o
+ld: symbol(s) not found for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
