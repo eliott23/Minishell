@@ -612,7 +612,6 @@ int mini_hell(char **av, char **ev)
             fd = malloc(sizeof(int) * (count - 1) * 2);
             while (tokens[i].args)
             {
-                printf("this is i %d\n", i);
                 id = fork();
                 if (!id)
                 {
@@ -622,6 +621,7 @@ int mini_hell(char **av, char **ev)
                     // }
                     // if (tokens[i + 1].args)
                     // {
+                        //
                     // }
                     // fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
