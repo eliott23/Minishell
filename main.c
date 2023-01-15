@@ -504,16 +504,6 @@ int exec(char **args, t_ev *ev)
 	waitpid(id, &stat, 0);
     return (0);
 }
-int ft_start(t_ev *ev_h, t_ev *x_ev_h, char *str)
-{
-    int     v;
-    char    **args = NULL;
-
-    args = ft_split(str, ' ');
-    v = m_parsing(args);
-    what_to_call(v, &ev_h, &x_ev_h, args);
-    return (0); // voir exit status related issues;
-}
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     if (v == 0)
@@ -537,12 +527,43 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         exec(args, *ev_h);
     return (0);
 }
+int ft_start(t_ev *ev_h, t_ev *x_ev_h, char *str)
+{
+    int     v;
+    char    **args = NULL;
+
+    args = ft_split(str, ' ');
+    v = m_parsing(args);
+    what_to_call(v, &ev_h, &x_ev_h, args);
+    return (0); // voir exit status related issues;
+}
+t_cmdl *v_pars(char  *str)
+{
+    char    **coml;
+    int count = 0;
+    int i = 0;
+
+    coml = ft_split(str, '|');
+    while (coml[count])
+        count++;
+    printf("number of args=%d\n", count);
+    t_cmdl *cmdl = malloc(sizeof(t_cmdl) * (count + 1));
+    while (i < count)
+    {
+        cmdl[i].args = ft_split(coml[i], ' ');
+        i++;
+    }
+    cmdl[i].args = 0;
+    return (cmdl);
+}
 int mini_hell(char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
+    t_cmdl  *tokens;
 
     int     v;
+    int     i;
     char    *str = NULL;
     char    **args = NULL;
     ev_h = NULL;
@@ -571,10 +592,18 @@ int mini_hell(char **av, char **ev)
             v = m_parsing(args);
             what_to_call(v, &ev_h, &x_ev_h, args);
         }
-        // else
+        else
+        {
+            tokens = v_pars(str);
+            while (tokens[i].args)
+            {
+                args = ft_split(tokens[i].args, ' ');
+                v = m_parsing(args);
+                what_to_call(v, &ev_h, &x_ev_h, args);
+            }
+        }
     }
 }
-
 
 int main(int ac, char **av, char **ev)
 {

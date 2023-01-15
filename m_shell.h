@@ -9,7 +9,6 @@
 #include <readline/readline.h> 
 typedef struct cmdl{
 	char	**args;
-	struct cmdl	*next;
 }t_cmdl;
 
 typedef struct node{
