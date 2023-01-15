@@ -484,8 +484,8 @@ int execp(char **args, t_ev *ev)
     char    *path;
     char    *com;
 
+    printf("here is the args[0] %s\n", args[0]);
     com = myft_strjoin("/", args[0]);
-    fprintf(stderr, "here is the path %s\n", path);
     path = exec_h(ev, com);
     free(com);
     execve(path, args, ft_conv(ev));
@@ -596,8 +596,8 @@ int mini_hell(char **av, char **ev)
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
-    int fd1 = dup(1);
-    int fd0 = dup(0);
+    // int fd1 = dup(1);
+    // int fd0 = dup(0);
     while (1)
     {
         if (str)
@@ -623,6 +623,7 @@ int mini_hell(char **av, char **ev)
         }
         else
         {
+            i = 0;
             tokens = v_pars(str, &count);
             fd = malloc(sizeof(int) * (count - 1) * 2);
             while (tokens[i].args)
@@ -644,13 +645,11 @@ int mini_hell(char **av, char **ev)
                     v = m_parsing(tokens[i].args);
                     if (v == 7)
                         what_to_call(v + 1, &ev_h, &x_ev_h, args);
-                    exit(0);
                 }
                 i++;
             }
             printf("waiting\n");
-            waitpid(-1, stat, 0);
-            waitpid(-1, stat, 0);
+            while (waitpid(-1, NULL, WUNTRACED) != -1);
             free(fd);
         }
     }
