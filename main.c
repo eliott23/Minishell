@@ -527,15 +527,12 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         exec(args, *ev_h);
     return (0);
 }
-int ft_start(t_ev *ev_h, t_ev *x_ev_h, char *str)
+int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     int     v;
-    char    **args = NULL;
-
-    args = ft_split(str, ' ');
     v = m_parsing(args);
-    what_to_call(v, &ev_h, &x_ev_h, args);
-    return (0); // voir exit status related issues;
+    what_to_call(v, ev_h, x_ev_h, args);
+    exit(0);
 }
 t_cmdl *v_pars(char  *str, int *a)
 {
@@ -556,6 +553,17 @@ t_cmdl *v_pars(char  *str, int *a)
     cmdl[i].args = 0;
     return (cmdl);
 }
+void    fdclose(int n, int  *fd)
+{
+    int i;
+
+    i = 0;
+    while (i < n)
+    {
+        close(fd[i]);
+        i++;
+    }
+}
 int mini_hell(char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -569,9 +577,12 @@ int mini_hell(char **av, char **ev)
     int     count;
     int     id;
     int     *fd;
+    int     *stat;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
+    int fd1 = dup(1);
+    int fd0 = dup(0);
     while (1)
     {
         if (str)
@@ -587,10 +598,10 @@ int mini_hell(char **av, char **ev)
         if (!str)
             exit(0);
         add_history(str);
-        if (args)
-            freesplit(args);
         if (!ft_srch(str, '|'))
         {
+            if (args)
+                freesplit(args);
             args = ft_split(str, ' ');
             v = m_parsing(args);
             what_to_call(v, &ev_h, &x_ev_h, args);
@@ -601,6 +612,7 @@ int mini_hell(char **av, char **ev)
             fd = malloc(sizeof(int) * (count - 1) * 2);
             while (tokens[i].args)
             {
+                printf("this is i %d\n", i);
                 id = fork();
                 if (!id)
                 {
@@ -608,12 +620,21 @@ int mini_hell(char **av, char **ev)
                     // {
 
                     // }
-                    args = ft_split(tokens[i].args, ' ');
-                    v = m_parsing(args);
+                    // if (tokens[i + 1].args)
+                    // {
+                    // }
+                    // fdclose((count - 1) * 2, fd);
+                    v = m_parsing(tokens[i].args);
+                    printf("this is v %d\n", v);
                     what_to_call(v, &ev_h, &x_ev_h, args);
+                    exit(0);
                 }
                 i++;
             }
+            printf("waiting\n");
+            waitpid(-1, stat, 0);
+            waitpid(-1, stat, 0);
+            free(fd);
         }
     }
 }
