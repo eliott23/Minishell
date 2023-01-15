@@ -390,7 +390,7 @@ int echo(char **args)
             printf("%s", args[i]);
             i++;
             if (args[i])
-                printf(" ");
+                printf(" ");    //weirdoooooooo
         }
         if (n_l)
             printf("\n");
@@ -479,6 +479,18 @@ char    **ft_conv(t_ev *ev)
     env[i] = 0;
     return (env);
 }
+int execp(char **args, t_ev *ev)
+{
+    char    *path;
+    char    *com;
+
+    com = myft_strjoin("/", args[0]);
+    fprintf(stderr, "here is the path %s\n", path);
+    path = exec_h(ev, com);
+    free(com);
+    execve(path, args, ft_conv(ev));
+    return (0);
+}
 int exec(char **args, t_ev *ev)
 {
     char    *path;
@@ -492,17 +504,14 @@ int exec(char **args, t_ev *ev)
     if (!path)
         return (0);
     id = fork();
-    if (id)
-    {
-        if (path)
-            free(path);
-    }
 	if (!id)
     {
         execve(path , args, ft_conv(ev)); //check safety of every execve;
-        exit(0);
+        exit(0);        //careful with the exit status;
     }
 	waitpid(id, &stat, 0);
+    if (path)
+        free(path);
     return (0);
 }
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
@@ -524,8 +533,13 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         printf("exit\n");
         exit (0);
     }
-    else
+    else if (v == 7)
         exec(args, *ev_h);
+    else
+    {
+        printf("execp was called\n");
+        execp(args, *ev_h);
+    }
     return (0);
 }
 int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
@@ -617,7 +631,7 @@ int mini_hell(char **av, char **ev)
                 if (!id)
                 {
                     // if (i == 1)
-                    //     sleep(40);
+                    //    sleep(40);
                     // if (i)
                     // {
 
@@ -628,12 +642,10 @@ int mini_hell(char **av, char **ev)
                     // }
                     // fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
-                    printf("this is v %d\n", v);
                     if (v == 7)
-                    what_to_call(v, &ev_h, &x_ev_h, args);
+                        what_to_call(v + 1, &ev_h, &x_ev_h, args);
                     exit(0);
                 }
-                sleep(1);
                 i++;
             }
             printf("waiting\n");
