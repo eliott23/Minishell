@@ -537,7 +537,7 @@ int ft_start(t_ev *ev_h, t_ev *x_ev_h, char *str)
     what_to_call(v, &ev_h, &x_ev_h, args);
     return (0); // voir exit status related issues;
 }
-t_cmdl *v_pars(char  *str)
+t_cmdl *v_pars(char  *str, int *a)
 {
     char    **coml;
     int count = 0;
@@ -546,7 +546,7 @@ t_cmdl *v_pars(char  *str)
     coml = ft_split(str, '|');
     while (coml[count])
         count++;
-    printf("number of args=%d\n", count);
+    *a = count;
     t_cmdl *cmdl = malloc(sizeof(t_cmdl) * (count + 1));
     while (i < count)
     {
@@ -566,6 +566,9 @@ int mini_hell(char **av, char **ev)
     int     i;
     char    *str = NULL;
     char    **args = NULL;
+    int     count;
+    int     id;
+    int     *fd;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -594,12 +597,22 @@ int mini_hell(char **av, char **ev)
         }
         else
         {
-            tokens = v_pars(str);
+            tokens = v_pars(str, &count);
+            fd = malloc(sizeof(int) * (count - 1) * 2);
             while (tokens[i].args)
             {
-                args = ft_split(tokens[i].args, ' ');
-                v = m_parsing(args);
-                what_to_call(v, &ev_h, &x_ev_h, args);
+                id = fork();
+                if (!id)
+                {
+                    // if (i)
+                    // {
+
+                    // }
+                    args = ft_split(tokens[i].args, ' ');
+                    v = m_parsing(args);
+                    what_to_call(v, &ev_h, &x_ev_h, args);
+                }
+                i++;
             }
         }
     }
