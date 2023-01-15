@@ -631,8 +631,8 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
-                    // if (i == 1)
-                    //    sleep(40);
+                    if (i == 1)
+                        exit(0);
                     // if (i)
                     // {
 
@@ -645,6 +645,8 @@ int mini_hell(char **av, char **ev)
                     v = m_parsing(tokens[i].args);
                     if (v == 7)
                         what_to_call(v + 1, &ev_h, &x_ev_h, args);
+                    else
+                        what_to_call(v, &ev_h, &x_ev_h, args);
                 }
                 i++;
             }
