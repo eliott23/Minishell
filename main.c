@@ -1,5 +1,4 @@
 #include "m_shell.h"
-#include "./Header/minishell.h"
 
 int erno;
 
@@ -491,7 +490,7 @@ int exec(char **args, t_ev *ev)
     free(com);
     if (!path)
         return (0);
-    id =fork();
+    id = fork();
     if (id)
     {
         if (path)
@@ -499,21 +498,52 @@ int exec(char **args, t_ev *ev)
     }
 	if (!id)
     {
-        execve(path , args, ft_conv(ev));
-        printf("hi am the child process\n");
+        execve(path , args, ft_conv(ev)); //check safety of every execve;
         exit(0);
     }
 	waitpid(id, &stat, 0);
     return (0);
 }
-int mini_hell(int ac, char **av, char **ev)
+int ft_start(t_ev *ev_h, t_ev *x_ev_h, char *str)
+{
+    int     v;
+    char    **args = NULL;
+
+    args = ft_split(str, ' ');
+    v = m_parsing(args);
+    what_to_call(v, &ev_h, &x_ev_h, args);
+    return (0); // voir exit status related issues;
+}
+int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
+{
+    if (v == 0)
+    xprt(ev_h, x_ev_h, args + 1, 0);
+    else if (v == 1)
+        unset(ev_h, x_ev_h, args + 1);
+    else if (v == 2)
+        env(*ev_h); //pottential issue regarding if an unwanted argument was provided;
+    else if(v == 3)
+        cd(ev_h, x_ev_h, args);
+    else if (v == 4)
+        pwd();
+    else if (v == 5)
+        echo(args + 1);
+    else if (v == 6)
+    {
+        printf("exit\n");
+        exit (0);
+    }
+    else
+        exec(args, *ev_h);
+    return (0);
+}
+int mini_hell(char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
 
     int     v;
     char    *str = NULL;
-    char    *noarg[] = {0};
     char    **args = NULL;
     ev_h = NULL;
     x_ev_h = NULL;
@@ -535,33 +565,20 @@ int mini_hell(int ac, char **av, char **ev)
         add_history(str);
         if (args)
             freesplit(args);
-        args = ft_split(str, ' ');
-        v = m_parsing(args);
-        if (v == 0)
-            xprt(&ev_h, &x_ev_h, args + 1, 0);
-        else if (v == 1)
-            unset(&ev_h, &x_ev_h, args + 1);
-        else if (v == 2)
-            env(ev_h); //pottential issue regarding if an unwanted argument was provided;
-        else if(v == 3)
-            cd(&ev_h, &x_ev_h, args);
-        else if (v == 4)
-            pwd();
-        else if (v == 5)
-            echo(args + 1);
-        else if (v == 6)
+        if (!ft_srch(str, '|'))
         {
-            printf("exit\n");
-            exit (0);
+            args = ft_split(str, ' ');
+            v = m_parsing(args);
+            what_to_call(v, &ev_h, &x_ev_h, args);
         }
-        else
-            exec(args, ev_h);
+        // else
     }
 }
 
+
 int main(int ac, char **av, char **ev)
 {
-    mini_hell(ac, av, ev);
+    mini_hell(av, ev);
 }
 /*
     validing the identifier

@@ -7,6 +7,10 @@
 #include <unistd.h>
 #include <errno.h>
 #include <readline/readline.h> 
+typedef struct cmdl{
+	char	**args;
+	struct cmdl	*next;
+}t_cmdl;
 
 typedef struct node{
     char *var;
