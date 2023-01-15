@@ -405,6 +405,7 @@ char *exec_h(t_ev *ev, char *com)
     int     i;
 
     i = 0;
+    PATHS = NULL;
     while (ev)
     {
         if (ev_cmp(ev->var, "PATH"))
@@ -450,7 +451,8 @@ char *exec_h(t_ev *ev, char *com)
         }
         ev = ev->next;
     }
-    freesplit(PATHS);
+    if (PATHS)
+        freesplit(PATHS);
     printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
@@ -483,7 +485,6 @@ int exec(char **args, t_ev *ev)
     char    *com;
     int     id;
     int     stat;
-    char    **e_v;
 
     com = myft_strjoin("/", args[0]);
     path = exec_h(ev, com);
@@ -628,6 +629,7 @@ int mini_hell(char **av, char **ev)
                     // fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
                     printf("this is v %d\n", v);
+                    if (v == 7)
                     what_to_call(v, &ev_h, &x_ev_h, args);
                     exit(0);
                 }
