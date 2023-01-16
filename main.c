@@ -481,8 +481,8 @@ char    **ft_conv(t_ev *ev)
 }
 int ft_execp(char **args, t_ev *ev)
 {
-    fprintf(stderr,"here is the args[0] %s\n", args[0]);
-    exit(0);
+    // fprintf(stderr,"here is the args[0] %s\n", args[0]);
+    // exit(0);
     char    *path;
     char    *com;
 
@@ -635,11 +635,11 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
-                    // if (i == 0)
-                    // {
-                    //     sleep(5);
-                    //     exit(0);
-                    // }
+                    if (i == 1)
+                    {
+                        // sleep(5);
+                        exit(0);
+                    }
                     // if (i)
                     // {
 
