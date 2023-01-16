@@ -479,16 +479,19 @@ char    **ft_conv(t_ev *ev)
     env[i] = 0;
     return (env);
 }
-int execp(char **args, t_ev *ev)
+int ft_execp(char **args, t_ev *ev)
 {
+    fprintf(stderr,"here is the args[0] %s\n", args[0]);
+    exit(0);
     char    *path;
     char    *com;
 
-    printf("here is the args[0] %s\n", args[0]);
     com = myft_strjoin("/", args[0]);
     path = exec_h(ev, com);
     free(com);
     execve(path, args, ft_conv(ev));
+    // printf("ana hmar\n");
+    exit(0);
     return (0);
 }
 int exec(char **args, t_ev *ev)
@@ -538,7 +541,8 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
     else
     {
         printf("execp was called\n");
-        execp(args, *ev_h);
+        ft_execp(args, *ev_h);
+        printf("execp was called\n");
     }
     return (0);
 }
@@ -631,8 +635,11 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
-                    if (i == 1)
-                        exit(0);
+                    // if (i == 0)
+                    // {
+                    //     sleep(5);
+                    //     exit(0);
+                    // }
                     // if (i)
                     // {
 
@@ -643,14 +650,22 @@ int mini_hell(char **av, char **ev)
                     // }
                     // fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
+                    // if (i == 1)
+                    // {
+                    //     printf("v = %d\n", v);
+                    //     exit(0);
+                    // }
                     if (v == 7)
                         what_to_call(v + 1, &ev_h, &x_ev_h, args);
                     else
                         what_to_call(v, &ev_h, &x_ev_h, args);
+                    fprintf(stderr,"breakpoint \n");
                 }
                 i++;
+                // sleep(5);
             }
             printf("waiting\n");
+            // sleep(40);
             while (waitpid(-1, NULL, WUNTRACED) != -1);
             free(fd);
         }
