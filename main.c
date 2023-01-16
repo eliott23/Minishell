@@ -636,7 +636,7 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
-                    if (j > 0)
+                    if (j >= 0)
                         dup2(fd[j], 0);
                     if (tokens[i + 1].args)
                         dup2(fd[j + 3], 1);
