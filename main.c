@@ -629,11 +629,6 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
-                    // if (i == 1)
-                    // {
-                    //     // sleep(5);
-                    //     exit(0);
-                    // }
                     // if (i)
                     // {
 
@@ -642,7 +637,7 @@ int mini_hell(char **av, char **ev)
                     // {
                         //
                     // }
-                    // fdclose((count - 1) * 2, fd);
+                    fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
                     // if (i == 1)
                     // {
@@ -656,10 +651,7 @@ int mini_hell(char **av, char **ev)
                     fprintf(stderr,"breakpoint \n");
                 }
                 i++;
-                // sleep(5);
             }
-            printf("waiting\n");
-            // sleep(40);
             while (waitpid(-1, NULL, WUNTRACED) != -1);
             free(fd);
         }
