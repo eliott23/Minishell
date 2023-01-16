@@ -481,8 +481,6 @@ char    **ft_conv(t_ev *ev)
 }
 int ft_execp(char **args, t_ev *ev)
 {
-    // fprintf(stderr,"here is the args[0] %s\n", args[0]);
-    // exit(0);
     char    *path;
     char    *com;
 
@@ -490,7 +488,6 @@ int ft_execp(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     execve(path, args, ft_conv(ev));
-    // printf("ana hmar\n");
     exit(0);
     return (0);
 }
@@ -539,11 +536,7 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
     else if (v == 7)
         exec(args, *ev_h);
     else
-    {
-        printf("execp was called\n");
         ft_execp(args, *ev_h);
-        printf("execp was called\n");
-    }
     return (0);
 }
 int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
@@ -590,11 +583,11 @@ int mini_hell(char **av, char **ev)
     t_cmdl  *tokens;
 
     int     v;
+    int     id;
     int     i;
     char    *str = NULL;
     char    **args = NULL;
     int     count;
-    int     id;
     int     *fd;
     int     *stat;
     ev_h = NULL;
@@ -628,6 +621,7 @@ int mini_hell(char **av, char **ev)
         else
         {
             i = 0;
+            
             tokens = v_pars(str, &count);
             fd = malloc(sizeof(int) * (count - 1) * 2);
             while (tokens[i].args)
@@ -635,11 +629,11 @@ int mini_hell(char **av, char **ev)
                 id = fork();
                 if (!id)
                 {
-                    if (i == 1)
-                    {
-                        // sleep(5);
-                        exit(0);
-                    }
+                    // if (i == 1)
+                    // {
+                    //     // sleep(5);
+                    //     exit(0);
+                    // }
                     // if (i)
                     // {
 
@@ -656,9 +650,9 @@ int mini_hell(char **av, char **ev)
                     //     exit(0);
                     // }
                     if (v == 7)
-                        what_to_call(v + 1, &ev_h, &x_ev_h, args);
+                        what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
                     else
-                        what_to_call(v, &ev_h, &x_ev_h, args);
+                        what_to_call(v, &ev_h, &x_ev_h, tokens[i].args);
                     fprintf(stderr,"breakpoint \n");
                 }
                 i++;
