@@ -102,32 +102,16 @@ int	main(int ac, char **av, char **ev)
 			dup2(filedes[i + 2], 1);
 			fprintf(stderr, "duped i + 2 =%d on 1\n", i + 2);
 		}
+			close(filedes[1]);	//needs to be dynamic;
+			close(filedes[2]);	//needs to be dynamic;
+			close(filedes[3]);	//needs to be dynamic;
+			close(filedes[4]);	//needs to be dynamic;
 		if (i == 0)
-		{
-			close(filedes[1]);	//needs to be dynamic;
-			close(filedes[2]);	//needs to be dynamic;
-			close(filedes[3]);	//needs to be dynamic;
-			close(filedes[4]);	//needs to be dynamic;
-			putstr("yarbi salama\n", 2);
-			exit(0);
-		}
-		else if (i == 2)
-		{
-			close(filedes[1]);	//needs to be dynamic;
-			close(filedes[2]);	//needs to be dynamic;
-			close(filedes[3]);	//needs to be dynamic;
-			close(filedes[4]);	//needs to be dynamic;
 			execve("/bin/cat", cat, NULL);
-		}
+		else if (i == 2)
+			execve("/bin/cat", cat, NULL);
 		else
-		{
-			// printf("it went here on i = %d\n", i);
-			close(filedes[1]);	//needs to be dynamic;
-			close(filedes[2]);	//needs to be dynamic;
-			close(filedes[3]);	//needs to be dynamic;
-			close(filedes[4]);	//needs to be dynamic;
 			execve("/bin/ls", ls, NULL);
-		}
 	}
 	i += 2;
 	}

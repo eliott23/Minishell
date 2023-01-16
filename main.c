@@ -585,6 +585,7 @@ int mini_hell(char **av, char **ev)
     int     v;
     int     id;
     int     i;
+    int     j;
     char    *str = NULL;
     char    **args = NULL;
     int     count;
@@ -621,37 +622,35 @@ int mini_hell(char **av, char **ev)
         else
         {
             i = 0;
-            
+            j = 0;
             tokens = v_pars(str, &count);
             fd = malloc(sizeof(int) * (count - 1) * 2);
+            while (j < (count - 1) * 2)
+            {
+                pipe(fd + j);
+                j += 2;
+            }
+            j = -2;
             while (tokens[i].args)
             {
-                // id = fork();
+                id = fork();
                 if (!id)
                 {
-                    // if (i)
-                    // {
-
-                    // }
-                    // if (tokens[i + 1].args)
-                    // {
-                        //
-                    // }
-                    // fdclose((count - 1) * 2, fd);
+                    if (j > 0)
+                        dup2(fd[j], 0);
+                    if (tokens[i + 1].args)
+                        dup2(fd[j + 3], 1);
+                    fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
-                    // if (i == 1)
-                    // {
-                    //     printf("v = %d\n", v);
-                    //     exit(0);
-                    // }
                     if (v == 7)
                         what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
                     else
                         what_to_call(v, &ev_h, &x_ev_h, tokens[i].args);
-                    // fprintf(stderr,"breakpoint \n");
                 }
+                j += 2;
                 i++;
             }
+            fdclose((count - 1) * 2, fd);
             while (waitpid(-1, NULL, WUNTRACED) != -1);
             free(fd);
         }
