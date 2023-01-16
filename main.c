@@ -626,7 +626,7 @@ int mini_hell(char **av, char **ev)
             fd = malloc(sizeof(int) * (count - 1) * 2);
             while (tokens[i].args)
             {
-                id = fork();
+                // id = fork();
                 if (!id)
                 {
                     // if (i)
@@ -637,7 +637,7 @@ int mini_hell(char **av, char **ev)
                     // {
                         //
                     // }
-                    fdclose((count - 1) * 2, fd);
+                    // fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
                     // if (i == 1)
                     // {
@@ -648,7 +648,7 @@ int mini_hell(char **av, char **ev)
                         what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
                     else
                         what_to_call(v, &ev_h, &x_ev_h, tokens[i].args);
-                    fprintf(stderr,"breakpoint \n");
+                    // fprintf(stderr,"breakpoint \n");
                 }
                 i++;
             }
