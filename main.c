@@ -594,8 +594,6 @@ int mini_hell(char **av, char **ev)
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
-    // int fd1 = dup(1);
-    // int fd0 = dup(0);
     while (1)
     {
         if (str)
@@ -645,7 +643,10 @@ int mini_hell(char **av, char **ev)
                     if (v == 7)
                         what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
                     else
+                    {
                         what_to_call(v, &ev_h, &x_ev_h, tokens[i].args);
+                        exit(0);
+                    }
                 }
                 j += 2;
                 i++;
