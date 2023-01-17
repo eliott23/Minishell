@@ -633,7 +633,7 @@ int mini_hell(char **av, char **ev)
             j = -2;
             while (tokens[i].args)
             {
-                id = fork();
+                id = fork(); // check later;
                 if (!id)
                 {
                     if (j >= 0)
