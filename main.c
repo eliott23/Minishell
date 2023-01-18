@@ -1,6 +1,15 @@
 #include "m_shell.h"
+#include <sys/wait.h>
 
 int erno;
+
+void    ft_exit_status(int status, int *e_s)
+{
+    if (WIFEXITED(status))
+        printf("child exited, status=%d\n", WEXITSTATUS(status));
+    else if (WIFSIGNALED(status))
+        printf("exit status = %d", status + 128);
+}
 
 void    env(t_ev *ev_h)
 {
@@ -425,9 +434,9 @@ char *exec_h(t_ev *ev, char *com)
                     }
                     else
                     {
-                        printf("%s: %s\n", com, strerror(erno));
                         free(PATH);
                         freesplit(PATHS);
+                        //set the exit status to 126;
                         return (0);
                     }
                 }
@@ -444,10 +453,13 @@ char *exec_h(t_ev *ev, char *com)
                 }
                 else
                 {
+                    //set e_s to 126;
                     freesplit(PATHS);
                     return (ft_strdup(com + 1));
                 }
             }
+            // else
+            //  set e_s to 127;
         }
         ev = ev->next;
     }
@@ -491,7 +503,7 @@ int ft_execp(char **args, t_ev *ev)
     exit(0);
     return (0);
 }
-int exec(char **args, t_ev *ev)
+int exec(char **args, t_ev *ev, int *e_s)
 {
     char    *path;
     char    *com;
@@ -510,11 +522,12 @@ int exec(char **args, t_ev *ev)
         exit(0);        //careful with the exit status;
     }
 	waitpid(id, &stat, 0);
+    ft_exit_status(stat, e_s);
     if (path)
         free(path);
     return (0);
 }
-int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
+int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args, int *e_s)
 {
     if (v == 0)
     xprt(ev_h, x_ev_h, args + 1, 0);
@@ -534,18 +547,18 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         exit (0);
     }
     else if (v == 7)
-        exec(args, *ev_h);
+        exec(args, *ev_h, e_s);
     else
         ft_execp(args, *ev_h);
     return (0);
 }
-int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
-{
-    int     v;
-    v = m_parsing(args);
-    what_to_call(v, ev_h, x_ev_h, args);
-    exit(0);
-}
+// int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
+// {
+//     int     v;
+//     v = m_parsing(args);
+//     what_to_call(v, ev_h, x_ev_h, args);
+//     exit(0);
+// }
 t_cmdl *v_pars(char  *str, int *a)
 {
     char    **coml;
@@ -576,6 +589,11 @@ void    fdclose(int n, int  *fd)
         i++;
     }
 }
+void    ctl_C(int i)
+{
+    printf("\n");
+    exit(0);
+}
 int mini_hell(char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -591,6 +609,8 @@ int mini_hell(char **av, char **ev)
     int     count;
     int     *fd;
     int     *stat;
+    int     *e_s;
+    e_s = malloc(sizeof(int) * 2);
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -615,7 +635,7 @@ int mini_hell(char **av, char **ev)
                 freesplit(args);
             args = ft_split(str, ' ');
             v = m_parsing(args);
-            what_to_call(v, &ev_h, &x_ev_h, args);
+            what_to_call(v, &ev_h, &x_ev_h, args, e_s);
         }
         else
         {
@@ -628,12 +648,14 @@ int mini_hell(char **av, char **ev)
                 pipe(fd + j);
                 j += 2;
             }
+            // pipe(e_s);
             j = -2;
             while (tokens[i].args)
             {
                 id = fork(); // check later;
                 if (!id)
                 {
+                    signal(SIGINT, SIG_DFL);
                     if (j >= 0)
                         dup2(fd[j], 0);
                     if (tokens[i + 1].args)
@@ -641,10 +663,10 @@ int mini_hell(char **av, char **ev)
                     fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
                     if (v == 7)
-                        what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
+                        what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args, e_s);
                     else
                     {
-                        what_to_call(v, &ev_h, &x_ev_h, tokens[i].args);
+                        what_to_call(v, &ev_h, &x_ev_h, tokens[i].args, e_s);
                         exit(0);
                     }
                 }
@@ -652,22 +674,24 @@ int mini_hell(char **av, char **ev)
                 i++;
             }
             fdclose((count - 1) * 2, fd);
-            while (waitpid(-1, NULL, WUNTRACED) != -1);
+            while (waitpid(-1, stat, 0) != -1);
+            ft_exit_status(*stat, e_s);
+            // char    *str = malloc(sizeof(char) * 4);
+            // read(e_s[0], str,3);
+            // printf("this is the exit status")
+            // add the $?;
             free(fd);
         }
     }
 }
-void    *test(int i)
+void    parent_ctlC(int i)
 {
-    printf("%d\n", 2);
-    return (0);
 }
 int main(int ac, char **av, char **ev)
 {
-    signal(SIGINT, test(2));
-    // mini_hell(av, ev);
-    while(1);
-    // sleep(100);
+    // signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, parent_ctlC);
+    mini_hell(av, ev);
 }
 /*
     validing the identifier
