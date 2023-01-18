@@ -657,10 +657,17 @@ int mini_hell(char **av, char **ev)
         }
     }
 }
-
+void    *test(int i)
+{
+    printf("%d\n", 2);
+    return (0);
+}
 int main(int ac, char **av, char **ev)
 {
-    mini_hell(av, ev);
+    signal(SIGINT, test(2));
+    // mini_hell(av, ev);
+    while(1);
+    // sleep(100);
 }
 /*
     validing the identifier
