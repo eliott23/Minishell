@@ -665,7 +665,7 @@ int mini_hell(char **av, char **ev)
                     else
                     {
                         what_to_call(v, &ev_h, &x_ev_h, tokens[i].args, e_s);
-                        exit(0);
+                        exit(0); // add exit_status;
                     }
                 }
                 j += 2;
@@ -683,7 +683,7 @@ void    parent_ctlC(int i)
 }
 int main(int ac, char **av, char **ev)
 {
-    // signal(SIGQUIT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
     mini_hell(av, ev);
 }
