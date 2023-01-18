@@ -351,7 +351,6 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
         }
         else
             cd_h(ev_h, x_ev_h);
-        
     }
     return (0);
 }
@@ -648,7 +647,6 @@ int mini_hell(char **av, char **ev)
                 pipe(fd + j);
                 j += 2;
             }
-            // pipe(e_s);
             j = -2;
             while (tokens[i].args)
             {
@@ -676,10 +674,6 @@ int mini_hell(char **av, char **ev)
             fdclose((count - 1) * 2, fd);
             while (waitpid(-1, stat, 0) != -1);
             ft_exit_status(*stat, e_s);
-            // char    *str = malloc(sizeof(char) * 4);
-            // read(e_s[0], str,3);
-            // printf("this is the exit status")
-            // add the $?;
             free(fd);
         }
     }
