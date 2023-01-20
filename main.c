@@ -418,6 +418,7 @@ char *exec_h(t_ev *ev, char *com)
     {
         if (ev_cmp(ev->var, "PATH") && !ft_srch(com + 1, '/'))
         {
+            printf("this is com %s\n", com + 1);
             PATH = ft_strdup(ev->var + 5);
             PATHS = ft_split(PATH, ':');
             free(PATH);
@@ -444,7 +445,6 @@ char *exec_h(t_ev *ev, char *com)
             }
             if (ft_srch(com + 1, '/'))
             {
-                printf("this is com %s\n", com + 1);
                 if (access(com + 1, F_OK))
                 {
                     freesplit(PATHS);
@@ -472,7 +472,7 @@ char *exec_h(t_ev *ev, char *com)
     }
     if (PATHS)
         freesplit(PATHS);
-    printf("minishell: %s: command not found\n", com + 1);
+    printf("minishell: %s: command not found flekher\n", com + 1);
     return (0);
 }
 char    **ft_conv(t_ev *ev)
