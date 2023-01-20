@@ -27,10 +27,11 @@ int is_regular_file(const char *path)
 {
     struct stat path_stat;
 	if (stat(path, &path_stat) == -1)
-		printf("lol\n");
+		printf("adsv");
     return S_ISREG(path_stat.st_mode);
 }
 int	main(int ac, char **av, char **ev)
 {
-	printf("%d\n", is_regular_file("hh/a"));
+	perror("lol");
+	printf("%d\n", is_regular_file("hh/kk"));
 }

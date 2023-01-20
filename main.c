@@ -442,7 +442,7 @@ char *exec_h(t_ev *ev, char *com)
                 i++;
                 free(PATH);
             }
-            if (!access(com + 1, F_OK))
+            if (ft_srch(com + 1, '/') && !access(com + 1, F_OK))
             {
                 printf("this is com %s\n", com + 1);
                 if (access(com + 1, X_OK))
@@ -454,8 +454,8 @@ char *exec_h(t_ev *ev, char *com)
                 else
                 {
                     printf("here\n");
-                    //set e_s to 126;
                     freesplit(PATHS);
+                    //set e_s to 126;
                     return (ft_strdup(com + 1));
                 }
             }
