@@ -444,15 +444,16 @@ char *exec_h(t_ev *ev, char *com)
             }
             if (!access(com + 1, F_OK))
             {
+                printf("this is com %s\n", com + 1);
                 if (access(com + 1, X_OK))
                 {
                     printf("%s: %s\n", com + 1, strerror(errno));
                     freesplit(PATHS);
-                    printf("yup here\n");
                     return (0);
                 }
                 else
                 {
+                    printf("here\n");
                     //set e_s to 126;
                     freesplit(PATHS);
                     return (ft_strdup(com + 1));
