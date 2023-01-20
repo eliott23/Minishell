@@ -420,7 +420,6 @@ char *exec_h(t_ev *ev, char *com)
     {
         if (ev_cmp(ev->var, "PATH")) 
         {
-            printf("this is com %s\n", com + 1);
             PATH = ft_strdup(ev->var + 5);
             PATHS = ft_split(PATH, ':');
             free(PATH);
@@ -516,7 +515,6 @@ int exec(char **args, t_ev *ev, int *e_s)
 
     com = myft_strjoin("/", args[0]);
     path = exec_h(ev, com);
-    printf("this is the path %s\n", path);
     free(com);
     if (!path)
         return (0);
