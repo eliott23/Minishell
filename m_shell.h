@@ -17,6 +17,7 @@ typedef struct node{
     struct node *next;
 }t_ev;
 
+long long int   ft_atoi(const char *str);
 int		myft_strcmp(char *s1, char *s2);
 int		ev_cmp(char *s1, char *s2);
 char    *ft_strdup(const char *s1);

@@ -5,10 +5,18 @@ int     e_s;
 
 void    ft_exit_status(int status)
 {
+    e_s = 0;
     if (WIFEXITED(status))
-        printf("child exited, status=%d\n", WEXITSTATUS(status));
+    {
+        e_s = WEXITSTATUS(status);
+        fprintf(stderr, "exit status=%d\n", WEXITSTATUS(status));
+    }
     else if (WIFSIGNALED(status))
-        printf("exit status = %d", status + 128);
+    {
+        e_s = WEXITSTATUS(status) + 128;
+        fprintf(stderr, "exit status = %d", status + 128);
+    }
+    // printf("exit status=%d\n", 0);
 }
 
 void    env(t_ev *ev_h)
@@ -459,14 +467,11 @@ char *exec_h(t_ev *ev, char *com)
             if (access(com + 1, X_OK))
             {
                 printf("%s: %s\n", com + 1, strerror(errno));
+                e_s = 126;  //check the exist status of execve in this case;
                 return (0);
             }
             else
-            {
-                printf("here\n");
-                e_s = 126;  //check the exist status of execve in this case;
                 return (ft_strdup(com + 1));
-            }
         }
     printf("minishell: %s: command not found flekher\n", com + 1);
     return (0);
@@ -548,7 +553,9 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args, int *e_s)
     {
         printf("exit\n");
         //carful check the exit status;
-        exit (0);
+        if (args && args[1])
+            exit ((char)ft_atoi(args[1]));
+        exit(0);
     }
     else if (v == 7)
         exec(args, *ev_h, e_s);
@@ -676,7 +683,8 @@ int mini_hell(char **av, char **ev)
                 i++;
             }
             fdclose((count - 1) * 2, fd);
-            while (waitpid(-1, &stat, 0) != -1);
+            waitpid(id, &stat, 0);
+            while (waitpid(-1, NULL, 0) != -1);
             ft_exit_status(stat);
             free(fd);
         }
@@ -687,10 +695,10 @@ void    parent_ctlC(int i)
 }
 int main(int ac, char **av, char **ev)
 {
+    e_s = 0;
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
     mini_hell(av, ev);
-    // ft_exit_status(2,)
 }
 /*
     validing the identifier
