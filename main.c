@@ -3,7 +3,7 @@
 
 int     e_s;
 
-void    ft_exit_status(int status, int *e_s)
+void    ft_exit_status(int status)
 {
     if (WIFEXITED(status))
         printf("child exited, status=%d\n", WEXITSTATUS(status));
@@ -465,7 +465,7 @@ char *exec_h(t_ev *ev, char *com)
             else
             {
                 printf("here\n");
-                //set e_s to 126;
+                e_s = 126;  //check the exist status of execve in this case;
                 return (ft_strdup(com + 1));
             }
         }
@@ -527,7 +527,7 @@ int exec(char **args, t_ev *ev, int *e_s)
         exit(0);        //careful with the exit status;
     }
 	waitpid(id, &stat, 0);
-    ft_exit_status(stat, e_s);
+    ft_exit_status(stat);
     if (path)
         free(path);
     return (0);
@@ -614,9 +614,8 @@ int mini_hell(char **av, char **ev)
     char    **args = NULL;
     int     count;
     int     *fd;
-    int     *stat;
+    int     stat;
     int     *e_s;
-    e_s = malloc(sizeof(int) * 2);
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -679,8 +678,8 @@ int mini_hell(char **av, char **ev)
                 i++;
             }
             fdclose((count - 1) * 2, fd);
-            while (waitpid(-1, stat, 0) != -1);
-            // ft_exit_status(*stat, e_s);
+            while (waitpid(-1, &stat, 0) != -1);
+            ft_exit_status(stat);
             free(fd);
         }
     }
@@ -693,6 +692,7 @@ int main(int ac, char **av, char **ev)
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
     mini_hell(av, ev);
+    // ft_exit_status(2,)
 }
 /*
     validing the identifier
