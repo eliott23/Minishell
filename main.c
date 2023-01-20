@@ -1,7 +1,6 @@
 #include "m_shell.h"
 #include <sys/wait.h>
 
-int erno;
 
 void    ft_exit_status(int status, int *e_s)
 {
@@ -293,8 +292,8 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
                 if (temp->var[i] == '=')
                 {
                     t_OLDPWD = getcwd(t_OLDPWD, 0);
-					erno = chdir(&temp->var[i + 1]);
-					if (erno)
+					chdir(&temp->var[i + 1]);
+					if (errno)
 					{
                         printf("cd : %s: %s\n", &temp->var[i + 1], strerror(errno));
                         free(t_OLDPWD); 
@@ -332,8 +331,9 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
         if (args[1])
         {
            t_OLDPWD = getcwd(t_OLDPWD, 0);
-           erno = chdir(args[1]);
-           if (erno)
+           chdir(args[1]);
+           printf("this is the errno %d", errno);
+           if (errno)
            {
                 printf("cd : %s: %s\n", args[1] , strerror(errno));
                 free(t_OLDPWD); 
