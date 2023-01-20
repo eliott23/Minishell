@@ -416,7 +416,7 @@ char *exec_h(t_ev *ev, char *com)
     PATHS = NULL;
     while (ev)
     {
-        if (ev_cmp(ev->var, "PATH"))
+        if (ev_cmp(ev->var, "PATH") && !ft_srch(com + 1, '/'))
         {
             PATH = ft_strdup(ev->var + 5);
             PATHS = ft_split(PATH, ':');
@@ -442,9 +442,15 @@ char *exec_h(t_ev *ev, char *com)
                 i++;
                 free(PATH);
             }
-            if (ft_srch(com + 1, '/') && !access(com + 1, F_OK))
+            if (ft_srch(com + 1, '/'))
             {
                 printf("this is com %s\n", com + 1);
+                if (access(com + 1, F_OK))
+                {
+                    freesplit(PATHS);
+                    printf("minishell: %s: no such file or directory\n", com + 1);
+                    return (0);
+                }
                 if (access(com + 1, X_OK))
                 {
                     printf("%s: %s\n", com + 1, strerror(errno));
