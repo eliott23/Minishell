@@ -277,6 +277,7 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
     char    *t_OLDPWD;
     char    *t_PWD;
     char    **OLD_PWD;
+    int     t;
     int     i;
 
     t_OLDPWD = NULL;
@@ -292,8 +293,8 @@ int    cd_h(t_ev **ev_h, t_ev **x_ev_h)
                 if (temp->var[i] == '=')
                 {
                     t_OLDPWD = getcwd(t_OLDPWD, 0);
-					chdir(&temp->var[i + 1]);
-					if (errno)
+					t = chdir(&temp->var[i + 1]);
+					if (t == -1)
 					{
                         printf("cd : %s: %s\n", &temp->var[i + 1], strerror(errno));
                         free(t_OLDPWD); 
@@ -323,6 +324,7 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
     char    *t_OLDPWD;
     char    *t_PWD;
     char    **OLD_PWD;
+    int     t;
 
     t_OLDPWD = NULL;
     t_PWD = NULL;
@@ -331,9 +333,8 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
         if (args[1])
         {
            t_OLDPWD = getcwd(t_OLDPWD, 0);
-           chdir(args[1]);
-           printf("this is the errno %d", errno);
-           if (errno)
+           t = chdir(args[1]);
+           if (t == -1)
            {
                 printf("cd : %s: %s\n", args[1] , strerror(errno));
                 free(t_OLDPWD); 
