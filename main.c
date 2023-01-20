@@ -1,6 +1,7 @@
 #include "m_shell.h"
 #include <sys/wait.h>
 
+int     e_s;
 
 void    ft_exit_status(int status, int *e_s)
 {
@@ -437,15 +438,13 @@ char *exec_h(t_ev *ev, char *com)
                     {
                         free(PATH);
                         freesplit(PATHS);
-                        //set the exit status to 126;
+                        e_s = 126;          //set the exit status to 126;
                         return (0);
                     }
                 }
                 i++;
                 free(PATH);
             }
-            // else
-            //  set e_s to 127;
         }
         ev = ev->next;
     }
