@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <readline/readline.h> 
+#include <sys/stat.h>
 typedef struct cmdl{
 	char	**args;
 }t_cmdl;

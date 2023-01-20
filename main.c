@@ -448,6 +448,7 @@ char *exec_h(t_ev *ev, char *com)
                 {
                     printf("%s: %s\n", com + 1, strerror(errno));
                     freesplit(PATHS);
+                    printf("yup here\n");
                     return (0);
                 }
                 else
@@ -511,6 +512,7 @@ int exec(char **args, t_ev *ev, int *e_s)
 
     com = myft_strjoin("/", args[0]);
     path = exec_h(ev, com);
+    printf("this is the path %s\n", path);
     free(com);
     if (!path)
         return (0);
@@ -543,6 +545,7 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args, int *e_s)
     else if (v == 6)
     {
         printf("exit\n");
+        //carful check the exit status;
         exit (0);
     }
     else if (v == 7)
