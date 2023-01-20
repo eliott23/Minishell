@@ -414,9 +414,9 @@ char *exec_h(t_ev *ev, char *com)
 
     i = 0;
     PATHS = NULL;
-    while (ev)
+    while (ev && !ft_srch(com + 1, '/'))
     {
-        if (ev_cmp(ev->var, "PATH") && !ft_srch(com + 1, '/'))
+        if (ev_cmp(ev->var, "PATH")) 
         {
             printf("this is com %s\n", com + 1);
             PATH = ft_strdup(ev->var + 5);
@@ -443,28 +443,6 @@ char *exec_h(t_ev *ev, char *com)
                 i++;
                 free(PATH);
             }
-            if (ft_srch(com + 1, '/'))
-            {
-                if (access(com + 1, F_OK))
-                {
-                    freesplit(PATHS);
-                    printf("minishell: %s: no such file or directory\n", com + 1);
-                    return (0);
-                }
-                if (access(com + 1, X_OK))
-                {
-                    printf("%s: %s\n", com + 1, strerror(errno));
-                    freesplit(PATHS);
-                    return (0);
-                }
-                else
-                {
-                    printf("here\n");
-                    freesplit(PATHS);
-                    //set e_s to 126;
-                    return (ft_strdup(com + 1));
-                }
-            }
             // else
             //  set e_s to 127;
         }
@@ -472,6 +450,25 @@ char *exec_h(t_ev *ev, char *com)
     }
     if (PATHS)
         freesplit(PATHS);
+    if (ft_srch(com + 1, '/'))
+        {
+            if (access(com + 1, F_OK))
+            {
+                printf("minishell: %s: no such file or directory\n", com + 1);
+                    return (0);
+            }
+            if (access(com + 1, X_OK))
+            {
+                printf("%s: %s\n", com + 1, strerror(errno));
+                return (0);
+            }
+            else
+            {
+                printf("here\n");
+                //set e_s to 126;
+                return (ft_strdup(com + 1));
+            }
+        }
     printf("minishell: %s: command not found flekher\n", com + 1);
     return (0);
 }
@@ -683,7 +680,7 @@ int mini_hell(char **av, char **ev)
             }
             fdclose((count - 1) * 2, fd);
             while (waitpid(-1, stat, 0) != -1);
-            ft_exit_status(*stat, e_s);
+            // ft_exit_status(*stat, e_s);
             free(fd);
         }
     }
