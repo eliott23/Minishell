@@ -482,7 +482,7 @@ char *exec_h(t_ev *ev, char *com)
             else
                 return (ft_strdup(com + 1));
         }
-    printf("minishell: %s: command not found flekher\n", com + 1);
+    printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
 char    **ft_conv(t_ev *ev)
@@ -536,7 +536,7 @@ int exec(char **args, t_ev *ev, int *e_s)
 	if (!id)
     {
         execve(path , args, ft_conv(ev)); //check safety of every execve;
-        exit(0);        //careful with the exit status;
+        exit(0);                          //careful with the exit status;
     }
 	waitpid(id, &stat, 0);
     ft_exit_status(stat);
