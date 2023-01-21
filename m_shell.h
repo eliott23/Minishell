@@ -1,6 +1,7 @@
 #ifndef M_SHELL_H
 # define M_SHELL_H
 
+#include <sys/wait.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +9,7 @@
 #include <errno.h>
 #include <readline/readline.h> 
 #include <sys/stat.h>
+
 typedef struct cmdl{
 	char	**args;
 }t_cmdl;
@@ -34,6 +36,7 @@ typedef struct nx{
 	char	*com;
 }t_nx;
 
+size_t	ft_strlen(const char *s);
 long long int   ft_atoi(const char *str);
 int		myft_strcmp(char *s1, char *s2);
 int		ev_cmp(char *s1, char *s2);
