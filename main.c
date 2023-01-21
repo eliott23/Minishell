@@ -441,50 +441,49 @@ int echo(char **args)
     }
     return (0);
 }
-
-char *exec_h(t_ev *ev, char *com)
+int nn_exec_h(t_nx *nx)
 {
-    char    *PATH;
-    char    **PATHS;
-    int     i;
-
-    i = 0;
-    PATHS = NULL;
-    while (ev && !ft_srch(com + 1, '/'))
-    {
-        if (ev_cmp(ev->var, "PATH")) 
-        {
-            PATH = ft_strdup(ev->var + 5);
-            PATHS = ft_split(PATH, ':');
-            free(PATH);
-            while (PATHS[i])
+            while ((nx->PATHS)[(nx->i)])
             {
-                PATH = myft_strjoin(PATHS[i], com);
-                if (!access(PATH, F_OK))
+                (nx->PATH) = myft_strjoin((nx->PATHS)[(nx->i)], (nx->com));
+                if (!access((nx->PATH), F_OK))
                 {
-                    if (!access(PATH, X_OK))
-                    {
-                        freesplit(PATHS);
-                        return (PATH);
-                    }
+                    freesplit((nx->PATHS));
+                    if (!access((nx->PATH), X_OK))
+                        return (1);
                     else
                     {
-                        free(PATH);
-                        freesplit(PATHS);
+                        free((nx->PATH));
                         e_s = 126;          //set the exit status to 126;
                         return (0);
                     }
                 }
-                i++;
-                free(PATH);
+                (nx->i)++;
+                free((nx->PATH));
             }
-        }
-        ev = ev->next;
-    }
-    if (PATHS)
-        freesplit(PATHS);
-    if (ft_srch(com + 1, '/'))
+            return (-1);
+}
+int n_exec_h(t_nx *nx)
+{
+    int i;
+
+    while ((nx->ev) && !ft_srch((nx->com) + 1, '/'))
+    {
+        if (ev_cmp((nx->ev)->var, "PATH")) 
         {
+            (nx->PATH) = ft_strdup((nx->ev)->var + 5);
+            (nx->PATHS) = ft_split((nx->PATH), ':');
+            free((nx->PATH));
+            i = nn_exec_h(nx);
+            if (i != -1)
+                return (i);
+        }
+        (nx->ev) = (nx->ev)->next;
+    }
+    return (-1);
+}
+int n2_exec_h(char  *com)
+{
             if (access(com + 1, F_OK))
             {
                 printf("minishell: %s: no such file or directory\n", com + 1);
@@ -496,6 +495,28 @@ char *exec_h(t_ev *ev, char *com)
                 e_s = 126;  //check the exist status of execve in this case;
                 return (0);
             }
+            return (1);
+}
+char *exec_h(t_ev *ev, char *com)
+{
+    t_nx    nx;
+    int     r;
+
+    nx.i = 0;
+    nx.PATHS = NULL;
+    nx.ev = ev;
+    nx.com = com;
+    r = n_exec_h(&nx);
+    if (!r)
+        return (0);
+    else if (r == 1)
+        return (nx.PATH);
+    if (nx.PATHS)
+        freesplit(nx.PATHS);
+    if (ft_srch(com + 1, '/'))
+        {
+            if (!n2_exec_h(com))
+                return (0); 
             else
                 return (ft_strdup(com + 1));
         }

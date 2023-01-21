@@ -26,6 +26,13 @@ typedef struct ncd{
     int     t;
     int     i;
 }t_ncd;
+typedef struct nx{
+	char	*PATH;
+	char	**PATHS;
+	int		i;
+	t_ev	*ev;
+	char	*com;
+}t_nx;
 
 long long int   ft_atoi(const char *str);
 int		myft_strcmp(char *s1, char *s2);
