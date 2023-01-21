@@ -310,7 +310,7 @@ int n_cd_h(t_ncd *ncd)
                 {
                     (ncd->t_OLDPWD) = getcwd((ncd->t_OLDPWD), 0);
 					(ncd->t) = chdir(&(ncd->temp)->var[(ncd->i) + 1]);
-                    if (nn_cd_h(ncd))
+                    if (!nn_cd_h(ncd))
                         return (0);
 					(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
 					(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=",(ncd->t_OLDPWD));
@@ -378,10 +378,6 @@ int n_cd(t_ncd *ncd, char   **args)
 int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     t_ncd   ncd;
-    // char    *t_OLDPWD;
-    // char    *t_PWD;
-    // char    **OLD_PWD;
-    // int     t;
 
     ncd.t_OLDPWD = NULL;
     ncd.t_PWD = NULL;
