@@ -142,6 +142,17 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
         env (*x_ev_h);
 }
 
+int n_unset_h(t_ev **ev_h, char *str, t_ev *temp)
+{
+        if (ev_cmp(temp->var, str))
+        {
+            *ev_h = (*ev_h)->next;
+            free(temp->var);
+            free(temp);
+            return (0);
+        }
+        return (1);
+}
 int unset_h(t_ev **ev_h, char *str)
 {
     t_ev    *temp;
@@ -150,13 +161,8 @@ int unset_h(t_ev **ev_h, char *str)
     temp = *ev_h;
     if (temp)
     {
-        if (ev_cmp(temp->var, str))
-        {
-            *ev_h = (*ev_h)->next;
-            free(temp->var);
-            free(temp);
+        if (!n_unset_h(ev_h, str, temp))
             return (0);
-        }
         while (temp->next)
         {
             if (ev_cmp(temp->next->var, str))
@@ -196,6 +202,13 @@ void    unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
     }
 }
 
+void    n_init(t_ev **temp, t_ev **temp2, t_ev **ev_h, t_ev **x_ev_h)
+{
+    *ev_h = malloc(sizeof(t_ev));
+    *x_ev_h = malloc(sizeof(t_ev));
+    *temp = *ev_h;
+    *temp2 = *x_ev_h;
+}
 void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
 {
     int     i;
@@ -206,10 +219,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
     if (ev && ev_h)
     {
         i = 1;
-        *ev_h = malloc(sizeof(t_ev));
-        *x_ev_h = malloc(sizeof(t_ev));
-        temp = *ev_h;
-        temp2 = *x_ev_h;
+        n_init(&temp, &temp2, ev_h, x_ev_h);
         temp->var = ft_strdup(ev[0]);
         temp2->var = x_ev_join(ev[0]);
         while (ev[i])
