@@ -16,7 +16,6 @@ void    ft_exit_status(int status)
         e_s = WEXITSTATUS(status) + 128;
         fprintf(stderr, "exit status = %d", status + 128);
     }
-    // printf("exit status=%d\n", 0);
 }
 
 void    env(t_ev *ev_h)
