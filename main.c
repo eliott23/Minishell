@@ -55,7 +55,7 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
 {
     t_ev    *temp;
 
-    while (args[(*i)] && !v_exp(args[(*i)], 0))
+    while (args[(*i)] && !v_exp(args[(*i)], -1))
         (*i)++;
     if (args[(*i)] && !(*ev_h))
         {
@@ -66,7 +66,7 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
         }
         if (args[(*i)])
         {
-            if (v_exp(args[(*i)], 0))
+            if (v_exp(args[(*i)], -1))
             {
                 temp = *ev_h;
                 xprt_he(args[(*i)], temp);
@@ -122,6 +122,7 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
         (*i)++;
     }
 }
+
 void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
 {
     int t;
@@ -131,9 +132,9 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
         if (ft_srch(args[i], '='))
         {
             t = i;
-            xprt_e(ev_h, args, &i);
-            i = t;
             xprt_x(x_ev_h, args, &i);
+            i = t;
+            xprt_e(ev_h, args, &i);
         }
         else
             xprt_x(x_ev_h, args, &i);
@@ -141,7 +142,6 @@ void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
     if (i == 0)
         env (*x_ev_h);
 }
-
 
 int unset_h(t_ev **ev_h, char *str)
 {
@@ -538,7 +538,7 @@ int exec(char **args, t_ev *ev, int *e_s)
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args, int *e_s)
 {
     if (v == 0)
-    xprt(ev_h, x_ev_h, args + 1, 0);
+        xprt(ev_h, x_ev_h, args + 1, 0);
     else if (v == 1)
         unset(ev_h, x_ev_h, args + 1);
     else if (v == 2)
