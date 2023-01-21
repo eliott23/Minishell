@@ -16,6 +16,16 @@ typedef struct node{
     char *var;
     struct node *next;
 }t_ev;
+typedef struct ncd{
+	t_ev	**ev_h;
+	t_ev	**x_ev_h;
+	t_ev    *temp;
+    char    *t_OLDPWD;
+    char    *t_PWD;
+    char    **OLD_PWD;
+    int     t;
+    int     i;
+}t_ncd;
 
 long long int   ft_atoi(const char *str);
 int		myft_strcmp(char *s1, char *s2);
