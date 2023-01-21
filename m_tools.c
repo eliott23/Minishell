@@ -42,19 +42,13 @@ int	v_exp(char *s, int caller)
 	i = 0;
 	if (s)
 	{
-		if (!s[i])
-		{
-			if (caller >= 0)
-				printf("%s: `%s': not a valid identifier\n", str[caller], s);
-			return (0);
-		}
 		if ((s[i] >= 'a' && s[i] <= 'z') \
 			|| (s[i] >= 'A' && s[i] <= 'Z')
 			|| s[i] == '_')
 			i++;
 		else
 		{
-			if (caller >= 0)
+			if (caller != -1)
 				printf("%s: `%s': not a valid identifier\n", str[caller], s);
 			return (0);
 		}
@@ -67,14 +61,14 @@ int	v_exp(char *s, int caller)
 				i++;
 			else
 			{
-				if (caller >= 0)
+				if (caller != -1)
 					printf("%s: `%s': not a valid identifier\n", str[caller], s);
 				return (0);
 			}
 		}
-		if (s[i] == '=' && caller)
+		if (s[i] == '=' && caller == 1)
 		{
-			if (caller >= 0)
+			if (caller != -1)
 				printf("%s: `%s': not a valid identifier\n", str[caller], s);
 			return (0);
 		}
