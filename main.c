@@ -109,12 +109,12 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i, int *r)
     if (t != (*i))
         *r = 1;
     if (args[(*i)] && !(*x_ev_h))
-        {
-            *x_ev_h = malloc(sizeof(t_ev));
-            (*x_ev_h)->var = x_ev_join(args[(*i)]);
-            (*x_ev_h)->next = NULL;
-            (*i)++;
-        }
+    {
+        *x_ev_h = malloc(sizeof(t_ev));
+        (*x_ev_h)->var = x_ev_join(args[(*i)]);
+        (*x_ev_h)->next = NULL;
+        (*i)++;
+    }
     if (args[(*i)])
     {
         if (v_exp(args[(*i)], 0))
