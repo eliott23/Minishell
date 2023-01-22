@@ -1,7 +1,5 @@
 #include "m_shell.h"
 
-int     e_s;
-
 void    ft_exit_status(int status)
 {
     e_s = 0;

@@ -10,6 +10,8 @@
 #include <readline/readline.h> 
 #include <sys/stat.h>
 
+int	e_s;
+
 typedef struct cmdl{
 	char	**args;
 }t_cmdl;
