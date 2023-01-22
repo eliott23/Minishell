@@ -17,7 +17,7 @@ void    ft_exit_status(int status)
     }
 }
 
-void    env(t_ev *ev_h)
+int env(t_ev *ev_h)
 {
     if (ev_h)
     {
@@ -27,6 +27,7 @@ void    env(t_ev *ev_h)
             ev_h = ev_h->next;
         }
     }
+    return (0);
 }
 
 int     xprt_he(char *arg, t_ev *temp)
@@ -97,12 +98,16 @@ int     xprt_hx(char *arg, t_ev *temp)
     }
     return (1);
 }
-void    xprt_x(t_ev **x_ev_h, char **args, int *i)
+void    xprt_x(t_ev **x_ev_h, char **args, int *i, int *r)
 {
     t_ev    *temp;
+    int     t;
 
+    t = *i;
     while (args[(*i)] && !v_exp(args[(*i)], 0))
         (*i)++;
+    if (t != (*i))
+        *r = 1;
     if (args[(*i)] && !(*x_ev_h))
         {
             *x_ev_h = malloc(sizeof(t_ev));
@@ -117,28 +122,35 @@ void    xprt_x(t_ev **x_ev_h, char **args, int *i)
             temp = *x_ev_h;
             xprt_hx(args[(*i)], temp);
         }
+        else
+            *r = 1;
         (*i)++;
     }
 }
 
-void    xprt(t_ev **ev_h, t_ev **x_ev_h, char **args, int i)
+int xprt(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     int t;
+    int i;
+    int r;
 
+    r = 0;
+    i = 0;
     while (args[i] != NULL)
     {
         if (ft_srch(args[i], '='))
         {
             t = i;
-            xprt_x(x_ev_h, args, &i);
+            xprt_x(x_ev_h, args, &i, &r);
             i = t;
             xprt_e(ev_h, args, &i);
         }
         else
-            xprt_x(x_ev_h, args, &i);
+            xprt_x(x_ev_h, args, &i, &r);
     }
     if (i == 0)
         env (*x_ev_h);
+    return (r);
 }
 
 int n_unset_h(t_ev **ev_h, char *str, t_ev *temp)
@@ -177,13 +189,15 @@ int unset_h(t_ev **ev_h, char *str)
     }
     return (0);
 }
-void    unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
+int unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     int     i;
     int     v;
     char    *temp;
+    int     r;
 
     i = 0;
+    r = 0;
     if (args)
     {
         while (args[i])
@@ -196,9 +210,12 @@ void    unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
                 unset_h(x_ev_h, temp);
                 free(temp);
             }
+            else
+                r = 1;
             i++;
         }
     }
+    return (r);
 }
 
 void    n_init(t_ev **temp, t_ev **temp2, t_ev **ev_h, t_ev **x_ev_h)
@@ -234,7 +251,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
         temp2->next = NULL;
     }
     unset(ev_h, x_ev_h, OLDPWD);
-    xprt(ev_h, x_ev_h, OLDPWD, 0);
+    xprt(ev_h, x_ev_h, OLDPWD);
 }
 void    freesplit(char **s)
 {
@@ -318,7 +335,7 @@ int n_cd_h(t_ncd *ncd)
 					(ncd->OLD_PWD)[1] = myft_strjoin("PWD=",(ncd->t_PWD));
                     free((ncd->t_PWD));
 					(ncd->OLD_PWD)[2] = 0;
-					xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD), 0);
+					xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD));
                     freesplit((ncd->OLD_PWD));
 					return (0);
 				}
@@ -366,7 +383,7 @@ int n_cd(t_ncd *ncd, char   **args)
            (ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_PWD));
            free((ncd->t_PWD));
            (ncd->OLD_PWD)[2] = 0;
-           xprt(ncd->ev_h, ncd->x_ev_h, (ncd->OLD_PWD), 0);
+           xprt(ncd->ev_h, ncd->x_ev_h, (ncd->OLD_PWD));
            freesplit((ncd->OLD_PWD));
         }
         else
@@ -385,7 +402,7 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
     if (args && args[0])
     {
         if (!n_cd(&ncd, args))
-            return (0);
+            return (1);
     }
     return (0);
 }
@@ -554,10 +571,9 @@ int ft_execp(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     execve(path, args, ft_conv(ev));
-    exit(0);
-    return (0);
+    return (-1);
 }
-int exec(char **args, t_ev *ev, int *e_s)
+int exec(char **args, t_ev *ev)
 {
     char    *path;
     char    *com;
@@ -571,30 +587,27 @@ int exec(char **args, t_ev *ev, int *e_s)
         return (0);
     id = fork();
 	if (!id)
-    {
         execve(path , args, ft_conv(ev)); //check safety of every execve;
-        exit(0);                          //careful with the exit status;
-    }
 	waitpid(id, &stat, 0);
     ft_exit_status(stat);
     if (path)
         free(path);
     return (0);
 }
-int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args, int *e_s)
+int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
     if (v == 0)
-        xprt(ev_h, x_ev_h, args + 1, 0);
+        return (xprt(ev_h, x_ev_h, args + 1));
     else if (v == 1)
-        unset(ev_h, x_ev_h, args + 1);
+        return (unset(ev_h, x_ev_h, args + 1));
     else if (v == 2)
-        env(*ev_h); //pottential issue regarding if an unwanted argument was provided;
+        return (env(*ev_h)); //pottential issue regarding if an unwanted argument was provided;
     else if(v == 3)
-        cd(ev_h, x_ev_h, args);
+        return (cd(ev_h, x_ev_h, args));
     else if (v == 4)
-        pwd();
+        return (pwd());
     else if (v == 5)
-        echo(args + 1);
+        return (echo(args + 1));
     else if (v == 6)
     {
         printf("exit\n");
@@ -604,10 +617,10 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args, int *e_s)
         exit(0);
     }
     else if (v == 7)
-        exec(args, *ev_h, e_s);
+        exec(args, *ev_h);
     else
-        ft_execp(args, *ev_h);
-    return (0);
+        return (ft_execp(args, *ev_h));
+    return(-1);
 }
 // int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
 // {
@@ -666,7 +679,6 @@ int mini_hell(char **av, char **ev)
     int     count;
     int     *fd;
     int     stat;
-    int     *e_s;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -691,7 +703,7 @@ int mini_hell(char **av, char **ev)
                 freesplit(args);
             args = ft_split(str, ' ');
             v = m_parsing(args);
-            what_to_call(v, &ev_h, &x_ev_h, args, e_s);
+            e_s = what_to_call(v, &ev_h, &x_ev_h, args);
         }
         else
         {
@@ -718,11 +730,9 @@ int mini_hell(char **av, char **ev)
                     fdclose((count - 1) * 2, fd);
                     v = m_parsing(tokens[i].args);
                     if (v == 7)
-                        what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args, e_s);
+                        what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
                     else
-                    {
-                        exit(what_to_call(v, &ev_h, &x_ev_h, tokens[i].args, e_s)); // add exit_status;
-                    }
+                        exit(what_to_call(v, &ev_h, &x_ev_h, tokens[i].args)); // add exit_status;
                 }
                 j += 2;
                 i++;
