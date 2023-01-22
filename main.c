@@ -721,8 +721,7 @@ int mini_hell(char **av, char **ev)
                         what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args, e_s);
                     else
                     {
-                        what_to_call(v, &ev_h, &x_ev_h, tokens[i].args, e_s);
-                        exit(0); // add exit_status;
+                        exit(what_to_call(v, &ev_h, &x_ev_h, tokens[i].args, e_s)); // add exit_status;
                     }
                 }
                 j += 2;

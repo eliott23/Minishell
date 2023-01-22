@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 01:05:18 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/22 01:32:22 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/22 02:03:36 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,7 @@ int	v_exp(char *s, int caller)
 	if (s)
 	{
 		if (!n_v_exp(s, caller, str, &i))
-		{
-			e_s = 1;
 			return (0);
-		}
 		if (s[i] == '=' && caller == 1)
 		{
 			if (caller != -1)
