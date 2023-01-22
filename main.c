@@ -1,4 +1,5 @@
 #include "m_shell.h"
+#include "include/parsing.h"
 
 void    ft_exit_status(int status)
 {
@@ -748,10 +749,16 @@ void    parent_ctlC(int i)
 }
 int main(int ac, char **av, char **ev)
 {
+    t_ev    *ev_h;
+    t_ev    *x_ev_h;
     e_s = 0;
+    ev_h = NULL;
+    x_ev_h = NULL;
+    init(ev, &ev_h, &x_ev_h);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
-    mini_hell(av, ev);
+    parse_line("cd", ev,)
+    // mini_hell(av, ev);
 }
 /*
     validing the identifier

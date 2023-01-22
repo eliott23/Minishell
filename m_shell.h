@@ -38,6 +38,7 @@ typedef struct nx{
 	char	*com;
 }t_nx;
 
+t_data	*parse_line(char *s, char **env, t_env *main_env);
 size_t	mft_strlen(const char *s);
 long long int   ft_atoi(const char *str);
 int		myft_strcmp(char *s1, char *s2);
