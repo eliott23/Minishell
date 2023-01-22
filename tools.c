@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 20:51:46 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/21 22:26:05 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/22 22:26:11 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ft_srch(char *s, char c)
 	return (0);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	mft_strlen(const char *s)
 {
 	size_t	i;
 
@@ -81,7 +81,7 @@ char	*myft_strjoin(char const *s1, char const *s2)
 		return (0);
 	a = 0;
 	i = 0;
-	len = ft_strlen(s1) + ft_strlen(s2);
+	len = mft_strlen(s1) + mft_strlen(s2);
 	str = malloc(sizeof(char) * len + 1);
 	if (!str)
 		return (0);

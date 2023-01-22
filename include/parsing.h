@@ -19,6 +19,7 @@
 # include <readline/readline.h>
 # include <fcntl.h>
 # include <errno.h>
+# include "../m_shell.h"
 # include "structures.h"
 # include "macros.h"
 

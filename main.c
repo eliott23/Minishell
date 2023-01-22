@@ -35,7 +35,7 @@ int     xprt_he(char *arg, t_ev *temp)
         if (ev_cmp(temp->var, arg) && ft_srch(arg, '='))
         {
             free(temp->var);
-            temp->var = ft_strdup(arg);
+            temp->var = mft_strdup(arg);
             return (0);
         }
         if (!temp->next && ft_srch(arg, '='))
@@ -57,7 +57,7 @@ void    xprt_e(t_ev **ev_h, char **args, int *i)
     if (args[(*i)] && !(*ev_h))
         {
             *ev_h = malloc(sizeof(t_ev));
-            (*ev_h)->var = ft_strdup(args[(*i)]);
+            (*ev_h)->var = mft_strdup(args[(*i)]);
             (*ev_h)->next = NULL;
             (*i)++;
         }
@@ -234,7 +234,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
     {
         i = 1;
         n_init(&temp, &temp2, ev_h, x_ev_h);
-        temp->var = ft_strdup(ev[0]);
+        temp->var = mft_strdup(ev[0]);
         temp2->var = x_ev_join(ev[0]);
         while (ev[i])
         {
@@ -289,12 +289,12 @@ void    freesplit(char **s)
 //                         {
 //                             if ((ev_h->var)[j] == '=')
 //                             {
-//                                 args[i] = ft_strdup(&(ev_h->var)[j + 1]);
+//                                 args[i] = mft_strdup(&(ev_h->var)[j + 1]);
 //                                 return (0);
 //                             }
 //                             j++;
 //                         }
-//                         args[i] = ft_strdup("");
+//                         args[i] = mft_strdup("");
 //                     }
 //                     ev_h = ev_h->next;
 //                 }
@@ -485,7 +485,7 @@ int n_exec_h(t_nx *nx)
     {
         if (ev_cmp((nx->ev)->var, "PATH")) 
         {
-            (nx->PATH) = ft_strdup((nx->ev)->var + 5);
+            (nx->PATH) = mft_strdup((nx->ev)->var + 5);
             (nx->PATHS) = ft_split((nx->PATH), ':');
             free((nx->PATH));
             i = nn_exec_h(nx);
@@ -532,7 +532,7 @@ char *exec_h(t_ev *ev, char *com)
             if (!n2_exec_h(com))
                 return (0); 
             else
-                return (ft_strdup(com + 1));
+                return (mft_strdup(com + 1));
         }
     printf("minishell: %s: command not found\n", com + 1);
     return (0);
@@ -553,7 +553,7 @@ char    **ft_conv(t_ev *ev)
     i = 0;
     while (ev)
     {
-        env[i] = ft_strdup(ev->var);
+        env[i] = mft_strdup(ev->var);
         i++;
         ev = ev->next;
     }

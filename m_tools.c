@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 01:05:18 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/22 02:03:36 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/22 22:37:24 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,5 @@ int	v_exp(char *s, int caller)
 void	ev_alloc(t_ev *ev, char *var)
 {
 	ev->next = malloc(sizeof(t_ev));
-	ev->next->var = ft_strdup(var);
+	ev->next->var = mft_strdup(var);
 }
