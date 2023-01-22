@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   m_tools.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/22 01:05:18 by aababach          #+#    #+#             */
+/*   Updated: 2023/01/22 01:05:19 by aababach         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "m_shell.h"
 
 int	len(char *s)
@@ -14,7 +26,7 @@ int	len(char *s)
 	return (0);
 }
 
-int ev_cmp(char *s1, char *s2)
+int	ev_cmp(char *s1, char *s2)
 {
 	int	i;
 
@@ -34,6 +46,35 @@ int ev_cmp(char *s1, char *s2)
 	return (0);
 }
 
+int	n_v_exp(char *s, int caller, char **str, int *i)
+{
+	if ((s[(*i)] >= 'a' && s[(*i)] <= 'z') \
+		|| (s[(*i)] >= 'A' && s[(*i)] <= 'Z')
+		|| s[(*i)] == '_')
+		(*i)++;
+	else
+	{
+		if (caller != -1)
+			printf("%s: `%s': not a valid identifier\n", str[caller], s);
+		return (0);
+	}
+	while (s[(*i)] && s[(*i)] != '=')
+	{
+		if ((s[(*i)] >= '0' && s[(*i)] <= '9') || \
+			(s[(*i)] >= 'a' && s[(*i)] <= 'z') \
+			|| (s[(*i)] >= 'A' && s[(*i)] <= 'Z')
+			|| s[(*i)] == '_')
+			(*i)++;
+		else
+		{
+			if (caller != -1)
+				printf("%s: `%s': not a valid identifier\n", str[caller], s);
+			return (0);
+		}
+	}
+	return (1);
+}
+
 int	v_exp(char *s, int caller)
 {
 	int				i;
@@ -42,30 +83,8 @@ int	v_exp(char *s, int caller)
 	i = 0;
 	if (s)
 	{
-		if ((s[i] >= 'a' && s[i] <= 'z') \
-			|| (s[i] >= 'A' && s[i] <= 'Z')
-			|| s[i] == '_')
-			i++;
-		else
-		{
-			if (caller != -1)
-				printf("%s: `%s': not a valid identifier\n", str[caller], s);
+		if (!n_v_exp(s, caller, str, &i))
 			return (0);
-		}
-		while (s[i] && s[i] != '=')
-		{
-			if ((s[i] >= '0' && s[i] <= '9') || \
-				(s[i] >= 'a' && s[i] <= 'z') \
-				|| (s[i] >= 'A' && s[i] <= 'Z')
-				|| s[i] == '_')
-				i++;
-			else
-			{
-				if (caller != -1)
-					printf("%s: `%s': not a valid identifier\n", str[caller], s);
-				return (0);
-			}
-		}
 		if (s[i] == '=' && caller == 1)
 		{
 			if (caller != -1)
@@ -81,34 +100,4 @@ void	ev_alloc(t_ev *ev, char *var)
 {
 	ev->next = malloc(sizeof(t_ev));
 	ev->next->var = ft_strdup(var);
-}
-
-char	*x_ev_join(char *s)
-{
-	int			i;
-	int			j;
-	static char	pref[12] = "declare -x \0";
-	char		*res;
-
-	if (!s)
-		return (0);
-	j = 0;
-	i = 0;
-	res = malloc(sizeof(char) * (15 + len(s)));
-	while (pref[i])
-	{
-		res[i] = pref[i];
-		i++;
-	}
-	while (s[j] && s[j] != '=')
-		res[i++] = s[j++];
-	res[i++] = s[j];
-	res[i++] = '"';
-	if (s[j])
-		j++;
-	while (s[j])
-		res[i++] = s[j++];
-	res[i++] = '"';
-	res[i] = 0;
-	return (res);
 }

@@ -49,5 +49,6 @@ char	*x_ev_join(char *s);
 char    **ft_split(char const *s, char c);
 int		m_parsing(char **av);
 char    *myft_strjoin(char const *s1, char const *s2);
+int		len(char *s);
 
 #endif
