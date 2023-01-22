@@ -453,7 +453,7 @@ int nn_exec_h(t_nx *nx)
                     else
                     {
                         free((nx->PATH));
-                        e_s = 126;          //set the exit status to 126;
+                        e_s = 126;
                         return (0);
                     }
                 }
