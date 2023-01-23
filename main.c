@@ -603,9 +603,13 @@ int exec(char **args, t_ev *ev)
     id = fork();
 	if (!id)
     {
-        // int fd = open("teest", O_RDONLY);
-        // printf("sadvv%s\n", strerror(errno));
-        // dup2(fd, 1);
+        int fd = open("teest", O_RDWR);
+        if (fd < 0)
+        {
+            printf("sadvv%s\n", strerror(errno));
+            exit(1);
+        }
+        dup2(fd, 1);
         execve(path , args, ft_conv(ev)); //check safety of every execve;
         handle_errors(args[0]);
     }
@@ -773,6 +777,22 @@ t_env   *fill_env(t_ev  *ev)
     r->next = 0;
     return (temp);
 }
+void    ft_close_pipes(int **pipes)
+{
+    int i;
+
+    i = 0;
+    if (pipes)
+    {
+        while (pipes[i])
+        {
+            close(pipes[i][0]);
+            close(pipes[i][1]);
+            i++;
+        }
+    }
+}
+
 int mini_hell(char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -788,6 +808,7 @@ int mini_hell(char **av, char **ev)
     int     count;
     int     *fd;
     int     stat;
+    t_data  *pd = NULL;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -806,9 +827,17 @@ int mini_hell(char **av, char **ev)
         if (!str)
             exit(0);
         add_history(str);
-        if (!ft_srch(str, '|'))
+        pd = parse_line(str, ft_conv(ev_h), fill_env(ev_h));
+        if (!pd->is_syntax_valid || pd->err)
         {
-            if (args)
+            if (pd->err)
+                printf("%s", pd->err);
+            else
+                printf("syntax error");
+        }
+        if (pd->n_cmds == 1)
+        {
+            if (args) //hafinkhlinaha;
                 freesplit(args);
             args = ft_split(str, ' ');
             v = m_parsing(args);
@@ -816,37 +845,25 @@ int mini_hell(char **av, char **ev)
         }
         else
         {
-            i = 0;
-            j = 0;
-            tokens = v_pars(str, &count);
-            fd = malloc(sizeof(int) * (count - 1) * 2);
-            while (j < (count - 1) * 2)
-            {
-                pipe(fd + j);
-                j += 2;
-            }
-            j = -2;
-            while (tokens[i].args)
+            while (pd->commands)
             {
                 id = fork(); // check later;
                 if (!id)
                 {
                     signal(SIGINT, SIG_DFL);
-                    if (j >= 0)
-                        dup2(fd[j], 0);
-                    if (tokens[i + 1].args)
-                        dup2(fd[j + 3], 1);
-                    fdclose((count - 1) * 2, fd);
-                    v = m_parsing(tokens[i].args);
-                    if (v == 7)
-                        what_to_call(v + 1, &ev_h, &x_ev_h, tokens[i].args);
+                    if (pd->commands->cmd_id != 1)
+                        dup2(pd->commands->read_end, 0);
+                    if (pd->commands->next)
+                        dup2(pd->commands->write_end, 1);
+                    ft_close_pipes(pd->pipes);
+                    if (!pd->commands->is_builtin)
+                        what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
                     else
-                        exit(what_to_call(v, &ev_h, &x_ev_h, tokens[i].args)); // add exit_status;
+                        exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
                 }
-                j += 2;
-                i++;
+                pd->commands = pd->commands->next;
             }
-            fdclose((count - 1) * 2, fd);
+            ft_close_pipes(pd->pipes);
             waitpid(id, &stat, 0);
             while (waitpid(-1, NULL, 0) != -1);
             ft_exit_status(stat);
@@ -863,6 +880,7 @@ int main(int ac, char **av, char **ev)
     t_ev    *x_ev_h;
     t_data  *pd;
     t_env   *main_ev;
+    int     i;
     errno = 0;
     e_s = 0;
     ev_h = NULL;
@@ -871,14 +889,26 @@ int main(int ac, char **av, char **ev)
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
     main_ev = fill_env(ev_h);
-    pd = parse_line(">teest cat", ev, main_ev);
+    pd = parse_line("<teest cat a | ls | ls <teest", ev, main_ev);
     // check for syntax errors;
     // check for error_file
+    //run_heredoc
     printf("n_cmds %d\n", pd->n_cmds);
     printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
     printf("err = %s\n", pd->err);
     printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
-    printf("this is the error_file %s\n", pd->commands->error_file);
+    while (pd->commands)
+    {
+        i = 0;
+        while (pd->commands->main_args[i])
+        {
+            printf("%d=%s ", pd->commands->cmd_id, pd->commands->main_args[i]);
+            i++;
+        }
+        printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
+        pd->commands->error_file, pd->commands->outfile,pd->commands->write_end, pd->commands->infile, pd->commands->read_end);
+        pd->commands = pd->commands->next;
+    }
     // mini_hell(av, ev);
     // free_t_env(main_ev);
 }

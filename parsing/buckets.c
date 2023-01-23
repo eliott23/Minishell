@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:09:26 by hel-mefe          #+#    #+#             */
-/*   Updated: 2022/07/30 18:09:27 by hel-mefe         ###   ########.fr       */
+/*   Updated: 2023/01/23 20:17:25 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	put_infile(t_cmd *cmd, char *infile_name)
 		}
 		close(cmd->read_end);
 		cmd->infile = infile_name;
-		cmd->read_end = open(cmd->infile, O_RDONLY);
+		cmd->read_end = open(cmd->infile, O_RDWR);
 		if (cmd->read_end < 0)
 		{
 			cmd->error_file = infile_name;
