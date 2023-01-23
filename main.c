@@ -807,6 +807,8 @@ int mini_hell(char **av, char **ev)
     int     count;
     int     stat;
     t_data  *pd = NULL;
+    int     s0 = dup(0);
+    int     s1= dup(1);
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -833,11 +835,24 @@ int mini_hell(char **av, char **ev)
                 printf("%s", pd->err);
             else
                 printf("syntax error");
+            exit(1);
         }
         if (pd->n_cmds == 1)
         {
             v = m_parsing(pd->commands->main_args);
+            if (pd->commands->infile)
+            {
+                dup2(pd->commands->read_end, 0);
+                close(pd->commands->read_end);
+            }
+            if (pd->commands->outfile)
+            {
+                dup2(pd->commands->write_end, 1);
+                close(pd->commands->write_end);
+            }
             e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
+            dup2(s0, 0);
+            dup2(s1, 1);
         }
         else
         {
