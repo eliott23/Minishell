@@ -663,6 +663,76 @@ void    ctl_C(int i)
     printf("\n");
     exit(0);
 }
+void    zero_fill(t_env *t)
+{
+    t->data = 0;
+    t->name = 0;
+    t->next = 0;
+}
+char    *ft_get_name(char *str)
+{
+    int     i;
+    int     j;
+    char    *r;
+
+    i = 0;
+    j = 0;
+    if (!str)
+        return (0);
+    while (str[i] && str[i] != '=')
+        i++;
+    r = malloc(sizeof(char) * (i + 1));
+    while (j < i)
+    {
+        r[j] = str[j];
+        j++;
+    }
+    r[j] = 0;
+    return (r);
+}
+char    *ft_get_data(char *str)
+{
+    int     i;
+    char    *r;
+
+    r = NULL;
+    if (!str)
+        return (0);
+    i = 0;
+    while (str[i] && str[i] != '=')
+        i++;
+    if (str[i] == '=')
+        r = mft_strdup(str[i + 1]);
+    return (r);
+}
+
+t_env   *fill_env(t_ev  *ev)
+{
+    t_ev    *t;
+    t_env   *r;
+    int     j;
+    int     i;
+
+    i = 0;
+    j = 0;
+    t = ev;
+    while (t)
+    {
+        t = t->next;
+        i++;
+    }
+    r = malloc(sizeof(t_env));
+    zero_fill(r);
+    t = r;
+    while (j < i)
+    {
+        r->data = ft_get_data(ev->var);
+        r->next = malloc(sizeof(t_env));
+        r = r->next;
+        ev = ev->next;
+    }
+    return (r);
+}
 int mini_hell(char **av, char **ev)
 {
     t_ev    *ev_h;
@@ -757,8 +827,8 @@ int main(int ac, char **av, char **ev)
     init(ev, &ev_h, &x_ev_h);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
-    parse_line("cd", ev,)
-    // mini_hell(av, ev);
+    // parse_line("cd", ev,)
+    mini_hell(av, ev);
 }
 /*
     validing the identifier

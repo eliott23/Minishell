@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:18 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/22 21:45:21 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/23 11:14:35 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_env
 {
 	char			*name;
 	char			*data;
-	char			*value;
 	struct s_env	*next;
 }	t_env;
 
