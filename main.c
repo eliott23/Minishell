@@ -11,7 +11,7 @@ void    ft_exit_status(int status)
     }
     else if (WIFSIGNALED(status))
     {
-        e_s = WEXITSTATUS(status) + 128;
+        e_s = status + 128;
         fprintf(stderr, "exit status = %d", status + 128);
     }
 }
@@ -571,6 +571,7 @@ int ft_execp(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     execve(path, args, ft_conv(ev));
+    printf("ahahah%s", strerror(errno));
     return (-1);
 }
 void    handle_errors(char *cmd)
@@ -580,7 +581,7 @@ void    handle_errors(char *cmd)
     if (!cmd)
         exit(0);
     fd = open(cmd, O_RDWR);
-    if (fd < 0)
+    if (fd < 0 && ft_srch(cmd, '/'))
     {
         printf("%s : %s\n", cmd, strerror(errno));
         close(fd);
@@ -612,6 +613,7 @@ int exec(char **args, t_ev *ev)
         // }
         // dup2(fd, 1);
         execve(path , args, ft_conv(ev)); //check safety of every execve;
+        fprintf(stderr ,"lol\n");
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
@@ -646,6 +648,7 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         exec(args, *ev_h);
     else
         return (ft_execp(args, *ev_h));
+    printf("went here again\n");
     return(-1);
 }
 // int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
@@ -868,8 +871,11 @@ int mini_hell(char **av, char **ev)
                         dup2(pd->commands->write_end, 1);
                     ft_close_pipes(pd->pipes);
                     v = m_parsing(pd->commands->main_args);
-                    if (!pd->commands->is_builtin)
+                    printf("the flag=%d and v==%d\n", pd->commands->is_builtin, v);
+                    if (!(pd->commands->is_builtin))
+                    {
                         what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
+                    }
                     else
                         exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
                 }
