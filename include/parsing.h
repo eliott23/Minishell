@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:13 by hel-mefe          #+#    #+#             */
-/*   Updated: 2022/07/30 18:12:14 by hel-mefe         ###   ########.fr       */
+/*   Updated: 2023/01/23 15:49:19 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # include <readline/readline.h>
 # include <fcntl.h>
 # include <errno.h>
-# include "../m_shell.h"
 # include "structures.h"
 # include "macros.h"
+#include "../m_shell.h"
 
 void		ft_putstr(char *s);
 char		*ft_strjoin(char *s1, char *s2);

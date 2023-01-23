@@ -572,6 +572,22 @@ int ft_execp(char **args, t_ev *ev)
     execve(path, args, ft_conv(ev));
     return (-1);
 }
+void    handle_errors(char *cmd)
+{
+    int fd;
+
+    if (!cmd)
+        exit(0);
+    fd = open(cmd, O_RDWR);
+    if (fd < 0)
+    {
+        printf("%s : %s\n", cmd, strerror(errno));
+        close(fd);
+    }
+    else if (ft_srch(cmd, '/'))
+        printf("%s : Command not found\n", cmd); //check
+    exit(126);
+}
 int exec(char **args, t_ev *ev)
 {
     char    *path;
@@ -586,7 +602,13 @@ int exec(char **args, t_ev *ev)
         return (0);
     id = fork();
 	if (!id)
+    {
+        // int fd = open("teest", O_RDONLY);
+        // printf("sadvv%s\n", strerror(errno));
+        // dup2(fd, 1);
         execve(path , args, ft_conv(ev)); //check safety of every execve;
+        handle_errors(args[0]);
+    }
 	waitpid(id, &stat, 0);
     ft_exit_status(stat);
     if (path)
@@ -702,14 +724,29 @@ char    *ft_get_data(char *str)
     while (str[i] && str[i] != '=')
         i++;
     if (str[i] == '=')
-        r = mft_strdup(str[i + 1]);
+        r = mft_strdup(&str[i + 1]);
     return (r);
+}
+void    free_t_env(t_env *ev)
+{
+    t_env   *t;
+
+    while (ev)
+    {
+        free(ev->data);
+        free(ev->name);
+        t = ev;
+        ev = ev->next;
+        free(t);
+        sleep(100);
+    }
 }
 
 t_env   *fill_env(t_ev  *ev)
 {
     t_ev    *t;
     t_env   *r;
+    t_env   *temp;
     int     j;
     int     i;
 
@@ -723,15 +760,18 @@ t_env   *fill_env(t_ev  *ev)
     }
     r = malloc(sizeof(t_env));
     zero_fill(r);
-    t = r;
+    temp = r;
     while (j < i)
     {
         r->data = ft_get_data(ev->var);
+        r->name = ft_get_name(ev->var);
         r->next = malloc(sizeof(t_env));
         r = r->next;
         ev = ev->next;
+        j++;
     }
-    return (r);
+    r->next = 0;
+    return (temp);
 }
 int mini_hell(char **av, char **ev)
 {
@@ -821,14 +861,26 @@ int main(int ac, char **av, char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
+    t_data  *pd;
+    t_env   *main_ev;
+    errno = 0;
     e_s = 0;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
-    // parse_line("cd", ev,)
-    mini_hell(av, ev);
+    main_ev = fill_env(ev_h);
+    pd = parse_line(">teest cat", ev, main_ev);
+    // check for syntax errors;
+    // check for error_file
+    printf("n_cmds %d\n", pd->n_cmds);
+    printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
+    printf("err = %s\n", pd->err);
+    printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
+    printf("this is the error_file %s\n", pd->commands->error_file);
+    // mini_hell(av, ev);
+    // free_t_env(main_ev);
 }
 /*
     validing the identifier

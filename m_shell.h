@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <readline/readline.h> 
 #include <sys/stat.h>
+#include "include/parsing.h"
 
 int	e_s;
 
