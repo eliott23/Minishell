@@ -909,6 +909,13 @@ int main(int ac, char **av, char **ev)
         pd->commands->error_file, pd->commands->outfile,pd->commands->write_end, pd->commands->infile, pd->commands->read_end);
         pd->commands = pd->commands->next;
     }
+    i = 0;
+    while (pd->pipes[i])
+    {
+        printf("pipe%d == %d . ", i, pd->pipes[i][0]);
+        printf("pipe%d == %d\n", i, pd->pipes[i][1]);
+        i++;
+    }
     // mini_hell(av, ev);
     // free_t_env(main_ev);
 }
