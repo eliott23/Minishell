@@ -836,13 +836,7 @@ int mini_hell(char **av, char **ev)
                 printf("syntax error");
         }
         if (pd->n_cmds == 1)
-        {
-            if (args) //hafinkhlinaha;
-                freesplit(args);
-            args = ft_split(str, ' ');
-            v = m_parsing(args);
-            e_s = what_to_call(v, &ev_h, &x_ev_h, args);
-        }
+            e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
         else
         {
             while (pd->commands)
