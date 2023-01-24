@@ -1,19 +1,20 @@
 #include "m_shell.h"
 #include "include/parsing.h"
 
-void    ft_exit_status(int status)
+int ft_exit_status(int status)
 {
     e_s = 0;
     if (WIFEXITED(status))
     {
         e_s = WEXITSTATUS(status);
-        fprintf(stderr, "exit status=%d\n", WEXITSTATUS(status));
+        return (e_s);
     }
     else if (WIFSIGNALED(status))
     {
         e_s = status + 128;
-        fprintf(stderr, "exit status = %d", status + 128);
+        return (e_s);
     }
+    return (e_s);
 }
 
 int env(t_ev *ev_h)
@@ -568,11 +569,19 @@ int ft_execp(char **args, t_ev *ev)
     char    *com;
 
     com = myft_strjoin("/", args[0]);
+    if (!com)
+    {
+        exit(0);
+    }
     path = exec_h(ev, com);
+    if (!path)
+    {
+        exit(127);
+    }
     free(com);
     execve(path, args, ft_conv(ev));
     printf("ahahah%s", strerror(errno));
-    return (-1);
+    exit (-1);
 }
 void    handle_errors(char *cmd)
 {
@@ -598,10 +607,12 @@ int exec(char **args, t_ev *ev)
     int     stat;
 
     com = myft_strjoin("/", args[0]);
+    if (!com)
+        return (0);
     path = exec_h(ev, com);
     free(com);
     if (!path)
-        return (0);
+        return (127);
     id = fork();
 	if (!id)
     {
@@ -617,10 +628,9 @@ int exec(char **args, t_ev *ev)
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
-    ft_exit_status(stat);
     if (path)
         free(path);
-    return (0);
+    return (ft_exit_status(stat));
 }
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
@@ -639,16 +649,14 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
     else if (v == 6)
     {
         printf("exit\n");
-        //carful check the exit status;
         if (args && args[1])
             exit ((char)ft_atoi(args[1]));
         exit(0);
     }
     else if (v == 7)
-        exec(args, *ev_h);
+        return (exec(args, *ev_h));
     else
         return (ft_execp(args, *ev_h));
-    printf("went here again\n");
     return(-1);
 }
 // int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
@@ -773,14 +781,19 @@ t_env   *fill_env(t_ev  *ev)
     {
         r->data = ft_get_data(ev->var);
         r->name = ft_get_name(ev->var);
-        r->next = malloc(sizeof(t_env));
-        r = r->next;
-        ev = ev->next;
+        if (j < i - 1)
+        {
+            r->next = malloc(sizeof(t_env));
+            r = r->next;
+            ev = ev->next;
+        }
+        else
+            r->next = 0;
         j++;
     }
-    r->next = 0;
     return (temp);
 }
+
 void    ft_close_pipes(int **pipes)
 {
     int i;
@@ -856,6 +869,7 @@ int mini_hell(char **av, char **ev)
             e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
             dup2(s0, 0);
             dup2(s1, 1);
+            printf("exit status==%d\n", e_s);
         }
         else
         {
@@ -884,7 +898,7 @@ int mini_hell(char **av, char **ev)
             ft_close_pipes(pd->pipes);
             waitpid(id, &stat, 0);
             while (waitpid(-1, NULL, 0) != -1);
-            ft_exit_status(stat);
+            printf("exit status==%d\n", ft_exit_status(stat));
         }
     }
 }
