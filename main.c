@@ -843,9 +843,11 @@ int mini_hell(char **av, char **ev)
             free_t_env(main_env);
         if (env)
             freesplit(env);
+        if (pd)
+            destory_data(&pd);
         main_env = fill_env(ev_h);
         env = ft_conv(ev_h);
-        pd = parse_line(str, ft_conv(ev_h), fill_env(ev_h));
+        pd = parse_line(str, env, main_env);
         //here_doc;
         if (!pd->is_syntax_valid || pd->err)
         {
@@ -914,6 +916,7 @@ int mini_hell(char **av, char **ev)
                     }
                 } 
                 pd->commands = pd->commands->next;
+                //check the leak;
             }
             ft_close_pipes(pd->pipes);
             waitpid(id, &stat, 0);
@@ -975,6 +978,7 @@ int main(int ac, char **av, char **ev)
     //     printf("pipe%d == %d\n", i, pd->pipes[i][1]);
     //     i++;
     // }
+    // run_heredoc(pd, pd->);
     mini_hell(av, ev);
     // free_t_env(main_ev);
 }

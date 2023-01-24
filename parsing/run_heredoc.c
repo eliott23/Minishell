@@ -74,6 +74,7 @@ void	run_heredoc(t_data *data, t_queue *limiters)
 //	g_global.new = dup(0);
 	while (limiters)
 	{
+		printf("went here\n");
 		//g_global.get_nb = 1;
 		s = readline("haredoc> ");
 //		if (/*g_global.get_nb == -1 && */set_trigger(&trigger))
