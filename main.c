@@ -930,47 +930,47 @@ int main(int ac, char **av, char **ev)
 {
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
-    // t_ev    *ev_h;
-    // t_ev    *x_ev_h;
-    // t_data  *pd;
-    // t_env   *main_ev;
-    // int     i;
-    // errno = 0;
-    // e_s = 0;
-    // ev_h = NULL;
-    // x_ev_h = NULL;
-    // init(ev, &ev_h, &x_ev_h);
-    // main_ev = fill_env(ev_h);
-    // pd = parse_line("cat <main.c<teest<tools.c", ev, main_ev);
-    // // check for syntax errors;
-    // // check for error_file
-    // //run_heredoc
-    // printf("n_cmds %d\n", pd->n_cmds);
-    // printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
-    // printf("err = %s\n", pd->err);
-    // printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
-    // while (pd->commands)
-    // {
-    //     i = 0;
-    //     while (pd->commands->main_args[i])
-    //     {
-    //         printf("%d=%s ", pd->commands->cmd_id, pd->commands->main_args[i]);
-    //         i++;
-    //     }
-    //     printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
-    //     pd->commands->error_file, pd->commands->outfile,pd->commands->write_end, pd->commands->infile, pd->commands->read_end);
-    //     if (pd->commands->error_file)
-    //         printf("%s : %s", pd->commands->error_file, strerror(errno));
-    //     pd->commands = pd->commands->next;
-    // }
-    // i = 0;
-    // while (pd->pipes[i])
-    // {
-    //     printf("pipe%d == %d . ", i, pd->pipes[i][0]);
-    //     printf("pipe%d == %d\n", i, pd->pipes[i][1]);
-    //     i++;
-    // }
-    mini_hell(av, ev);
+    t_ev    *ev_h;
+    t_ev    *x_ev_h;
+    t_data  *pd;
+    t_env   *main_ev;
+    int     i;
+    errno = 0;
+    e_s = 0;
+    ev_h = NULL;
+    x_ev_h = NULL;
+    init(ev, &ev_h, &x_ev_h);
+    main_ev = fill_env(ev_h);
+    pd = parse_line("<<lim cat <main.c<teest<tools.c", ev, main_ev);
+    // check for syntax errors;
+    // check for error_file
+    //run_heredoc
+    printf("n_cmds %d\n", pd->n_cmds);
+    printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
+    printf("err = %s\n", pd->err);
+    printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
+    while (pd->commands)
+    {
+        i = 0;
+        while (pd->commands->main_args[i])
+        {
+            printf("%d=%s ", pd->commands->cmd_id, pd->commands->main_args[i]);
+            i++;
+        }
+        printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
+        pd->commands->error_file, pd->commands->outfile,pd->commands->write_end, pd->commands->infile, pd->commands->read_end);
+        if (pd->commands->error_file)
+            printf("%s : %s", pd->commands->error_file, strerror(errno));
+        pd->commands = pd->commands->next;
+    }
+    i = 0;
+    while (pd->pipes[i])
+    {
+        printf("pipe%d == %d . ", i, pd->pipes[i][0]);
+        printf("pipe%d == %d\n", i, pd->pipes[i][1]);
+        i++;
+    }
+    // mini_hell(av, ev);
     // free_t_env(main_ev);
 }
 /*
