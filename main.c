@@ -503,7 +503,8 @@ int n2_exec_h(char  *com)
             if (access(com + 1, F_OK))
             {
                 printf("minishell: %s: no such file or directory\n", com + 1);
-                    return (0);
+                e_s = 127;
+                return (0);
             }
             if (access(com + 1, X_OK))
             {
@@ -539,66 +540,6 @@ char *exec_h(t_ev *ev, char *com)
     printf("minishell: %s: command not found\n", com + 1);
     return (0);
 }
-char    **ft_conv(t_ev *ev)
-{
-    char    **env;
-    t_ev    *temp;
-    int     i;
-
-    temp = ev;
-    i = 0;
-    while (temp)
-    {
-        temp = temp->next;
-        i++;
-    }
-    env = malloc(sizeof(char *) * (i + 1));
-    i = 0;
-    while (ev)
-    {
-        env[i] = mft_strdup(ev->var);
-        i++;
-        ev = ev->next;
-    }
-    env[i] = 0;
-    return (env);
-}
-int ft_execp(char **args, t_ev *ev)
-{
-    char    *path;
-    char    *com;
-
-    com = myft_strjoin("/", args[0]);
-    if (!com)
-    {
-        exit(0);
-    }
-    path = exec_h(ev, com);
-    if (!path)
-    {
-        exit(127);
-    }
-    free(com);
-    execve(path, args, ft_conv(ev));
-    printf("ahahah%s", strerror(errno));
-    exit (-1);
-}
-void    handle_errors(char *cmd)
-{
-    int fd;
-
-    if (!cmd)
-        exit(0);
-    fd = open(cmd, O_RDWR);
-    if (fd < 0 && ft_srch(cmd, '/'))
-    {
-        printf("%s : %s\n", cmd, strerror(errno));
-        close(fd);
-    }
-    else if (ft_srch(cmd, '/'))
-        printf("%s : Command not found\n", cmd); //check
-    exit(126);
-}
 int exec(char **args, t_ev *ev)
 {
     char    *path;
@@ -631,6 +572,62 @@ int exec(char **args, t_ev *ev)
     if (path)
         free(path);
     return (ft_exit_status(stat));
+}
+char    **ft_conv(t_ev *ev)
+{
+    char    **env;
+    t_ev    *temp;
+    int     i;
+
+    temp = ev;
+    i = 0;
+    while (temp)
+    {
+        temp = temp->next;
+        i++;
+    }
+    env = malloc(sizeof(char *) * (i + 1));
+    i = 0;
+    while (ev)
+    {
+        env[i] = mft_strdup(ev->var);
+        i++;
+        ev = ev->next;
+    }
+    env[i] = 0;
+    return (env);
+}
+int ft_execp(char **args, t_ev *ev)
+{
+    char    *path;
+    char    *com;
+
+    com = myft_strjoin("/", args[0]);
+    if (!com)
+        exit(0);
+    path = exec_h(ev, com);
+    if (!path)
+        exit(127);
+    free(com);
+    execve(path, args, ft_conv(ev));
+    printf("ahahah%s", strerror(errno));
+    exit (-1);
+}
+void    handle_errors(char *cmd)
+{
+    int fd;
+
+    if (!cmd)
+        exit(0);
+    fd = open(cmd, O_RDWR);
+    if (fd < 0 && ft_srch(cmd, '/'))
+    {
+        printf("%s : %s\n", cmd, strerror(errno));
+        close(fd);
+    }
+    else if (ft_srch(cmd, '/'))
+        printf("%s : Command not found\n", cmd); //check
+    exit(126);
 }
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
