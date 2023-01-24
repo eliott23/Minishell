@@ -47,7 +47,7 @@ int env(t_ev *ev_h)
     {
         while (ev_h)
         {
-            printf("%s\n", ev_h->var);
+            fprintf(stderr, "%s\n", ev_h->var);
             ev_h = ev_h->next;
         }
     }
@@ -490,11 +490,11 @@ void    handle_errors(char *cmd)
     fd = open(cmd, O_RDWR);     //careful!!!!;
     if (fd < 0 && ft_srch(cmd, '/'))
     {
-        printf("%s : %s\n", cmd, strerror(errno));
+        fprintf(stderr, "%s : %s\n", cmd, strerror(errno));
         close(fd);
     }
     else if (ft_srch(cmd, '/'))
-        printf("%s : Command not found\n", cmd); //check
+        fprintf(stderr, "%s : Command not found\n", cmd); //check
     exit(126);
 }
 int nn_exec_h(t_nx *nx)
@@ -542,13 +542,13 @@ int n2_exec_h(char  *com)
 {
             if (access(com + 1, F_OK))
             {
-                printf("minishell: %s: no such file or directory\n", com + 1);
+                fprintf(stderr, "minishell: %s: no such file or directory\n", com + 1);
                 e_s = 127;
                 return (0);
             }
             if (access(com + 1, X_OK))
             {
-                printf("%s: %s\n", com + 1, strerror(errno));
+                fprintf(stderr, "%s: %s\n", com + 1, strerror(errno));
                 e_s = 126;  //check the exist status of execve in this case;
                 return (0);
             }
@@ -577,7 +577,7 @@ char *exec_h(t_ev *ev, char *com)
             else
                 return (mft_strdup(com + 1));
         }
-    printf("minishell: %s: command not found\n", com + 1);
+    fprintf(stderr, "minishell: %s: command not found\n", com + 1);
     return (0);
 }
 int exec(char **args, t_ev *ev)
@@ -605,7 +605,6 @@ int exec(char **args, t_ev *ev)
         // }
         // dup2(fd, 1);
         execve(path , args, ft_conv(ev)); //check safety of every execve;
-        fprintf(stderr ,"lol\n");
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
@@ -626,8 +625,8 @@ int ft_execp(char **args, t_ev *ev)
         exit(127);
     free(com);
     execve(path, args, ft_conv(ev));
-    printf("ahahah%s", strerror(errno));
-    exit (-1);
+    handle_errors(args[0]);
+    return (0);
 }
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
@@ -645,7 +644,7 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         return (echo(args + 1));
     else if (v == 6)
     {
-        printf("exit\n");
+        fprintf(stderr, "exit\n");
         if (args && args[1])
             exit ((char)ft_atoi(args[1]));
         exit(0);
@@ -846,9 +845,9 @@ int mini_hell(char **av, char **ev)
         if (!pd->is_syntax_valid || pd->err)
         {
             if (pd->err)
-                printf("%s", pd->err);
+                fprintf(stderr, "%s", pd->err);
             else
-                printf("syntax error");
+                fprintf(stderr, "syntax error");
             exit(1);
         }
         if (pd->n_cmds == 1)
@@ -866,17 +865,17 @@ int mini_hell(char **av, char **ev)
                     dup2(pd->commands->write_end, 1);
                     close(pd->commands->write_end);
                 }
-                printf("yup\n");
+                fprintf(stderr, "yup\n");
                 e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
                 dup2(s0, 0);
                 dup2(s1, 1);
             }
             else
             {
-                printf("%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
+                fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
                 e_s = 1;
             }
-            printf("exit status==%d\n", e_s);
+            fprintf(stderr, "exit status==%d\n", e_s);
         }
         else
         {
@@ -897,7 +896,7 @@ int mini_hell(char **av, char **ev)
                                 dup2(pd->commands->write_end, 1);
                             ft_close_pipes(pd->pipes);
                             v = m_parsing(pd->commands->main_args);
-                            printf("the flag=%d and v==%d\n", pd->commands->is_builtin, v);
+                            fprintf(stderr, "the flag=%d and v==%d\n", pd->commands->is_builtin, v);
                             if (!(pd->commands->is_builtin))
                             {
                                 what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
@@ -916,7 +915,7 @@ int mini_hell(char **av, char **ev)
             ft_close_pipes(pd->pipes);
             waitpid(id, &stat, 0);
             while (waitpid(-1, NULL, 0) != -1);
-            printf("exit status==%d\n", ft_exit_status(stat));
+            fprintf(stderr, "exit status==%d\n", ft_exit_status(stat));
         }
     }
 }
