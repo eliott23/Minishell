@@ -487,7 +487,7 @@ void    handle_errors(char *cmd)
 
     if (!cmd)
         exit(0);
-    fd = open(cmd, O_RDWR);
+    fd = open(cmd, O_RDWR);     //careful!!!!;
     if (fd < 0 && ft_srch(cmd, '/'))
     {
         printf("%s : %s\n", cmd, strerror(errno));
@@ -852,43 +852,60 @@ int mini_hell(char **av, char **ev)
         }
         if (pd->n_cmds == 1)
         {
-            v = m_parsing(pd->commands->main_args);
-            if (pd->commands->infile)
+            if (!pd->commands->error_file)
             {
-                dup2(pd->commands->read_end, 0);
-                close(pd->commands->read_end);
+                v = m_parsing(pd->commands->main_args);
+                if (pd->commands->infile)
+                {
+                    dup2(pd->commands->read_end, 0);
+                    close(pd->commands->read_end);
+                }
+                if (pd->commands->outfile)
+                {
+                    dup2(pd->commands->write_end, 1);
+                    close(pd->commands->write_end);
+                }
+                printf("yup\n");
+                e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
+                dup2(s0, 0);
+                dup2(s1, 1);
             }
-            if (pd->commands->outfile)
+            else
             {
-                dup2(pd->commands->write_end, 1);
-                close(pd->commands->write_end);
+                printf("%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
+                e_s = 1;
             }
-            e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
-            dup2(s0, 0);
-            dup2(s1, 1);
             printf("exit status==%d\n", e_s);
         }
         else
         {
             while (pd->commands)
             {
-                id = fork(); // check later;
-                if (!id)
+                if (!pd->commands->error_file)
                 {
-                    signal(SIGINT, SIG_DFL);
-                    if (pd->commands->cmd_id != 1)
-                        dup2(pd->commands->read_end, 0);
-                    if (pd->commands->next)
-                        dup2(pd->commands->write_end, 1);
-                    ft_close_pipes(pd->pipes);
-                    v = m_parsing(pd->commands->main_args);
-                    printf("the flag=%d and v==%d\n", pd->commands->is_builtin, v);
-                    if (!(pd->commands->is_builtin))
+                    id = fork(); // check later;
+                    if (!id)
                     {
-                        what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
+                        signal(SIGINT, SIG_DFL);
+                        if (pd->commands->cmd_id != 1)
+                            dup2(pd->commands->read_end, 0);
+                        if (pd->commands->next)
+                            dup2(pd->commands->write_end, 1);
+                        ft_close_pipes(pd->pipes);
+                        v = m_parsing(pd->commands->main_args);
+                        printf("the flag=%d and v==%d\n", pd->commands->is_builtin, v);
+                        if (!(pd->commands->is_builtin))
+                        {
+                            what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
+                        }
+                        else
+                            exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
                     }
-                    else
-                        exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
+                }
+                else
+                {
+                    printf("%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
+                    e_s = 1;
                 }
                 pd->commands = pd->commands->next;
             }
@@ -917,7 +934,7 @@ int main(int ac, char **av, char **ev)
     // x_ev_h = NULL;
     // init(ev, &ev_h, &x_ev_h);
     // main_ev = fill_env(ev_h);
-    // pd = parse_line("<teest cat a | ls | ls <teest", ev, main_ev);
+    // pd = parse_line("cat <main.c<teest<tools.c", ev, main_ev);
     // // check for syntax errors;
     // // check for error_file
     // //run_heredoc
@@ -935,6 +952,8 @@ int main(int ac, char **av, char **ev)
     //     }
     //     printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
     //     pd->commands->error_file, pd->commands->outfile,pd->commands->write_end, pd->commands->infile, pd->commands->read_end);
+    //     if (pd->commands->error_file)
+    //         printf("%s : %s", pd->commands->error_file, strerror(errno));
     //     pd->commands = pd->commands->next;
     // }
     // i = 0;
