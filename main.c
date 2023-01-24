@@ -941,7 +941,7 @@ int main(int ac, char **av, char **ev)
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
     main_ev = fill_env(ev_h);
-    pd = parse_line("<<lim cat <main.c<teest<tools.c", ev, main_ev);
+    pd = parse_line("<<lim cat <main.c<teest<tools.c | <<ac <<dvsd <<sdvdv | <<final", ev, main_ev);
     // check for syntax errors;
     // check for error_file
     //run_heredoc
@@ -949,6 +949,12 @@ int main(int ac, char **av, char **ev)
     printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
     printf("err = %s\n", pd->err);
     printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
+    while (pd && pd->heredoc)
+    {
+        printf("|lim= %s  | - ",pd->heredoc->s);
+        pd->heredoc = pd->heredoc->next;
+    }
+    printf("\n");
     while (pd->commands)
     {
         i = 0;
