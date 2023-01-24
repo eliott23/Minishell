@@ -47,7 +47,7 @@ int env(t_ev *ev_h)
     {
         while (ev_h)
         {
-            fprintf(stderr, "%s\n", ev_h->var);
+            printf("%s\n", ev_h->var);
             ev_h = ev_h->next;
         }
     }
@@ -256,7 +256,7 @@ void    init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
     t_ev    *temp2;
     char    *OLDPWD[] = {"OLDPWD", 0};
 
-    if (ev && ev_h)
+    if (ev && ev[0] && ev_h)
     {
         i = 1;
         n_init(&temp, &temp2, ev_h, x_ev_h);
@@ -621,9 +621,9 @@ int ft_execp(char **args, t_ev *ev)
     if (!com)
         exit(0);
     path = exec_h(ev, com);
+    free(com);
     if (!path)
         exit(127);
-    free(com);
     execve(path, args, ft_conv(ev));
     handle_errors(args[0]);
     return (0);
