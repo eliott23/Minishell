@@ -1,6 +1,30 @@
 #include "m_shell.h"
 #include "include/parsing.h"
 
+char    **ft_conv(t_ev *ev)
+{
+    char    **env;
+    t_ev    *temp;
+    int     i;
+
+    temp = ev;
+    i = 0;
+    while (temp)
+    {
+        temp = temp->next;
+        i++;
+    }
+    env = malloc(sizeof(char *) * (i + 1));
+    i = 0;
+    while (ev)
+    {
+        env[i] = mft_strdup(ev->var);
+        i++;
+        ev = ev->next;
+    }
+    env[i] = 0;
+    return (env);
+}
 int ft_exit_status(int status)
 {
     e_s = 0;
@@ -457,6 +481,22 @@ int echo(char **args)
     }
     return (0);
 }
+void    handle_errors(char *cmd)
+{
+    int fd;
+
+    if (!cmd)
+        exit(0);
+    fd = open(cmd, O_RDWR);
+    if (fd < 0 && ft_srch(cmd, '/'))
+    {
+        printf("%s : %s\n", cmd, strerror(errno));
+        close(fd);
+    }
+    else if (ft_srch(cmd, '/'))
+        printf("%s : Command not found\n", cmd); //check
+    exit(126);
+}
 int nn_exec_h(t_nx *nx)
 {
             while ((nx->PATHS)[(nx->i)])
@@ -573,30 +613,6 @@ int exec(char **args, t_ev *ev)
         free(path);
     return (ft_exit_status(stat));
 }
-char    **ft_conv(t_ev *ev)
-{
-    char    **env;
-    t_ev    *temp;
-    int     i;
-
-    temp = ev;
-    i = 0;
-    while (temp)
-    {
-        temp = temp->next;
-        i++;
-    }
-    env = malloc(sizeof(char *) * (i + 1));
-    i = 0;
-    while (ev)
-    {
-        env[i] = mft_strdup(ev->var);
-        i++;
-        ev = ev->next;
-    }
-    env[i] = 0;
-    return (env);
-}
 int ft_execp(char **args, t_ev *ev)
 {
     char    *path;
@@ -612,22 +628,6 @@ int ft_execp(char **args, t_ev *ev)
     execve(path, args, ft_conv(ev));
     printf("ahahah%s", strerror(errno));
     exit (-1);
-}
-void    handle_errors(char *cmd)
-{
-    int fd;
-
-    if (!cmd)
-        exit(0);
-    fd = open(cmd, O_RDWR);
-    if (fd < 0 && ft_srch(cmd, '/'))
-    {
-        printf("%s : %s\n", cmd, strerror(errno));
-        close(fd);
-    }
-    else if (ft_srch(cmd, '/'))
-        printf("%s : Command not found\n", cmd); //check
-    exit(126);
 }
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
