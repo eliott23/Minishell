@@ -597,13 +597,6 @@ int exec(char **args, t_ev *ev)
     id = fork();
 	if (!id)
     {
-        // int fd = open("teest", O_RDWR);
-        // if (fd < 0)
-        // {
-        //     printf("sadvv%s\n", strerror(errno));
-        //     exit(1);
-        // }
-        // dup2(fd, 1);
         execve(path , args, ft_conv(ev)); //check safety of every execve;
         handle_errors(args[0]);
     }
@@ -750,7 +743,6 @@ void    free_t_env(t_env *ev)
         t = ev;
         ev = ev->next;
         free(t);
-        sleep(100);
     }
 }
 
@@ -818,10 +810,16 @@ int mini_hell(char **av, char **ev)
     char    *str = NULL;
     int     count;
     int     stat;
-    t_data  *pd = NULL;
+    t_data  *pd;
     int     s0 = dup(0);
     int     s1= dup(1);
     int     t_errno;
+    t_env   *main_env;
+    char    **env;
+
+    pd = NULL;
+    env = NULL;
+    main_env = NULL;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -841,7 +839,14 @@ int mini_hell(char **av, char **ev)
         if (!str)
             exit(0);
         add_history(str);
+        if (main_env)
+            free_t_env(main_env);
+        if (env)
+            freesplit(env);
+        main_env = fill_env(ev_h);
+        env = ft_conv(ev_h);
         pd = parse_line(str, ft_conv(ev_h), fill_env(ev_h));
+        //here_doc;
         if (!pd->is_syntax_valid || pd->err)
         {
             if (pd->err)
@@ -865,7 +870,6 @@ int mini_hell(char **av, char **ev)
                     dup2(pd->commands->write_end, 1);
                     close(pd->commands->write_end);
                 }
-                fprintf(stderr, "yup\n");
                 e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
                 dup2(s0, 0);
                 dup2(s1, 1);
