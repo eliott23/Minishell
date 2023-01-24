@@ -822,6 +822,7 @@ int mini_hell(char **av, char **ev)
     t_data  *pd = NULL;
     int     s0 = dup(0);
     int     s1= dup(1);
+    int     t_errno;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
@@ -881,32 +882,35 @@ int mini_hell(char **av, char **ev)
         {
             while (pd->commands)
             {
-                if (!pd->commands->error_file)
+                // if (pd->commands->cmd_id == 2)
+                    // sleep(5);
+                t_errno = errno;
+                id = fork(); // check later;
+                if (!id)
                 {
-                    id = fork(); // check later;
-                    if (!id)
+                    if (!pd->commands->error_file)
                     {
-                        signal(SIGINT, SIG_DFL);
-                        if (pd->commands->cmd_id != 1)
-                            dup2(pd->commands->read_end, 0);
-                        if (pd->commands->next)
-                            dup2(pd->commands->write_end, 1);
-                        ft_close_pipes(pd->pipes);
-                        v = m_parsing(pd->commands->main_args);
-                        printf("the flag=%d and v==%d\n", pd->commands->is_builtin, v);
-                        if (!(pd->commands->is_builtin))
-                        {
-                            what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
-                        }
-                        else
-                            exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
+                            signal(SIGINT, SIG_DFL);
+                            if (pd->commands->cmd_id != 1)
+                                dup2(pd->commands->read_end, 0);
+                            if (pd->commands->next)
+                                dup2(pd->commands->write_end, 1);
+                            ft_close_pipes(pd->pipes);
+                            v = m_parsing(pd->commands->main_args);
+                            printf("the flag=%d and v==%d\n", pd->commands->is_builtin, v);
+                            if (!(pd->commands->is_builtin))
+                            {
+                                what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
+                            }
+                            else
+                                exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
                     }
-                }
-                else
-                {
-                    printf("%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
-                    e_s = 1;
-                }
+                    else
+                    {
+                        fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(t_errno), t_errno);
+                        exit(1);
+                    }
+                } 
                 pd->commands = pd->commands->next;
             }
             ft_close_pipes(pd->pipes);
