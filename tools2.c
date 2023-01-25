@@ -1,11 +1,6 @@
 #include "m_shell.h"
 #include "include/parsing.h"
 
-void	h_D()
-{
-	gv.flag = -1;
-}
-
 void	h_C()
 {
 	printf("went here\n");

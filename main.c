@@ -934,8 +934,8 @@ void    parent_ctlC(int i)
 }
 int main(int ac, char **av, char **ev)
 {
-    // signal(SIGQUIT, SIG_IGN);
-    //signal(SIGINT, parent_ctlC);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, parent_ctlC);
     gv.e_s = 0;
     t_ev    *ev_h;
     t_ev    *x_ev_h;
@@ -944,13 +944,15 @@ int main(int ac, char **av, char **ev)
     int     i;
     t_queue *tdoc;
     t_cmd   *tcmd;
+    char    *str;
     errno = 0;
     gv.e_s = 0;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
     main_ev = fill_env(ev_h);
-    pd = parse_line("<<lim <<lim2", ev, main_ev);
+    str = readline("minihell");
+    pd = parse_line(str, ev, main_ev);
     tdoc = pd->heredoc;
     tcmd = pd->commands;
     // check for syntax errors;
@@ -988,7 +990,11 @@ int main(int ac, char **av, char **ev)
         i++;
     }
     if (run_heredoc(pd, pd->heredoc))
-        printf("it's out and printed\n");
+    {
+        // rl_on_new_line();
+        // rl_redisplay();
+    }
+    // str = readline("minihell");
     // mini_hell(av, ev);
     // free_t_env(main_ev);
 }

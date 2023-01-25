@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:10:46 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/25 22:56:13 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/26 00:06:48 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	set_status(t_data *data, t_queue *limiter, char *s, char *res)
 		free(s);
 	if (res)
 		free(res);
-	printf("set_status\n");
 	close(cmd->heredoc_pipe[1]);
 }
 
@@ -69,21 +68,18 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 	char	*s;
 	char	*res;
 	int		trigger;
+	int		d;
 
 	trigger = 0;
 	res = NULL;
 	signal(SIGINT, h_C);
-	// handle_signals(2);
-//	g_global.new = dup(0);
+	d = dup(0);
 	while (limiters)
 	{
 		gv.flag = 0;
 		s = readline("haredoc> ");
 		if (gv.flag && set_trigger(&trigger))
-		{
-			printf("broke");
 			break ;
-		}
 		if (!s || !ft_strcmp(s, limiters->s))
 		{
 			limiter_found(data, &limiters, &res, s);
@@ -96,8 +92,8 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 	{
 		printf("went here\n");
 		set_status(data, limiters, s, res);
+		dup2(d, 0);
 		return (-1);
 	}
 	return (0);
-	//dup2(g_global.new, 0);
 }
