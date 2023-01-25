@@ -594,7 +594,7 @@ int exec(char **args, t_ev *ev)
     if (!path)
     {
         // printf("here\n");
-        return (127);
+        return (e_s);
     }
     id = fork();
 	if (!id)
@@ -618,7 +618,7 @@ int ft_execp(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     if (!path)
-        exit(127);
+        exit(e_s);
     execve(path, args, ft_conv(ev));
     handle_errors(args[0]);
     return (0);
