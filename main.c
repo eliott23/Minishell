@@ -593,7 +593,10 @@ int exec(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     if (!path)
+    {
+        // printf("here\n");
         return (127);
+    }
     id = fork();
 	if (!id)
     {
@@ -816,6 +819,7 @@ int mini_hell(char **av, char **ev)
     int     t_errno;
     t_env   *main_env;
     char    **env;
+    t_cmd   *head;
 
     pd = NULL;
     env = NULL;
@@ -828,6 +832,12 @@ int mini_hell(char **av, char **ev)
     {
         if (str)
             free(str);
+        if (main_env)
+            free_t_env(main_env);
+        if (env)
+            freesplit(env);
+        if (pd)
+            destory_data(&pd);
         str = readline("Minishell>");
         if (!str)
             exit(0);
@@ -839,12 +849,6 @@ int mini_hell(char **av, char **ev)
         if (!str)
             exit(0);
         add_history(str);
-        if (main_env)
-            free_t_env(main_env);
-        if (env)
-            freesplit(env);
-        if (pd)
-            destory_data(&pd);
         main_env = fill_env(ev_h);
         env = ft_conv(ev_h);
         pd = parse_line(str, env, main_env);
@@ -885,7 +889,8 @@ int mini_hell(char **av, char **ev)
         }
         else
         {
-            while (pd->commands)
+            head = pd->commands;
+            while (head)
             {
                 // if (pd->commands->cmd_id == 2)
                     // sleep(5);
@@ -893,29 +898,29 @@ int mini_hell(char **av, char **ev)
                 id = fork(); // check later;
                 if (!id)
                 {
-                    if (!pd->commands->error_file)
+                    if (!head->error_file)
                     {
                             signal(SIGINT, SIG_DFL);
-                            if (pd->commands->cmd_id != 1 || pd->commands->infile)
-                                dup2(pd->commands->read_end, 0);
-                            if (pd->commands->next || pd->commands->outfile)
-                                dup2(pd->commands->write_end, 1);
+                            if (head->cmd_id != 1 || head->infile)
+                                dup2(head->read_end, 0);
+                            if (head->next || head->outfile)
+                                dup2(head->write_end, 1);
                             ft_close_pipes(pd->pipes);
-                            v = m_parsing(pd->commands->main_args);
-                            if (!(pd->commands->is_builtin) || pd->commands->outfile)
+                            v = m_parsing(head->main_args);
+                            if (!(head->is_builtin) || head->outfile)
                             {
-                                what_to_call(v + 1, &ev_h, &x_ev_h, pd->commands->main_args);
+                                what_to_call(v + 1, &ev_h, &x_ev_h, head->main_args);
                             }
                             else
-                                exit(what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args)); // check exit_status;
+                                exit(what_to_call(v, &ev_h, &x_ev_h, head->main_args)); // check exit_status;
                     }
                     else
                     {
-                        fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(t_errno), t_errno);
+                        fprintf(stderr, "%s : %s errno==%d\n", head->error_file, strerror(t_errno), t_errno);
                         exit(1);
                     }
                 } 
-                pd->commands = pd->commands->next;
+                head = head->next;
                 //check the leak;
             }
             ft_close_pipes(pd->pipes);
@@ -943,7 +948,7 @@ int main(int ac, char **av, char **ev)
     // x_ev_h = NULL;
     // init(ev, &ev_h, &x_ev_h);
     // main_ev = fill_env(ev_h);
-    // pd = parse_line("echo 'adsfcdc", ev, main_ev);
+    // pd = parse_line("<<lim", ev, main_ev);
     // // check for syntax errors;
     // // check for error_file
     // //run_heredoc
@@ -951,6 +956,7 @@ int main(int ac, char **av, char **ev)
     // printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
     // printf("err = %s\n", pd->err);
     // printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
+    // t_queue *head = pd->heredoc;
     // while (pd && pd->heredoc)
     // {
     //     printf("|lim= %s  | - ",pd->heredoc->s);
@@ -978,7 +984,7 @@ int main(int ac, char **av, char **ev)
     //     printf("pipe%d == %d\n", i, pd->pipes[i][1]);
     //     i++;
     // }
-    // run_heredoc(pd, pd->heredoc);
+    // run_heredoc(pd, head);
     mini_hell(av, ev);
     // free_t_env(main_ev);
 }
