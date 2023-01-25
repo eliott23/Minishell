@@ -898,7 +898,7 @@ int mini_hell(char **av, char **ev)
                             signal(SIGINT, SIG_DFL);
                             if (pd->commands->cmd_id != 1 || pd->commands->infile)
                                 dup2(pd->commands->read_end, 0);
-                            if (pd->commands->next)
+                            if (pd->commands->next || pd->commands->outfile)
                                 dup2(pd->commands->write_end, 1);
                             ft_close_pipes(pd->pipes);
                             v = m_parsing(pd->commands->main_args);
@@ -943,7 +943,7 @@ int main(int ac, char **av, char **ev)
     // x_ev_h = NULL;
     // init(ev, &ev_h, &x_ev_h);
     // main_ev = fill_env(ev_h);
-    // pd = parse_line("<<lim cat <main.c<teest<tools.c | <<ac <<dvsd <<sdvdv | <<final", ev, main_ev);
+    // pd = parse_line("echo 'adsfcdc", ev, main_ev);
     // // check for syntax errors;
     // // check for error_file
     // //run_heredoc
@@ -978,7 +978,7 @@ int main(int ac, char **av, char **ev)
     //     printf("pipe%d == %d\n", i, pd->pipes[i][1]);
     //     i++;
     // }
-    // run_heredoc(pd, pd->);
+    // run_heredoc(pd, pd->heredoc);
     mini_hell(av, ev);
     // free_t_env(main_ev);
 }
