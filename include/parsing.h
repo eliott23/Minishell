@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:13 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/25 18:19:18 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/25 21:47:02 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,16 @@
 # include "macros.h"
 #include "../m_shell.h"
 
-int e_s;
+typedef	struct gv
+{
+	int	e_s;
+	int	flag;
+}	t_gv;
 
+t_gv	gv;
+
+void		h_C();
+void		parent_ctlC(int i);
 void		ft_putstr(char *s);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strjoin_free(char *s1, char *s2);
@@ -78,7 +86,7 @@ void		push_command(t_cmd **head, t_cmd *new);
 t_cmd		*new_command(t_cmd *head);
 t_cmd		*get_last_command(t_cmd *head);
 
-void		run_heredoc(t_data *data, t_queue *limiters);
+int			run_heredoc(t_data *data, t_queue *limiters);
 void		init_env(t_env **env_v, char **env);
 
 void		prepare_data(t_data *data);

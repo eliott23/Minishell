@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:08:20 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/22 22:02:17 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/25 21:38:42 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*get_status(char *old_res, size_t *i, size_t *j)
 	char	*res;
 	char	*part;
 
-	part = ft_itoa(e_s);
+	part = ft_itoa(gv.e_s);
 	res = ft_strjoin_free(old_res, part);
 	*i += 1;
 	*j = (*i) + 1;

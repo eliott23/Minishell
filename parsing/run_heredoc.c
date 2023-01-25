@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:10:46 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/22 21:58:15 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/25 22:56:13 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	limiter_not_found(char **res, char **s)
 int	set_trigger(int *trigger)
 {
 	*trigger = 1;
+	printf("triggered\n");
 	return (1);
 }
 
@@ -59,10 +60,11 @@ void	set_status(t_data *data, t_queue *limiter, char *s, char *res)
 		free(s);
 	if (res)
 		free(res);
+	printf("set_status\n");
 	close(cmd->heredoc_pipe[1]);
 }
 
-void	run_heredoc(t_data *data, t_queue *limiters)
+int	run_heredoc(t_data *data, t_queue *limiters)
 {
 	char	*s;
 	char	*res;
@@ -70,21 +72,32 @@ void	run_heredoc(t_data *data, t_queue *limiters)
 
 	trigger = 0;
 	res = NULL;
+	signal(SIGINT, h_C);
 	// handle_signals(2);
 //	g_global.new = dup(0);
 	while (limiters)
 	{
-		printf("went here\n");
-		//g_global.get_nb = 1;
+		gv.flag = 0;
 		s = readline("haredoc> ");
-//		if (/*g_global.get_nb == -1 && */set_trigger(&trigger))
-//			break ;
+		if (gv.flag && set_trigger(&trigger))
+		{
+			printf("broke");
+			break ;
+		}
 		if (!s || !ft_strcmp(s, limiters->s))
+		{
 			limiter_found(data, &limiters, &res, s);
+			printf("went here\n");
+		}
 		else
 			limiter_not_found(&res, &s);
 	}
 	if (trigger)
+	{
+		printf("went here\n");
 		set_status(data, limiters, s, res);
+		return (-1);
+	}
+	return (0);
 	//dup2(g_global.new, 0);
 }

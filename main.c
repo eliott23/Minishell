@@ -29,15 +29,15 @@ int ft_exit_status(int status)
 {
     if (WIFEXITED(status))
     {
-        e_s = WEXITSTATUS(status);
-        return (e_s);
+        gv.e_s = WEXITSTATUS(status);
+        return (gv.e_s);
     }
     else if (WIFSIGNALED(status))
     {
-        e_s = status + 128;
-        return (e_s);
+        gv.e_s = status + 128;
+        return (gv.e_s);
     }
-    return (e_s);
+    return (gv.e_s);
 }
 
 int env(t_ev *ev_h)
@@ -509,7 +509,7 @@ int nn_exec_h(t_nx *nx)
                     else
                     {
                         free((nx->PATH));
-                        e_s = 126;
+                        gv.e_s = 126;
                         return (0);
                     }
                 }
@@ -542,13 +542,13 @@ int n2_exec_h(char  *com)
             if (access(com + 1, F_OK))
             {
                 fprintf(stderr, "minishell: %s: no such file or directory\n", com + 1);
-                e_s = 127;
+                gv.e_s = 127;
                 return (0);
             }
             if (access(com + 1, X_OK))
             {
                 fprintf(stderr, "%s: %s\n", com + 1, strerror(errno));
-                e_s = 126;  //check the exist status of execve in this case;
+                gv.e_s = 126;  //check the exist status of execve in this case;
                 return (0);
             }
             return (1);
@@ -594,7 +594,7 @@ int exec(char **args, t_ev *ev)
     if (!path)
     {
         // printf("here\n");
-        return (e_s);
+        return (gv.e_s);
     }
     id = fork();
 	if (!id)
@@ -618,7 +618,7 @@ int ft_execp(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     if (!path)
-        exit(e_s);
+        exit(gv.e_s);
     execve(path, args, ft_conv(ev));
     handle_errors(args[0]);
     return (0);
@@ -875,16 +875,16 @@ int mini_hell(char **av, char **ev)
                     dup2(pd->commands->write_end, 1);
                     close(pd->commands->write_end);
                 }
-                e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
+                gv.e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
                 dup2(s0, 0);
                 dup2(s1, 1);
             }
             else
             {
                 fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
-                e_s = 1;
+                gv.e_s = 1;
             }
-            fprintf(stderr, "exit status==%d\n", e_s);
+            fprintf(stderr, "exit status==%d\n", gv.e_s);
         }
         else
         {
@@ -934,58 +934,62 @@ void    parent_ctlC(int i)
 }
 int main(int ac, char **av, char **ev)
 {
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGINT, parent_ctlC);
-    e_s = 0;
-    // t_ev    *ev_h;
-    // t_ev    *x_ev_h;
-    // t_data  *pd;
-    // t_env   *main_ev;
-    // int     i;
-    // errno = 0;
-    // e_s = 0;
-    // ev_h = NULL;
-    // x_ev_h = NULL;
-    // init(ev, &ev_h, &x_ev_h);
-    // main_ev = fill_env(ev_h);
-    // pd = parse_line("<<lim", ev, main_ev);
-    // // check for syntax errors;
-    // // check for error_file
-    // //run_heredoc
-    // printf("n_cmds %d\n", pd->n_cmds);
-    // printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
-    // printf("err = %s\n", pd->err);
-    // printf("this is the out fd %s and the mode=%d\n", pd->commands->outfile, pd->commands->outfile_mode);
-    // t_queue *head = pd->heredoc;
-    // while (pd && pd->heredoc)
-    // {
-    //     printf("|lim= %s  | - ",pd->heredoc->s);
-    //     pd->heredoc = pd->heredoc->next;
-    // }
-    // printf("\n");
-    // while (pd->commands)
-    // {
-    //     i = 0;
-    //     while (pd->commands->main_args[i])
-    //     {
-    //         printf("%d=%s ", pd->commands->cmd_id, pd->commands->main_args[i]);
-    //         i++;
-    //     }
-    //     printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
-    //     pd->commands->error_file, pd->commands->outfile,pd->commands->write_end, pd->commands->infile, pd->commands->read_end);
-    //     if (pd->commands->error_file)
-    //         printf("%s : %s", pd->commands->error_file, strerror(errno));
-    //     pd->commands = pd->commands->next;
-    // }
-    // i = 0;
-    // while (pd->pipes[i])
-    // {
-    //     printf("pipe%d == %d . ", i, pd->pipes[i][0]);
-    //     printf("pipe%d == %d\n", i, pd->pipes[i][1]);
-    //     i++;
-    // }
-    // run_heredoc(pd, head);
-    mini_hell(av, ev);
+    // signal(SIGQUIT, SIG_IGN);
+    //signal(SIGINT, parent_ctlC);
+    gv.e_s = 0;
+    t_ev    *ev_h;
+    t_ev    *x_ev_h;
+    t_data  *pd;
+    t_env   *main_ev;
+    int     i;
+    t_queue *tdoc;
+    t_cmd   *tcmd;
+    errno = 0;
+    gv.e_s = 0;
+    ev_h = NULL;
+    x_ev_h = NULL;
+    init(ev, &ev_h, &x_ev_h);
+    main_ev = fill_env(ev_h);
+    pd = parse_line("<<lim <<lim2", ev, main_ev);
+    tdoc = pd->heredoc;
+    tcmd = pd->commands;
+    // check for syntax errors;
+    // check for error_file
+    //run_heredoc
+    printf("n_cmds %d\n", pd->n_cmds);
+    printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
+    printf("err = %s\n", pd->err);
+    printf("this is the out fd %s and the mode=%d\n", tcmd->outfile, tcmd->outfile_mode);
+    while (pd && tdoc)
+    {
+        printf("|lim= %s  | - ",tdoc->s);
+        tdoc = tdoc->next;
+    }
+    printf("\n");
+    while (tcmd)
+    {
+        i = 0;
+        while (tcmd->main_args[i])
+        {
+            printf("%d=%s ", tcmd->cmd_id, tcmd->main_args[i]);
+            i++;
+        }
+        printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
+        tcmd->error_file, tcmd->outfile,tcmd->write_end, tcmd->infile, tcmd->read_end);
+        if (tcmd->error_file)
+            printf("%s : %s", tcmd->error_file, strerror(errno));
+        tcmd = tcmd->next;
+    }
+    i = 0;
+    while (pd->pipes[i])
+    {
+        printf("pipe%d == %d . ", i, pd->pipes[i][0]);
+        printf("pipe%d == %d\n", i, pd->pipes[i][1]);
+        i++;
+    }
+    if (run_heredoc(pd, pd->heredoc))
+        printf("it's out and printed\n");
+    // mini_hell(av, ev);
     // free_t_env(main_ev);
 }
 /*
