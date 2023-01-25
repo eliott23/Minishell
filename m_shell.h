@@ -11,8 +11,6 @@
 #include <sys/stat.h>
 #include "include/parsing.h"
 
-int	e_s;
-
 typedef struct cmdl{
 	char	**args;
 }t_cmdl;

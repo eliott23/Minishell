@@ -27,7 +27,6 @@ char    **ft_conv(t_ev *ev)
 }
 int ft_exit_status(int status)
 {
-    e_s = 0;
     if (WIFEXITED(status))
     {
         e_s = WEXITSTATUS(status);
@@ -937,6 +936,7 @@ int main(int ac, char **av, char **ev)
 {
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
+    e_s = 0;
     // t_ev    *ev_h;
     // t_ev    *x_ev_h;
     // t_data  *pd;
