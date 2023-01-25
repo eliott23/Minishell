@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:13 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/23 15:49:19 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/25 18:19:18 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include "structures.h"
 # include "macros.h"
 #include "../m_shell.h"
+
+int e_s;
 
 void		ft_putstr(char *s);
 char		*ft_strjoin(char *s1, char *s2);
