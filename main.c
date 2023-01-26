@@ -598,6 +598,7 @@ int exec(char **args, t_ev *ev)
 	if (!id)
     {
         execve(path , args, ft_conv(ev)); //check safety of every execve;
+        fprintf(stderr, "am heeere\n");
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
@@ -862,7 +863,7 @@ int mini_hell(char **av, char **ev)
                 free(str);
             main_env = fill_env(ev_h);
             env = ft_conv(ev_h);
-            str = readline("Minishell");
+            str = readline("Minishell>");
             pd = parse_line(str, env, main_env);
         }
         //here_doc;
