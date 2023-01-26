@@ -855,6 +855,7 @@ int mini_hell(char **av, char **ev)
         main_env = fill_env(ev_h);
         env = ft_conv(ev_h);
         pd = parse_line(str, env, main_env);
+        t_errno = errno;
         while (run_heredoc(pd, pd->heredoc))
         {
             signal(SIGINT, parent_ctlC);
@@ -870,6 +871,7 @@ int mini_hell(char **av, char **ev)
             env = ft_conv(ev_h);
             str = readline("Minishell>");
             pd = parse_line(str, env, main_env);
+            t_errno = errno;
         }
         //here_doc;
         if (!pd->is_syntax_valid || pd->err)
@@ -902,7 +904,7 @@ int mini_hell(char **av, char **ev)
             }
             else
             {
-                fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(errno), errno);
+                fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(t_errno), t_errno);
                 gv.e_s = 1;
             }
             fprintf(stderr, "exit status==%d\n", gv.e_s);
@@ -912,7 +914,6 @@ int mini_hell(char **av, char **ev)
             head = pd->commands;
             while (head)
             {
-                t_errno = errno;
                 id = fork(); // check later;
                 if (!id)
                 {
