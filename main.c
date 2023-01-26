@@ -576,6 +576,7 @@ char *exec_h(t_ev *ev, char *com)
             else
                 return (mft_strdup(com + 1));
         }
+    gv.e_s = 127;
     fprintf(stderr, "minishell: %s: command not found\n", com + 1);
     return (0);
 }
@@ -592,10 +593,7 @@ int exec(char **args, t_ev *ev)
     path = exec_h(ev, com);
     free(com);
     if (!path)
-    {
-        // printf("here\n");
         return (gv.e_s);
-    }
     id = fork();
 	if (!id)
     {
@@ -851,6 +849,22 @@ int mini_hell(char **av, char **ev)
         main_env = fill_env(ev_h);
         env = ft_conv(ev_h);
         pd = parse_line(str, env, main_env);
+        while (run_heredoc(pd, pd->heredoc))
+        {
+            signal(SIGINT, parent_ctlC);
+            if (main_env)
+                free_t_env(main_env);
+            if (env)
+                freesplit(env);
+            if (pd)
+                destory_data(&pd);
+            if (str)
+                free(str);
+            main_env = fill_env(ev_h);
+            env = ft_conv(ev_h);
+            str = readline("Minishell");
+            pd = parse_line(str, env, main_env);
+        }
         //here_doc;
         if (!pd->is_syntax_valid || pd->err)
         {
@@ -941,69 +955,69 @@ int main(int ac, char **av, char **ev)
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
     gv.e_s = 0;
-    t_ev    *ev_h;
-    t_ev    *x_ev_h;
-    t_data  *pd;
-    t_env   *main_ev;
-    int     i;
-    t_queue *tdoc;
-    t_cmd   *tcmd;
-    char    *str;
-    errno = 0;
-    gv.e_s = 0;
-    ev_h = NULL;
-    x_ev_h = NULL;
-    init(ev, &ev_h, &x_ev_h);
-    main_ev = fill_env(ev_h);
-    str = readline("minihell");
-    pd = parse_line(str, ev, main_ev);
-    tdoc = pd->heredoc;
-    tcmd = pd->commands;
-    // check for syntax errors;
-    // check for error_file
-    //run_heredoc
-    printf("n_cmds %d\n", pd->n_cmds);
-    printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
-    printf("err = %s\n", pd->err);
-    printf("this is the out fd %s and the mode=%d\n", tcmd->outfile, tcmd->outfile_mode);
-    while (pd && tdoc)
-    {
-        printf("|lim= %s  | - ",tdoc->s);
-        tdoc = tdoc->next;
-    }
-    printf("\n");
-    while (tcmd)
-    {
-        i = 0;
-        while (tcmd->main_args[i])
-        {
-            printf("%d=%s ", tcmd->cmd_id, tcmd->main_args[i]);
-            i++;
-        }
-        printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
-        tcmd->error_file, tcmd->outfile,tcmd->write_end, tcmd->infile, tcmd->read_end);
-        if (tcmd->error_file)
-            printf("%s : %s", tcmd->error_file, strerror(errno));
-        tcmd = tcmd->next;
-    }
-    i = 0;
-    while (pd->pipes[i])
-    {
-        printf("pipe%d == %d . ", i, pd->pipes[i][0]);
-        printf("pipe%d == %d\n", i, pd->pipes[i][1]);
-        i++;
-    }
-    while (run_heredoc(pd, pd->heredoc))
-    {
-        // rl_replace_line("", 0);
-        // rl_on_new_line();
-        // rl_redisplay();
-        signal(SIGINT, parent_ctlC);
-        str = readline("minishell");
-        pd = parse_line(str, ev, main_ev);
-    }
+    // t_ev    *ev_h;
+    // t_ev    *x_ev_h;
+    // t_data  *pd;
+    // t_env   *main_ev;
+    // int     i;
+    // t_queue *tdoc;
+    // t_cmd   *tcmd;
+    // char    *str;
+    // errno = 0;
+    // gv.e_s = 0;
+    // ev_h = NULL;
+    // x_ev_h = NULL;
+    // init(ev, &ev_h, &x_ev_h);
+    // main_ev = fill_env(ev_h);
     // str = readline("minihell");
-    // mini_hell(av, ev);
+    // pd = parse_line(str, ev, main_ev);
+    // tdoc = pd->heredoc;
+    // tcmd = pd->commands;
+    // // check for syntax errors;
+    // // check for error_file
+    // //run_heredoc
+    // printf("n_cmds %d\n", pd->n_cmds);
+    // printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
+    // printf("err = %s\n", pd->err);
+    // printf("this is the out fd %s and the mode=%d\n", tcmd->outfile, tcmd->outfile_mode);
+    // while (pd && tdoc)
+    // {
+    //     printf("|lim= %s  | - ",tdoc->s);
+    //     tdoc = tdoc->next;
+    // }
+    // printf("\n");
+    // while (tcmd)
+    // {
+    //     i = 0;
+    //     while (tcmd->main_args[i])
+    //     {
+    //         printf("%d=%s ", tcmd->cmd_id, tcmd->main_args[i]);
+    //         i++;
+    //     }
+    //     printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
+    //     tcmd->error_file, tcmd->outfile,tcmd->write_end, tcmd->infile, tcmd->read_end);
+    //     if (tcmd->error_file)
+    //         printf("%s : %s", tcmd->error_file, strerror(errno));
+    //     tcmd = tcmd->next;
+    // }
+    // i = 0;
+    // while (pd->pipes[i])
+    // {
+    //     printf("pipe%d == %d . ", i, pd->pipes[i][0]);
+    //     printf("pipe%d == %d\n", i, pd->pipes[i][1]);
+    //     i++;
+    // }
+    // while (run_heredoc(pd, pd->heredoc))
+    // {
+    //     // rl_replace_line("", 0);
+    //     // rl_on_new_line();
+    //     // rl_redisplay();
+    //     signal(SIGINT, parent_ctlC);
+    //     str = readline("minishell");
+    //     pd = parse_line(str, ev, main_ev);
+    // }
+    // str = readline("minihell");
+    mini_hell(av, ev);
     // free_t_env(main_ev);
 }
 /*
