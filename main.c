@@ -991,8 +991,10 @@ int main(int ac, char **av, char **ev)
     }
     if (run_heredoc(pd, pd->heredoc))
     {
+        // rl_replace_line("", 0);
         // rl_on_new_line();
         // rl_redisplay();
+        str = readline("minishell");
     }
     // str = readline("minihell");
     // mini_hell(av, ev);

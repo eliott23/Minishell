@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:10:46 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/26 00:06:48 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/26 20:03:59 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	limiter_not_found(char **res, char **s)
 int	set_trigger(int *trigger)
 {
 	*trigger = 1;
-	printf("triggered\n");
 	return (1);
 }
 
@@ -81,16 +80,12 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 		if (gv.flag && set_trigger(&trigger))
 			break ;
 		if (!s || !ft_strcmp(s, limiters->s))
-		{
 			limiter_found(data, &limiters, &res, s);
-			printf("went here\n");
-		}
 		else
 			limiter_not_found(&res, &s);
 	}
 	if (trigger)
 	{
-		printf("went here\n");
 		set_status(data, limiters, s, res);
 		dup2(d, 0);
 		return (-1);
