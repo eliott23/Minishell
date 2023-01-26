@@ -931,6 +931,11 @@ int mini_hell(char **av, char **ev)
 }
 void    parent_ctlC(int i)
 {
+    gv.e_s = 1;
+    write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 int main(int ac, char **av, char **ev)
 {
@@ -989,12 +994,14 @@ int main(int ac, char **av, char **ev)
         printf("pipe%d == %d\n", i, pd->pipes[i][1]);
         i++;
     }
-    if (run_heredoc(pd, pd->heredoc))
+    while (run_heredoc(pd, pd->heredoc))
     {
         // rl_replace_line("", 0);
         // rl_on_new_line();
         // rl_redisplay();
+        signal(SIGINT, parent_ctlC);
         str = readline("minishell");
+        pd = parse_line(str, ev, main_ev);
     }
     // str = readline("minihell");
     // mini_hell(av, ev);
