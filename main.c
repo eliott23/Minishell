@@ -486,6 +486,11 @@ void    handle_errors(char *cmd)
 
     if (!cmd)
         exit(0);
+    if (!cmd[0])
+    {
+        fprintf(stderr, "Minishell : %s : Command not found\n", cmd); //check
+        exit(127);
+    }
     fd = open(cmd, O_RDWR);     //careful!!!!;
     if (fd < 0 && ft_srch(cmd, '/'))
     {
@@ -598,7 +603,6 @@ int exec(char **args, t_ev *ev)
 	if (!id)
     {
         execve(path , args, ft_conv(ev)); //check safety of every execve;
-        fprintf(stderr, "am heeere\n");
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
@@ -828,6 +832,7 @@ int mini_hell(char **av, char **ev)
     i = 0;
     while (1)
     {
+        signal(SIGINT, parent_ctlC);
         if (str)
             free(str);
         if (main_env)
