@@ -858,6 +858,7 @@ int mini_hell(char **av, char **ev)
                 fprintf(stderr, "%s", pd->err);
             else
                 fprintf(stderr, "syntax error");
+            // gv.e_s = 258;
             exit(1);
         }
         if (pd->n_cmds == 1)
@@ -891,8 +892,6 @@ int mini_hell(char **av, char **ev)
             head = pd->commands;
             while (head)
             {
-                // if (pd->commands->cmd_id == 2)
-                    // sleep(5);
                 t_errno = errno;
                 id = fork(); // check later;
                 if (!id)
@@ -900,6 +899,7 @@ int mini_hell(char **av, char **ev)
                     if (!head->error_file)
                     {
                             signal(SIGINT, SIG_DFL);
+                            //add handler for SIGQUIT;
                             if (head->cmd_id != 1 || head->infile)
                                 dup2(head->read_end, 0);
                             if (head->next || head->outfile)
@@ -920,7 +920,6 @@ int mini_hell(char **av, char **ev)
                     }
                 } 
                 head = head->next;
-                //check the leak;
             }
             ft_close_pipes(pd->pipes);
             waitpid(id, &stat, 0);
