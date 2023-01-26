@@ -869,7 +869,17 @@ int mini_hell(char **av, char **ev)
                 free(str);
             main_env = fill_env(ev_h);
             env = ft_conv(ev_h);
+            // fprintf(stderr, "break_point\n");
             str = readline("Minishell>");
+            while (!str || !str[0])
+            {
+                if (!str)
+                    exit(0);
+                fprintf(stderr, "b2");
+                free(str);
+                str = readline("Minishell>");
+            }
+            add_history(str);
             pd = parse_line(str, env, main_env);
             t_errno = errno;
         }

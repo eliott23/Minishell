@@ -5,6 +5,7 @@ void	h_C()
 {
 	gv.e_s = 1;
 	gv.flag = -2;
+	fprintf(stderr, "ba0a hna\n");
 	write(1, "\n", 1);
 	close(0);
 }

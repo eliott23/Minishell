@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:10:46 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/26 20:03:59 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:27:19 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,6 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 		dup2(d, 0);
 		return (-1);
 	}
+	signal(SIGINT, parent_ctlC);
 	return (0);
 }
