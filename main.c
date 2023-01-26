@@ -881,7 +881,7 @@ int mini_hell(char **av, char **ev)
             if (!pd->commands->error_file)
             {
                 v = m_parsing(pd->commands->main_args);
-                if (pd->commands->infile)
+                if (pd->commands->infile || pd->commands->has_heredoc)
                 {
                     dup2(pd->commands->read_end, 0);
                     close(pd->commands->read_end);
@@ -915,7 +915,7 @@ int mini_hell(char **av, char **ev)
                     {
                             signal(SIGINT, SIG_DFL);
                             //add handler for SIGQUIT;
-                            if (head->cmd_id != 1 || head->infile)
+                            if (head->cmd_id != 1 || head->infile || head->has_heredoc)
                                 dup2(head->read_end, 0);
                             if (head->next || head->outfile)
                                 dup2(head->write_end, 1);
