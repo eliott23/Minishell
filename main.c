@@ -811,69 +811,70 @@ int mini_hell(char **ev)
 
     int     v;
     int     id;
-    char    *str = NULL;
     int     stat;
     t_nread nread;
     int     s0 = dup(0);
     int     s1= dup(1);
     int     t_errno;
-    t_env   *main_env;
     char    **env;
     t_cmd   *head;
 
+    (nread.str) = NULL;
     (nread.pd) = NULL;
-    env = NULL;
-    main_env = NULL;
+    (nread.env) = NULL;
+    (nread.main_env) = NULL;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
     while (1)
     {
         signal(SIGINT, parent_ctlC);
-        if (str)
-            free(str);
-        if (main_env)
-            free_t_env(main_env);
-        if (env)
-            freesplit(env);
+        if ((nread.str))
+            free((nread.str));
+        if ((nread.main_env))
+            free_t_env((nread.main_env));
+        if ((nread.env))
+            freesplit((nread.env));
         if ((nread.pd))
             destory_data(&(nread.pd));
-        str = readline("Minishell>");
-        while (!str || !str[0])
+        (nread.str) = readline("Minishell>");
+        while (!(nread.str) || !(nread.str)[0])
         {
-            if (!str)
+            if (!(nread.str))
                 exit(0);
-            free(str);
-            str = readline("Minishell>");
+            free((nread.str));
+            (nread.str) = readline("Minishell>");
         }
-        add_history(str);
-        main_env = fill_env(ev_h);
-        env = ft_conv(ev_h);
-        (nread.pd) = parse_line(str, env, main_env);
-        t_errno = errno;
+        add_history((nread.str));
+        (nread.main_env) = fill_env(ev_h);
+        (nread.env) = ft_conv(ev_h);
+        (nread.pd) = parse_line((nread.str), (nread.env), (nread.main_env));
+        nread.t_errno = errno;
         while (run_heredoc((nread.pd), (nread.pd)->heredoc))
         {
             signal(SIGINT, parent_ctlC);
-            if (main_env)
-                free_t_env(main_env);
-            if (env)
-                freesplit(env);
+            if ((nread.main_env))
+                free_t_env((nread.main_env));
+            if ((nread.env))
+                freesplit((nread.env));
             if ((nread.pd))
                 destory_data(&(nread.pd));
-            if (str)
-                free(str);
-            main_env = fill_env(ev_h);
+            if ((nread.str))
+                free((nread.str));
+            (nread.main_env) = fill_env(ev_h);
             env = ft_conv(ev_h);
-            str = readline("Minishell>");
-            while (!str || !str[0])
+            (nread.str) = readline("Minishell>");
+            while (!(nread.str) || !(nread.str)[0])
             {
-                if (!str)
+                if (!(nread.str))
                     exit(0);
-                free(str);
-                str = readline("Minishell>");
+                free((nread.str));
+                (nread.str) = readline("Minishell>");
             }
-            add_history(str);
-            (nread.pd) = parse_line(str, env, main_env);
+            add_history((nread.str));
+            (nread.main_env) = fill_env(ev_h);
+            (nread.env) = ft_conv(ev_h);
+            (nread.pd) = parse_line((nread.str), (nread.env), (nread.main_env));
             t_errno = errno;
         }
         //here_doc;
