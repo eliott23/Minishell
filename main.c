@@ -3,7 +3,7 @@
 
 void    p_quit()
 {
-    fprintf(stderr, "Quit");
+    fprintf(stderr, "Quit\n");
     exit(131);
 }
 char    **ft_conv(t_ev *ev)
@@ -811,10 +811,9 @@ int mini_hell(char **ev)
 
     int     v;
     int     id;
-    int     i;
     char    *str = NULL;
     int     stat;
-    t_data  *pd;
+    t_nread nread;
     int     s0 = dup(0);
     int     s1= dup(1);
     int     t_errno;
@@ -822,13 +821,12 @@ int mini_hell(char **ev)
     char    **env;
     t_cmd   *head;
 
-    pd = NULL;
+    (nread.pd) = NULL;
     env = NULL;
     main_env = NULL;
     ev_h = NULL;
     x_ev_h = NULL;
     init(ev, &ev_h, &x_ev_h);
-    i = 0;
     while (1)
     {
         signal(SIGINT, parent_ctlC);
@@ -838,8 +836,8 @@ int mini_hell(char **ev)
             free_t_env(main_env);
         if (env)
             freesplit(env);
-        if (pd)
-            destory_data(&pd);
+        if ((nread.pd))
+            destory_data(&(nread.pd));
         str = readline("Minishell>");
         while (!str || !str[0])
         {
@@ -851,17 +849,17 @@ int mini_hell(char **ev)
         add_history(str);
         main_env = fill_env(ev_h);
         env = ft_conv(ev_h);
-        pd = parse_line(str, env, main_env);
+        (nread.pd) = parse_line(str, env, main_env);
         t_errno = errno;
-        while (run_heredoc(pd, pd->heredoc))
+        while (run_heredoc((nread.pd), (nread.pd)->heredoc))
         {
             signal(SIGINT, parent_ctlC);
             if (main_env)
                 free_t_env(main_env);
             if (env)
                 freesplit(env);
-            if (pd)
-                destory_data(&pd);
+            if ((nread.pd))
+                destory_data(&(nread.pd));
             if (str)
                 free(str);
             main_env = fill_env(ev_h);
@@ -875,49 +873,49 @@ int mini_hell(char **ev)
                 str = readline("Minishell>");
             }
             add_history(str);
-            pd = parse_line(str, env, main_env);
+            (nread.pd) = parse_line(str, env, main_env);
             t_errno = errno;
         }
         //here_doc;
-        if (!pd->is_syntax_valid || pd->err)
+        if (!(nread.pd)->is_syntax_valid || (nread.pd)->err)
         {
-            if (pd->err)
-                fprintf(stderr, "%s", pd->err);
+            if ((nread.pd)->err)
+                fprintf(stderr, "%s", (nread.pd)->err);
             else
                 fprintf(stderr, "syntax error");
             //show prompt;
             // gv.e_s = 258;
             exit(1);
         }
-        if (pd->n_cmds == 1)
+        if ((nread.pd)->n_cmds == 1)
         {
-            if (!pd->commands->error_file)
+            if (!(nread.pd)->commands->error_file)
             {
-                v = m_parsing(pd->commands->main_args);
-                if (pd->commands->infile || pd->commands->has_heredoc)
+                v = m_parsing((nread.pd)->commands->main_args);
+                if ((nread.pd)->commands->infile || (nread.pd)->commands->has_heredoc)
                 {
-                    dup2(pd->commands->read_end, 0);
-                    close(pd->commands->read_end);
+                    dup2((nread.pd)->commands->read_end, 0);
+                    close((nread.pd)->commands->read_end);
                 }
-                if (pd->commands->outfile)
+                if ((nread.pd)->commands->outfile)
                 {
-                    dup2(pd->commands->write_end, 1);
-                    close(pd->commands->write_end);
+                    dup2((nread.pd)->commands->write_end, 1);
+                    close((nread.pd)->commands->write_end);
                 }
-                gv.e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
+                gv.e_s = what_to_call(v, &ev_h, &x_ev_h, (nread.pd)->commands->main_args);
                 dup2(s0, 0);
                 dup2(s1, 1);
             }
             else
             {
-                fprintf(stderr, "%s : %s errno==%d\n", pd->commands->error_file, strerror(t_errno), t_errno);
+                fprintf(stderr, "%s : %s errno==%d\n", (nread.pd)->commands->error_file, strerror(t_errno), t_errno);
                 gv.e_s = 1;
             }
             fprintf(stderr, "exit status==%d\n", gv.e_s);
         }
         else
         {
-            head = pd->commands;
+            head = (nread.pd)->commands;
             while (head)
             {
                 id = fork(); // check later;
@@ -931,7 +929,7 @@ int mini_hell(char **ev)
                                 dup2(head->read_end, 0);
                             if (head->next || head->outfile)
                                 dup2(head->write_end, 1);
-                            ft_close_pipes(pd->pipes);
+                            ft_close_pipes((nread.pd)->pipes);
                             v = m_parsing(head->main_args);
                             if (!(head->is_builtin) || head->outfile)
                                 what_to_call(v + 1, &ev_h, &x_ev_h, head->main_args);
@@ -946,7 +944,7 @@ int mini_hell(char **ev)
                 } 
                 head = head->next;
             }
-            ft_close_pipes(pd->pipes);
+            ft_close_pipes((nread.pd)->pipes);
             waitpid(id, &stat, 0);
             while (waitpid(-1, NULL, 0) != -1);
             fprintf(stderr, "exit status==%d\n", ft_exit_status(stat));

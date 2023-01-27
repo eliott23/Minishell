@@ -37,6 +37,14 @@ typedef struct nx{
 	char	*com;
 }t_nx;
 
+typedef struct nread{
+	char	*str;
+	t_env	*main_env;
+	char	**env;
+	t_data	*pd;
+	int		t_errno;	
+} t_nread;
+
 void	add_history(const char *line);
 t_data	*parse_line(char *s, char **env, t_env *main_env);
 size_t	mft_strlen(const char *s);
