@@ -3,7 +3,8 @@
 
 void    p_quit()
 {
-    fprintf(stderr, "Quit :");
+    fprintf(stderr, "Quit");
+    exit(131);
 }
 char    **ft_conv(t_ev *ev)
 {
@@ -903,7 +904,6 @@ int mini_hell(char **ev)
                     dup2(pd->commands->write_end, 1);
                     close(pd->commands->write_end);
                 }
-                printf("went here\n");
                 gv.e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
                 dup2(s0, 0);
                 dup2(s1, 1);
@@ -927,7 +927,6 @@ int mini_hell(char **ev)
                     {
                             signal(SIGINT, SIG_DFL);
                             signal(SIGQUIT, p_quit);
-                            //add handler for SIGQUIT;
                             if (head->cmd_id != 1 || head->infile || head->has_heredoc)
                                 dup2(head->read_end, 0);
                             if (head->next || head->outfile)
