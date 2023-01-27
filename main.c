@@ -659,13 +659,7 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
         return (ft_execp(args, *ev_h));
     return(-1);
 }
-// int ft_start(t_ev **ev_h, t_ev **x_ev_h, char **args)
-// {
-//     int     v;
-//     v = m_parsing(args);
-//     what_to_call(v, ev_h, x_ev_h, args);
-//     exit(0);
-// }
+
 t_cmdl *v_pars(char  *str, int *a)
 {
     char    **coml;
@@ -816,6 +810,7 @@ int mini_hell(char **ev)
     int     s0 = dup(0);
     int     s1= dup(1);
     t_cmd   *head;
+    int hdoc;
 
     (nread.str) = NULL;
     (nread.pd) = NULL;
@@ -827,14 +822,20 @@ int mini_hell(char **ev)
     while (1)
     {
         read_prompt(ev_h, &nread);
-        while (run_heredoc((nread.pd), (nread.pd)->heredoc))
-            read_prompt(ev_h, &nread); 
-        while (!(nread.pd)->is_syntax_valid || (nread.pd)->err)
+        hdoc = run_heredoc(nread.pd, (nread.pd)->heredoc);
+        // while (run_heredoc((nread.pd), (nread.pd)->heredoc))
+        //     read_prompt(ev_h, &nread); 
+        while (hdoc || !(nread.pd)->is_syntax_valid || (nread.pd)->err)
         {
-            if ((nread.pd)->err)
-                fprintf(stderr, "%s\n", (nread.pd)->err);
-            gv.e_s = 258;
+            if (!hdoc && (!(nread.pd)->is_syntax_valid || (nread.pd)->err))
+            {
+                printf("went here\n");
+                if ((nread.pd)->err)
+                    fprintf(stderr, "%s\n", (nread.pd)->err);
+                gv.e_s = 258;
+            }
             read_prompt(ev_h, &nread);
+            hdoc = run_heredoc(nread.pd, (nread.pd)->heredoc);
         }
         if ((nread.pd)->n_cmds == 1)
         {
