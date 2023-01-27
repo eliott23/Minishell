@@ -836,15 +836,13 @@ int mini_hell(char **ev)
         if (pd)
             destory_data(&pd);
         str = readline("Minishell>");
-        if (!str)
-            exit(0);
-        while (str && !str[0])
+        while (!str || !str[0])
         {
+            if (!str)
+                exit(0);
             free(str);
             str = readline("Minishell>");
         }
-        if (!str)
-            exit(0);
         add_history(str);
         main_env = fill_env(ev_h);
         env = ft_conv(ev_h);
