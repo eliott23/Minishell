@@ -690,11 +690,7 @@ void    fdclose(int n, int  *fd)
         i++;
     }
 }
-void    ctl_C(int i)
-{
-    printf("\n");
-    exit(0);
-}
+
 void    zero_fill(t_env *t)
 {
     t->data = 0;
@@ -803,7 +799,7 @@ void    ft_close_pipes(int **pipes)
     }
 }
 
-int mini_hell(char **av, char **ev)
+int mini_hell(char **ev)
 {
     t_ev    *ev_h;
     t_ev    *x_ev_h;
@@ -811,9 +807,7 @@ int mini_hell(char **av, char **ev)
     int     v;
     int     id;
     int     i;
-    int     j;
     char    *str = NULL;
-    int     count;
     int     stat;
     t_data  *pd;
     int     s0 = dup(0);
@@ -958,7 +952,7 @@ int mini_hell(char **av, char **ev)
         }
     }
 }
-void    parent_ctlC(int i)
+void    parent_ctlC()
 {
     gv.e_s = 1;
     write(1, "\n", 1);
@@ -971,6 +965,7 @@ int main(int ac, char **av, char **ev)
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
     gv.e_s = 0;
+    av = 0;
     // t_ev    *ev_h;
     // t_ev    *x_ev_h;
     // t_data  *pd;
@@ -1033,8 +1028,9 @@ int main(int ac, char **av, char **ev)
     //     pd = parse_line(str, ev, main_ev);
     // }
     // str = readline("minihell");
-    mini_hell(av, ev);
+    mini_hell(ev);
     // free_t_env(main_ev);
+    ac = 0;
 }
 /*
     validing the identifier
