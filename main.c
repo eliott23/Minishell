@@ -830,15 +830,16 @@ int mini_hell(char **ev)
         while (run_heredoc((nread.pd), (nread.pd)->heredoc))
             read_prompt(ev_h, &nread); 
         //here_doc;
-        if (!(nread.pd)->is_syntax_valid || (nread.pd)->err)
+        while (!(nread.pd)->is_syntax_valid || (nread.pd)->err)
         {
             if ((nread.pd)->err)
-                fprintf(stderr, "%s", (nread.pd)->err);
-            else
-                fprintf(stderr, "syntax error");
+                fprintf(stderr, "%s\n", (nread.pd)->err);
+            // else
+            //     fprintf(stderr, "syntax error");
+            gv.e_s = 258;
+            read_prompt(ev_h, &nread);
             //show prompt;
-            // gv.e_s = 258;
-            exit(1);
+            // exit(1);
         }
         if ((nread.pd)->n_cmds == 1)
         {
