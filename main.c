@@ -1,6 +1,10 @@
 #include "m_shell.h"
 #include "include/parsing.h"
 
+void    p_quit()
+{
+    fprintf(stderr, "Quit :");
+}
 char    **ft_conv(t_ev *ev)
 {
     char    **env;
@@ -602,6 +606,7 @@ int exec(char **args, t_ev *ev)
     id = fork();
 	if (!id)
     {
+        signal(SIGQUIT, p_quit);
         execve(path , args, ft_conv(ev)); //check safety of every execve;
         handle_errors(args[0]);
     }
@@ -798,7 +803,6 @@ void    ft_close_pipes(int **pipes)
         }
     }
 }
-
 int mini_hell(char **ev)
 {
     t_ev    *ev_h;
@@ -899,6 +903,7 @@ int mini_hell(char **ev)
                     dup2(pd->commands->write_end, 1);
                     close(pd->commands->write_end);
                 }
+                printf("went here\n");
                 gv.e_s = what_to_call(v, &ev_h, &x_ev_h, pd->commands->main_args);
                 dup2(s0, 0);
                 dup2(s1, 1);
@@ -921,6 +926,7 @@ int mini_hell(char **ev)
                     if (!head->error_file)
                     {
                             signal(SIGINT, SIG_DFL);
+                            signal(SIGQUIT, p_quit);
                             //add handler for SIGQUIT;
                             if (head->cmd_id != 1 || head->infile || head->has_heredoc)
                                 dup2(head->read_end, 0);
@@ -929,9 +935,7 @@ int mini_hell(char **ev)
                             ft_close_pipes(pd->pipes);
                             v = m_parsing(head->main_args);
                             if (!(head->is_builtin) || head->outfile)
-                            {
                                 what_to_call(v + 1, &ev_h, &x_ev_h, head->main_args);
-                            }
                             else
                                 exit(what_to_call(v, &ev_h, &x_ev_h, head->main_args)); // check exit_status;
                     }
