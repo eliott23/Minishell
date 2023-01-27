@@ -45,6 +45,7 @@ typedef struct nread{
 	int		t_errno;	
 } t_nread;
 
+void	read_prompt(t_ev *ev_h, t_nread *nread);
 char	**ft_conv(t_ev *ev);
 void	freesplit(char **s);
 void	free_t_env(t_env *ev);

@@ -815,8 +815,6 @@ int mini_hell(char **ev)
     t_nread nread;
     int     s0 = dup(0);
     int     s1= dup(1);
-    int     t_errno;
-    char    **env;
     t_cmd   *head;
 
     (nread.str) = NULL;
@@ -828,55 +826,9 @@ int mini_hell(char **ev)
     init(ev, &ev_h, &x_ev_h);
     while (1)
     {
-        signal(SIGINT, parent_ctlC);
-        if ((nread.str))
-            free((nread.str));
-        if ((nread.main_env))
-            free_t_env((nread.main_env));
-        if ((nread.env))
-            freesplit((nread.env));
-        if ((nread.pd))
-            destory_data(&(nread.pd));
-        (nread.str) = readline("Minishell>");
-        while (!(nread.str) || !(nread.str)[0])
-        {
-            if (!(nread.str))
-                exit(0);
-            free((nread.str));
-            (nread.str) = readline("Minishell>");
-        }
-        add_history((nread.str));
-        (nread.main_env) = fill_env(ev_h);
-        (nread.env) = ft_conv(ev_h);
-        (nread.pd) = parse_line((nread.str), (nread.env), (nread.main_env));
-        nread.t_errno = errno;
+        read_prompt(ev_h, &nread);
         while (run_heredoc((nread.pd), (nread.pd)->heredoc))
-        {
-            signal(SIGINT, parent_ctlC);
-            if ((nread.main_env))
-                free_t_env((nread.main_env));
-            if ((nread.env))
-                freesplit((nread.env));
-            if ((nread.pd))
-                destory_data(&(nread.pd));
-            if ((nread.str))
-                free((nread.str));
-            (nread.main_env) = fill_env(ev_h);
-            env = ft_conv(ev_h);
-            (nread.str) = readline("Minishell>");
-            while (!(nread.str) || !(nread.str)[0])
-            {
-                if (!(nread.str))
-                    exit(0);
-                free((nread.str));
-                (nread.str) = readline("Minishell>");
-            }
-            add_history((nread.str));
-            (nread.main_env) = fill_env(ev_h);
-            (nread.env) = ft_conv(ev_h);
-            (nread.pd) = parse_line((nread.str), (nread.env), (nread.main_env));
-            t_errno = errno;
-        }
+            read_prompt(ev_h, &nread); 
         //here_doc;
         if (!(nread.pd)->is_syntax_valid || (nread.pd)->err)
         {
@@ -909,7 +861,7 @@ int mini_hell(char **ev)
             }
             else
             {
-                fprintf(stderr, "%s : %s errno==%d\n", (nread.pd)->commands->error_file, strerror(t_errno), t_errno);
+                fprintf(stderr, "%s : %s errno==%d\n", (nread.pd)->commands->error_file, strerror((nread.t_errno)), (nread.t_errno));
                 gv.e_s = 1;
             }
             fprintf(stderr, "exit status==%d\n", gv.e_s);
@@ -939,7 +891,7 @@ int mini_hell(char **ev)
                     }
                     else
                     {
-                        fprintf(stderr, "%s : %s errno==%d\n", head->error_file, strerror(t_errno), t_errno);
+                        fprintf(stderr, "%s : %s errno==%d\n", head->error_file, strerror((nread.t_errno)), (nread.t_errno));
                         exit(1);
                     }
                 } 
