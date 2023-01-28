@@ -26,3 +26,30 @@ void    read_prompt(t_ev *ev_h, t_nread *nread)
     (nread->pd) = parse_line((nread->str), (nread->env), (nread->main_env));
     nread->t_errno = errno;
 }
+
+void    one_cmd(int v, int s0, int s1, t_nread *nread)
+{
+      if (!(nread->pd)->commands->error_file)
+            {
+                v = m_parsing((nread->pd)->commands->main_args);
+                if ((nread->pd)->commands->infile || (nread->pd)->commands->has_heredoc)
+                {
+                    dup2((nread->pd)->commands->read_end, 0);
+                    close((nread->pd)->commands->read_end);
+                }
+                if ((nread->pd)->commands->outfile)
+                {
+                    dup2((nread->pd)->commands->write_end, 1);
+                    close((nread->pd)->commands->write_end);
+                }
+                gv.e_s = what_to_call(v, &(nread->ev_h), &(nread->x_ev_h), (nread->pd)->commands->main_args);
+                dup2(s0, 0);
+                dup2(s1, 1);
+            }
+            else
+            {
+                fprintf(stderr, "%s : %s errno==%d\n", (nread->pd)->commands->error_file, strerror((nread->t_errno)), (nread->t_errno));
+                gv.e_s = 1;
+            }
+            fprintf(stderr, "exit status==%d\n", gv.e_s);
+}

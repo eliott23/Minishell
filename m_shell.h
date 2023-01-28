@@ -43,8 +43,12 @@ typedef struct nread{
 	char	**env;
 	t_data	*pd;
 	int		t_errno;	
+	t_ev	*ev_h;
+	t_ev	*x_ev_h;
 } t_nread;
 
+int		what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args);
+void	one_cmd(int v, int s0, int s1, t_nread *nread);
 void	read_prompt(t_ev *ev_h, t_nread *nread);
 char	**ft_conv(t_ev *ev);
 void	freesplit(char **s);
