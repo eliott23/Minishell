@@ -746,23 +746,27 @@ void    free_t_env(t_env *ev)
         free(t);
     }
 }
+int n_fill_env(t_ev *ev)
+{
+    int i;
 
+    i = 0;
+    while (ev)
+    {
+        ev = ev->next;
+        i++;
+    }
+    return (i);
+}
 t_env   *fill_env(t_ev  *ev)
 {
-    t_ev    *t;
     t_env   *r;
     t_env   *temp;
     int     j;
     int     i;
 
-    i = 0;
+    i = n_fill_env(ev);
     j = 0;
-    t = ev;
-    while (t)
-    {
-        t = t->next;
-        i++;
-    }
     r = malloc(sizeof(t_env));
     zero_fill(r);
     temp = r;
