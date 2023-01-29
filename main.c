@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:41:14 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 18:30:43 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 18:31:41 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -866,66 +866,3 @@ int	main(int ac, char **av, char **ev)
 	mini_hell(ev, s0, s1, nread);
 	ac = 0;
 }
-	// t_ev	*ev_h;
-	// t_ev	*x_ev_h;
-	// t_data  *pd;
-	// t_env   *main_ev;
-	// int	 i;
-	// t_queue *tdoc;
-	// t_cmd   *tcmd;
-	// char	*str;
-	// errno = 0;
-	// gv.e_s = 0;
-	// ev_h = NULL;
-	// x_ev_h = NULL;
-	// init(ev, &ev_h, &x_ev_h);
-	// main_ev = fill_env(ev_h);
-	// str = readline("minihell");
-	// pd = parse_line(str, ev, main_ev);
-	// tdoc = pd->heredoc;
-	// tcmd = pd->commands;
-	// // check for syntax errors;
-	// // check for error_file
-	// //run_heredoc
-	// printf("n_cmds %d\n", pd->n_cmds);
-	// printf("is_syntax_valid = %d\n", pd->is_syntax_valid);
-	// printf("err = %s\n", pd->err);
-	// printf("this is the out fd %s and the mode=%d\n", tcmd->outfile, tcmd->outfile_mode);
-	// while (pd && tdoc)
-	// {
-	//	 printf("|lim= %s  | - ",tdoc->s);
-	//	 tdoc = tdoc->next;
-	// }
-	// printf("\n");
-	// while (tcmd)
-	// {
-	//	 i = 0;
-	//	 while (tcmd->main_args[i])
-	//	 {
-	//		 printf("%d=%s ", tcmd->cmd_id, tcmd->main_args[i]);
-	//		 i++;
-	//	 }
-	//	 printf("\nerror_file==%s outfile==%s=%d infile==%s=%d\n", \
-	//	 tcmd->error_file, tcmd->outfile,tcmd->write_end, tcmd->infile, tcmd->read_end);
-	//	 if (tcmd->error_file)
-	//		 printf("%s : %s", tcmd->error_file, strerror(errno));
-	//	 tcmd = tcmd->next;
-	// }
-	// i = 0;
-	// while (pd->pipes[i])
-	// {
-	//	 printf("pipe%d == %d . ", i, pd->pipes[i][0]);
-	//	 printf("pipe%d == %d\n", i, pd->pipes[i][1]);
-	//	 i++;
-	// }
-	// while (run_heredoc(pd, pd->heredoc))
-	// {
-	//	 // rl_replace_line("", 0);
-	//	 // rl_on_new_line();
-	//	 // rl_redisplay();
-	//	 signal(SIGINT, parent_ctlC);
-	//	 str = readline("minishell");
-	//	 pd = parse_line(str, ev, main_ev);
-	// }
-	// str = readline("minihell");
-	// free_t_env(main_ev);
