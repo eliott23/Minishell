@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:13 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/29 16:58:59 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 18:28:11 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef	struct gv
 t_gv	gv;
 
 void		h_c();
-void		parent_ctlC(int i);
+void		parent_ctlc(int i);
 void		ft_putstr(char *s);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strjoin_free(char *s1, char *s2);

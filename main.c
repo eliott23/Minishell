@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:41:14 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 18:22:38 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 18:30:43 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,7 +470,7 @@ int	echo(char **args)
 			printf("%s", args[i]);
 			i++;
 			if (args[i])
-				printf(" ");//weirdoooooooo
+				printf(" ");
 		}
 		if (n_l)
 			printf("\n");
@@ -496,7 +496,7 @@ void	handle_errors(char *cmd)
 		close(fd);
 	}
 	else if (ft_srch(cmd, '/'))
-		fprintf(stderr, "%s : Command not found\n", cmd); //check
+		fprintf(stderr, "%s : Command not found\n", cmd);
 	exit(126);
 }
 
@@ -554,7 +554,7 @@ int	n2_exec_h(char *com)
 	if (access(com + 1, X_OK))
 	{
 		fprintf(stderr, "%s: %s\n", com + 1, strerror(errno));
-		gv.e_s = 126;//check the exist status of execve in this case;
+		gv.e_s = 126;
 		return (0);
 	}
 	return (1);
@@ -612,8 +612,8 @@ int	exec(char **args, t_ev *ev)
 	id = fork();
 	if (!id)
 	{
-		signal(SIGQUIT, SIG_DFL); //check;
-		signal(SIGINT, SIG_DFL); //check;
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		execve(path, args, ft_conv(ev));
 		handle_errors(args[0]);
 	}
@@ -830,7 +830,7 @@ int	mini_hell(char **ev, int s0, int s1, t_nread nread)
 				head = head->next;
 			}
 			f_exec(&stat, id, &nread);
-			signal(SIGINT, parent_ctlC);
+			signal(SIGINT, parent_ctlc);
 		}
 	}
 }
@@ -852,7 +852,7 @@ int	main(int ac, char **av, char **ev)
 	int		s1;
 
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, parent_ctlC);
+	signal(SIGINT, parent_ctlc);
 	s0 = dup(0);
 	s1 = dup(1);
 	gv.e_s = 0;
