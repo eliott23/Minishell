@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "m_shell.h"
+#include "include/parsing.h"
 
 char	*mft_strdup(const char *s1)
 {
@@ -30,4 +31,12 @@ char	*mft_strdup(const char *s1)
 	}
 	rtrn[i] = '\0';
 	return (rtrn);
+}
+
+void	h_c(void)
+{
+	gv.e_s = 1;
+	gv.flag = -2;
+	write(1, "\n", 1);
+	close(0);
 }

@@ -40,6 +40,14 @@ void	read_prompt(t_ev *ev_h, t_nread *nread)
 	nread->t_errno = errno;
 }
 
+void	error_one_cmd(t_nread *nread)
+{
+	fprintf(stderr, "%s : %s\n", \
+	(nread->pd)->commands->error_file, \
+	strerror((nread->t_errno)));
+	gv.e_s = 1;
+}
+
 void	one_cmd(int v, int s0, int s1, t_nread *nread)
 {
 	signal(SIGINT, SIG_IGN);
@@ -62,12 +70,7 @@ void	one_cmd(int v, int s0, int s1, t_nread *nread)
 		dup2(s1, 1);
 	}
 	else
-	{
-		fprintf(stderr, "%s : %s\n", \
-		(nread->pd)->commands->error_file, \
-		strerror((nread->t_errno)));
-		gv.e_s = 1;
-	}
+		error_one_cmd(nread);
 	signal(SIGINT, parent_ctlc);
 }
 
