@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   m_parsing.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/29 16:59:52 by aababach          #+#    #+#             */
+/*   Updated: 2023/01/29 17:02:26 by aababach         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "m_shell.h"
 
-int		myft_strcmp(char *s1, char *s2)
+int	myft_strcmp(char *s1, char *s2)
 {
 	int	i;
-	
+
 	i = 0;
 	if (s1 && s2)
 	{
@@ -22,9 +34,11 @@ int		myft_strcmp(char *s1, char *s2)
 
 int	m_parsing(char **av)
 {
-	char 	*x[] = {"export", "unset", "env", "cd", "pwd", "echo", "exit",0};
-	int	i = 0;
+	static char	*x[] = {"export", \
+		"unset", "env", "cd", "pwd", "echo", "exit", 0};
+	int			i;
 
+	i = 0;
 	while (x[i] && !myft_strcmp(av[0], x[i]))
 			i++;
 	return (i);
