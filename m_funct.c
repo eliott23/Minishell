@@ -40,14 +40,6 @@ void	read_prompt(t_ev *ev_h, t_nread *nread)
 	nread->t_errno = errno;
 }
 
-void	error_one_cmd(t_nread *nread)
-{
-	fprintf(stderr, "%s : %s\n", \
-	(nread->pd)->commands->error_file, \
-	strerror((nread->t_errno)));
-	gv.e_s = 1;
-}
-
 void	one_cmd(int v, int s0, int s1, t_nread *nread)
 {
 	signal(SIGINT, SIG_IGN);
@@ -83,7 +75,7 @@ void	error_m_cmds(t_cmd *head, t_nread *nread)
 
 void	m_cmds(int v, int *id, t_cmd *head, t_nread *nread)
 {
-	(*id) = fork(); // check later;
+	(*id) = fork();
 	if ((*id) == -1)
 		exit(0);
 	if (!(*id))

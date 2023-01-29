@@ -47,6 +47,7 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 } t_nread;
 
+void	error_one_cmd(t_nread *nread);
 t_env	*fill_env(t_ev	*ev);
 int	n_fill_env(t_ev *ev);
 void	free_t_env(t_env *ev);

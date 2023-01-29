@@ -40,3 +40,11 @@ void	h_c(void)
 	write(1, "\n", 1);
 	close(0);
 }
+
+void	error_one_cmd(t_nread *nread)
+{
+	fprintf(stderr, "%s : %s\n", \
+	(nread->pd)->commands->error_file, \
+	strerror((nread->t_errno)));
+	gv.e_s = 1;
+}

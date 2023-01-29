@@ -51,7 +51,7 @@ int	ft_execp(char **args, t_ev *ev)
 	if (!com)
 		exit(0);
 	path = exec_h(ev, com);
-	signal(SIGQUIT, p_quit); // handle sigquit
+	signal(SIGQUIT, p_quit);
 	free(com);
 	if (!path)
 		exit(gv.e_s);
