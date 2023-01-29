@@ -795,6 +795,7 @@ int mini_hell(char **ev, int s0, int s1, t_nread nread)
             ft_close_pipes((nread.pd)->pipes);
             waitpid(id, &stat, 0);
             while (waitpid(-1, NULL, 0) != -1);
+            ft_exit_status(stat);
         }
     }
 }
