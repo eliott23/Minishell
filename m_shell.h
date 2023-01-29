@@ -47,6 +47,20 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 } t_nread;
 
+void	handle_errors(char *cmd);
+int	echo(char **args);
+int	is_an_option(char *str);
+int	pwd(void);
+int	cd(t_ev **ev_h, t_ev **x_ev_h, char **args);
+int	n_cd(t_ncd *ncd, char **args);
+int	cd_h(t_ev **ev_h, t_ev **x_ev_h);
+int	n_cd_h(t_ncd *ncd);
+int	nn_cd_h(t_ncd *ncd);
+void	init(char **ev, t_ev **ev_h, t_ev **x_ev_h);
+void	n_init(t_ev **temp, t_ev **temp2, t_ev **ev_h, t_ev **x_ev_h);
+int	unset(t_ev **ev_h, t_ev **x_ev_h, char **args);
+int	unset_h(t_ev **ev_h, char *str);
+int	n_unset_h(t_ev **ev_h, char *str, t_ev *temp);
 void	xprt_e(t_ev **ev_h, char **args, int *i);
 int	xprt_hx(char *arg, t_ev *temp);
 void	n_xprt_x(t_ev **x_ev_h, int *i, char **args);
