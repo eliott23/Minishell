@@ -56,22 +56,33 @@ void	one_cmd(int v, int s0, int s1, t_nread *nread)
 			dup2((nread->pd)->commands->write_end, 1);
 			close((nread->pd)->commands->write_end);
 		}
-		gv.e_s = what_to_call(v, &(nread->ev_h), &(nread->x_ev_h), (nread->pd)->commands->main_args);
+		gv.e_s = what_to_call(v, &(nread->ev_h), \
+		&(nread->x_ev_h), (nread->pd)->commands->main_args);
 		dup2(s0, 0);
 		dup2(s1, 1);
 	}
 	else
 	{
-		fprintf(stderr, "%s : %s errno==%d\n", \
-				(nread->pd)->commands->error_file, strerror((nread->t_errno)), (nread->t_errno));
+		fprintf(stderr, "%s : %s\n", \
+		(nread->pd)->commands->error_file, \
+		strerror((nread->t_errno)));
 		gv.e_s = 1;
 	}
 	signal(SIGINT, parent_ctlc);
 }
 
+void	error_m_cmds(t_cmd *head, t_nread *nread)
+{
+	fprintf(stderr, "%s : %s\n", \
+	head->error_file, strerror((nread->t_errno)));
+	exit(1);
+}
+
 void	m_cmds(int v, int *id, t_cmd *head, t_nread *nread)
 {
 	(*id) = fork(); // check later;
+	if ((*id) == -1)
+		exit(0);
 	if (!(*id))
 	{
 		signal(SIGINT, SIG_DFL);
@@ -91,11 +102,7 @@ void	m_cmds(int v, int *id, t_cmd *head, t_nread *nread)
 							&(nread->x_ev_h), head->main_args));
 		}
 		else
-		{
-			fprintf(stderr, "%s : %s errno==%d\n", \
-					head->error_file, strerror((nread->t_errno)), (nread->t_errno));
-			exit(1);
-		}
+			error_m_cmds(head, nread);
 	}
 }
 
