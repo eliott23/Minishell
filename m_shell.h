@@ -47,6 +47,11 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 } t_nread;
 
+void	xprt_e(t_ev **ev_h, char **args, int *i);
+int	xprt_hx(char *arg, t_ev *temp);
+void	n_xprt_x(t_ev **x_ev_h, int *i, char **args);
+void	xprt_x(t_ev **x_ev_h, char **args, int *i, int *r);
+int	xprt(t_ev **ev_h, t_ev **x_ev_h, char **args);
 char	**ft_conv(t_ev *ev);
 int	ft_exit_status(int status);
 int	env(t_ev *ev_h);
