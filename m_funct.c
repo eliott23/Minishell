@@ -51,18 +51,17 @@ void    one_cmd(int v, int s0, int s1, t_nread *nread)
                 fprintf(stderr, "%s : %s errno==%d\n", (nread->pd)->commands->error_file, strerror((nread->t_errno)), (nread->t_errno));
                 gv.e_s = 1;
             }
-            // fprintf(stderr, "exit status==%d\n", gv.e_s);
 }
 
 void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
 {
+    // signal(SIGQUIT, p_quit); // handle sigquit
       (*id) = fork(); // check later;
                 if (!(*id))
                 {
                     if (!head->error_file)
                     {
                             signal(SIGINT, SIG_DFL);
-                            // signal(SIGQUIT, p_quit); // handle sigquit
                             if (head->cmd_id != 1 || head->infile || head->has_heredoc)
                                 dup2(head->read_end, 0);
                             if (head->next || head->outfile)
@@ -80,6 +79,7 @@ void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
                         exit(1);
                     }
                 } 
+    // signal(SIGQUIT, SIG_IGN); // handle sigquit
 }
 
 void    pre_exec(int hdoc, t_nread *nread)

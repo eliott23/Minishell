@@ -3,7 +3,8 @@
 
 void    p_quit()
 {
-    fprintf(stderr, "Quit\n");
+    fprintf(stderr, "went here\n");
+    printf("Quit\n");
     exit(131);
 }
 char    **ft_conv(t_ev *ev)
@@ -298,43 +299,7 @@ void    freesplit(char **s)
         free(s);
     }
 }
-// int    ft_expand(char **args, t_ev *ev_h)
-// {
-//     int i;
-//     int j;
 
-//     i = 1;
-//     j = 0;
-//     if (args)
-//     {
-//         while (args[i])
-//         {
-//             if (args[i][0] == '$')
-//             {
-//                 while (ev_h)
-//                 {
-//                     if (ev_cmp(ev_h->var, &args[i][1]))
-//                     {
-//                         free(args[i]);
-//                         j = 0;
-//                         while ((ev_h->var)[j])
-//                         {
-//                             if ((ev_h->var)[j] == '=')
-//                             {
-//                                 args[i] = mft_strdup(&(ev_h->var)[j + 1]);
-//                                 return (0);
-//                             }
-//                             j++;
-//                         }
-//                         args[i] = mft_strdup("");
-//                     }
-//                     ev_h = ev_h->next;
-//                 }
-//             }
-//             i++;
-//         }
-//     }
-// }
 int nn_cd_h(t_ncd *ncd)
 {
     if ((ncd->t) == -1)
@@ -609,13 +574,15 @@ int exec(char **args, t_ev *ev)
     id = fork();
 	if (!id)
     {
-        signal(SIGQUIT, p_quit); //check;
+        signal(SIGQUIT, SIG_DFL); //check;
         execve(path , args, ft_conv(ev));
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
     if (path)
         free(path);
+    if (ft_exit_status(stat) == 131)
+        printf("Quit :\n");
     return (ft_exit_status(stat));
 }
 int ft_execp(char **args, t_ev *ev)
