@@ -47,6 +47,9 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 } t_nread;
 
+void    p_quit();
+void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread);
+void	ft_close_pipes(int **pipes);
 int		what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args);
 void	one_cmd(int v, int s0, int s1, t_nread *nread);
 void	read_prompt(t_ev *ev_h, t_nread *nread);

@@ -51,5 +51,33 @@ void    one_cmd(int v, int s0, int s1, t_nread *nread)
                 fprintf(stderr, "%s : %s errno==%d\n", (nread->pd)->commands->error_file, strerror((nread->t_errno)), (nread->t_errno));
                 gv.e_s = 1;
             }
-            fprintf(stderr, "exit status==%d\n", gv.e_s);
+            // fprintf(stderr, "exit status==%d\n", gv.e_s);
+}
+
+void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
+{
+      (*id) = fork(); // check later;
+                if (!(*id))
+                {
+                    if (!head->error_file)
+                    {
+                            signal(SIGINT, SIG_DFL);
+                            // signal(SIGQUIT, p_quit); // handle sigquit
+                            if (head->cmd_id != 1 || head->infile || head->has_heredoc)
+                                dup2(head->read_end, 0);
+                            if (head->next || head->outfile)
+                                dup2(head->write_end, 1);
+                            ft_close_pipes((nread->pd)->pipes);
+                            v = m_parsing(head->main_args);
+                            if (!(head->is_builtin) || head->outfile)
+                                what_to_call(v + 1, &(nread->ev_h), &(nread->x_ev_h), head->main_args);
+                            else
+                                exit(what_to_call(v, &(nread->ev_h), &(nread->x_ev_h), head->main_args));
+                    }
+                    else
+                    {
+                        fprintf(stderr, "%s : %s errno==%d\n", head->error_file, strerror((nread->t_errno)), (nread->t_errno));
+                        exit(1);
+                    }
+                } 
 }

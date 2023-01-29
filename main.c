@@ -609,8 +609,8 @@ int exec(char **args, t_ev *ev)
     id = fork();
 	if (!id)
     {
-        signal(SIGQUIT, p_quit);
-        execve(path , args, ft_conv(ev)); //check safety of every execve;
+        signal(SIGQUIT, p_quit); //check;
+        execve(path , args, ft_conv(ev));
         handle_errors(args[0]);
     }
 	waitpid(id, &stat, 0);
@@ -806,15 +806,15 @@ void    ft_close_pipes(int **pipes)
 }
 int mini_hell(char **ev)
 {
-    int     v;
-    int     id;
     int     stat;
     t_nread nread;
     int     s0 = dup(0);
     int     s1= dup(1);
     t_cmd   *head;
     int hdoc;
+    int id;
 
+    id = 0;
     (nread.str) = NULL;
     (nread.pd) = NULL;
     (nread.env) = NULL;
@@ -838,42 +838,18 @@ int mini_hell(char **ev)
             hdoc = run_heredoc(nread.pd, (nread.pd)->heredoc);
         }
         if ((nread.pd)->n_cmds == 1)
-            one_cmd(v, s0, s1, &nread);
+            one_cmd(0, s0, s1, &nread);
         else
         {
             head = (nread.pd)->commands;
             while (head)
             {
-                id = fork(); // check later;
-                if (!id)
-                {
-                    if (!head->error_file)
-                    {
-                            signal(SIGINT, SIG_DFL);
-                            signal(SIGQUIT, p_quit);
-                            if (head->cmd_id != 1 || head->infile || head->has_heredoc)
-                                dup2(head->read_end, 0);
-                            if (head->next || head->outfile)
-                                dup2(head->write_end, 1);
-                            ft_close_pipes((nread.pd)->pipes);
-                            v = m_parsing(head->main_args);
-                            if (!(head->is_builtin) || head->outfile)
-                                what_to_call(v + 1, &(nread.ev_h), &(nread.x_ev_h), head->main_args);
-                            else
-                                exit(what_to_call(v, &(nread.ev_h), &(nread.x_ev_h), head->main_args)); // check exit_status;
-                    }
-                    else
-                    {
-                        fprintf(stderr, "%s : %s errno==%d\n", head->error_file, strerror((nread.t_errno)), (nread.t_errno));
-                        exit(1);
-                    }
-                } 
+                m_cmds(0, &id, head, &nread);
                 head = head->next;
             }
             ft_close_pipes((nread.pd)->pipes);
             waitpid(id, &stat, 0);
             while (waitpid(-1, NULL, 0) != -1);
-            fprintf(stderr, "exit status==%d\n", ft_exit_status(stat));
         }
     }
 }
