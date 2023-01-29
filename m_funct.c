@@ -81,3 +81,20 @@ void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
                     }
                 } 
 }
+
+void    pre_exec(int hdoc, t_nread *nread)
+{
+      read_prompt((nread->ev_h), nread);
+        hdoc = run_heredoc(nread->pd, (nread->pd)->heredoc);
+        while (hdoc || !(nread->pd)->is_syntax_valid || (nread->pd)->err)
+        {
+            if (!hdoc && (!(nread->pd)->is_syntax_valid || (nread->pd)->err))
+            {
+                if ((nread->pd)->err)
+                    fprintf(stderr, "%s\n", (nread->pd)->err);
+                gv.e_s = 258;
+            }
+            read_prompt((nread->ev_h), nread);
+            hdoc = run_heredoc(nread->pd, (nread->pd)->heredoc);
+        }
+}

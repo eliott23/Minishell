@@ -804,39 +804,17 @@ void    ft_close_pipes(int **pipes)
         }
     }
 }
-int mini_hell(char **ev)
+int mini_hell(char **ev, int s0, int s1, t_nread nread)
 {
     int     stat;
-    t_nread nread;
-    int     s0 = dup(0);
-    int     s1= dup(1);
     t_cmd   *head;
-    int hdoc;
     int id;
 
     id = 0;
-    (nread.str) = NULL;
-    (nread.pd) = NULL;
-    (nread.env) = NULL;
-    (nread.main_env) = NULL;
-    (nread.ev_h) = NULL;
-    (nread.x_ev_h) = NULL;
     init(ev, &(nread.ev_h), &(nread.x_ev_h));
     while (1)
     {
-        read_prompt((nread.ev_h), &nread);
-        hdoc = run_heredoc(nread.pd, (nread.pd)->heredoc);
-        while (hdoc || !(nread.pd)->is_syntax_valid || (nread.pd)->err)
-        {
-            if (!hdoc && (!(nread.pd)->is_syntax_valid || (nread.pd)->err))
-            {
-                if ((nread.pd)->err)
-                    fprintf(stderr, "%s\n", (nread.pd)->err);
-                gv.e_s = 258;
-            }
-            read_prompt((nread.ev_h), &nread);
-            hdoc = run_heredoc(nread.pd, (nread.pd)->heredoc);
-        }
+        pre_exec(0, &nread);
         if ((nread.pd)->n_cmds == 1)
             one_cmd(0, s0, s1, &nread);
         else
@@ -865,8 +843,18 @@ int main(int ac, char **av, char **ev)
 {
     signal(SIGQUIT, SIG_IGN);
     signal(SIGINT, parent_ctlC);
+    t_nread nread;
+    int     s0 = dup(0);
+    int     s1= dup(1);
     gv.e_s = 0;
     av = 0;
+    (nread.str) = NULL;
+    (nread.pd) = NULL;
+    (nread.env) = NULL;
+    (nread.main_env) = NULL;
+    (nread.ev_h) = NULL;
+    (nread.x_ev_h) = NULL;
+    mini_hell(ev, s0, s1, nread);
     // t_ev    *ev_h;
     // t_ev    *x_ev_h;
     // t_data  *pd;
@@ -929,7 +917,6 @@ int main(int ac, char **av, char **ev)
     //     pd = parse_line(str, ev, main_ev);
     // }
     // str = readline("minihell");
-    mini_hell(ev);
     // free_t_env(main_ev);
     ac = 0;
 }
