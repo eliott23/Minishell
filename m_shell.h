@@ -47,6 +47,21 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 } t_nread;
 
+t_env	*fill_env(t_ev	*ev);
+int	n_fill_env(t_ev *ev);
+void	free_t_env(t_env *ev);
+char	*ft_get_data(char *str);
+char	*ft_get_name(char *str);
+void	zero_fill(t_env *t);
+void	fdclose(int n, int *fd);
+int	what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args);
+int	ft_execp(char **args, t_ev *ev);
+int	exec(char **args, t_ev *ev);
+void	w_resetsig(int *stat, int id);
+char	*exec_h(t_ev *ev, char *com);
+int	n2_exec_h(char *com);
+int	n_exec_h(t_nx *nx);
+int	nn_exec_h(t_nx *nx);
 void	handle_errors(char *cmd);
 int	echo(char **args);
 int	is_an_option(char *str);
