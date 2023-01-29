@@ -6,17 +6,19 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:41:14 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 17:43:45 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 17:58:04 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "m_shell.h"
 #include "include/parsing.h"
 
-void	p_quit()
+void	p_quit(int i)
 {
+	i = 0;
 	printf("Quit\n");
 }
+
 char	**ft_conv(t_ev *ev)
 {
 	char	**env;
@@ -41,6 +43,7 @@ char	**ft_conv(t_ev *ev)
 	env[i] = 0;
 	return (env);
 }
+
 int	ft_exit_status(int status)
 {
 	if (WIFEXITED(status))
@@ -89,6 +92,7 @@ int	xprt_he(char *arg, t_ev *temp)
 	}
 	return (1);
 }
+
 void	xprt_e(t_ev **ev_h, char **args, int *i)
 {
 	t_ev	*temp;
@@ -137,6 +141,7 @@ int	xprt_hx(char *arg, t_ev *temp)
 	}
 	return (1);
 }
+
 void	n_xprt_x(t_ev **x_ev_h, int *i, char **args)
 {
 	*x_ev_h = malloc(sizeof(t_ev));
@@ -144,6 +149,7 @@ void	n_xprt_x(t_ev **x_ev_h, int *i, char **args)
 	(*x_ev_h)->next = NULL;
 	(*i)++;
 }
+
 void	xprt_x(t_ev **x_ev_h, char **args, int *i, int *r)
 {
 	t_ev	*temp;
@@ -205,6 +211,7 @@ int	n_unset_h(t_ev **ev_h, char *str, t_ev *temp)
 	}
 	return (1);
 }
+
 int	unset_h(t_ev **ev_h, char *str)
 {
 	t_ev	*temp;
@@ -230,6 +237,7 @@ int	unset_h(t_ev **ev_h, char *str)
 	}
 	return (0);
 }
+
 int	unset(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
 	int		i;
@@ -266,6 +274,7 @@ void	n_init(t_ev **temp, t_ev **temp2, t_ev **ev_h, t_ev **x_ev_h)
 	*temp = *ev_h;
 	*temp2 = *x_ev_h;
 }
+
 void	init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
 {
 	int		i;
@@ -294,6 +303,7 @@ void	init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
 	unset(ev_h, x_ev_h, OLDPWD);
 	xprt(ev_h, x_ev_h, OLDPWD);
 }
+
 void	freesplit(char **s)
 {
 	int	i;
@@ -324,31 +334,32 @@ int	nn_cd_h(t_ncd *ncd)
 int	n_cd_h(t_ncd *ncd)
 {
 	if (ev_cmp((ncd->temp)->var, "HOME"))
+	{
+		while ((ncd->temp)->var[ncd->i])
 		{
-			while ((ncd->temp)->var[ncd->i])
+			if ((ncd->temp)->var[ncd->i] == '=')
 			{
-				if ((ncd->temp)->var[ncd->i] == '=')
-				{
-					(ncd->t_OLDPWD) = getcwd((ncd->t_OLDPWD), 0);
-					(ncd->t) = chdir(&(ncd->temp)->var[(ncd->i) + 1]);
-					if (!nn_cd_h(ncd))
-						return (0);
-					(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
-					(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=",(ncd->t_OLDPWD));
-					free((ncd->t_OLDPWD));
-					(ncd->t_PWD) = getcwd((ncd->t_PWD), 0);
-					(ncd->OLD_PWD)[1] = myft_strjoin("PWD=",(ncd->t_PWD));
-					free((ncd->t_PWD));
-					(ncd->OLD_PWD)[2] = 0;
-					xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD));
-					freesplit((ncd->OLD_PWD));
+				(ncd->t_OLDPWD) = getcwd((ncd->t_OLDPWD), 0);
+				(ncd->t) = chdir(&(ncd->temp)->var[(ncd->i) + 1]);
+				if (!nn_cd_h(ncd))
 					return (0);
-				}
-				(ncd->i)++;
+				(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
+				(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=",(ncd->t_OLDPWD));
+				free((ncd->t_OLDPWD));
+				(ncd->t_PWD) = getcwd((ncd->t_PWD), 0);
+				(ncd->OLD_PWD)[1] = myft_strjoin("PWD=",(ncd->t_PWD));
+				free((ncd->t_PWD));
+				(ncd->OLD_PWD)[2] = 0;
+				xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD));
+				freesplit((ncd->OLD_PWD));
+				return (0);
 			}
+			(ncd->i)++;
 		}
-		return (1);
+	}
+	return (1);
 }
+
 int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 {
 	t_ncd	ncd;
@@ -362,7 +373,7 @@ int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 	while (ncd.temp)
 	{
 		if (!n_cd_h(&ncd))
-			return (0);  
+			return (0);
 		ncd.temp = ncd.temp->next;
 	}
 	printf("cd: HOME not set\n");
@@ -371,14 +382,14 @@ int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 
 int	n_cd(t_ncd *ncd, char **args)
 {
-	if (args[1]) 
+	if (args[1])
 	{
 		(ncd->t_OLDPWD) = getcwd((ncd->t_OLDPWD), 0);
 		(ncd->t) = chdir(args[1]);
 		if ((ncd->t) == -1)
 		{
-			printf("cd : %s: %s\n", args[1] , strerror(errno));
-			free((ncd->t_OLDPWD)); 
+			printf("cd : %s: %s\n", args[1], strerror(errno));
+			free((ncd->t_OLDPWD));
 			return (0);
 		}
 		(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
@@ -411,7 +422,8 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 	}
 	return (0);
 }
-int pwd()
+
+int pwd(void)
 {
 	char	*PWD;
 
@@ -421,6 +433,7 @@ int pwd()
 	free(PWD);
 	return (0);
 }
+
 int is_an_option(char *str)
 {
 	int i;
@@ -436,6 +449,7 @@ int is_an_option(char *str)
 		return (1);
 	return (0);
 }
+
 int echo(char **args)
 {
 	int i;
@@ -462,6 +476,7 @@ int echo(char **args)
 	}
 	return (0);
 }
+
 void	handle_errors(char *cmd)
 {
 	int fd;
@@ -483,6 +498,7 @@ void	handle_errors(char *cmd)
 		fprintf(stderr, "%s : Command not found\n", cmd); //check
 	exit(126);
 }
+
 int nn_exec_h(t_nx *nx)
 {
 	while ((nx->PATHS)[(nx->i)])
@@ -505,13 +521,14 @@ int nn_exec_h(t_nx *nx)
 	}
 	return (-1);
 }
+
 int n_exec_h(t_nx *nx)
 {
 	int i;
 
 	while ((nx->ev) && !ft_srch((nx->com) + 1, '/'))
 	{
-		if (ev_cmp((nx->ev)->var, "PATH")) 
+		if (ev_cmp((nx->ev)->var, "PATH"))
 		{
 			(nx->PATH) = mft_strdup((nx->ev)->var + 5);
 			(nx->PATHS) = ft_split((nx->PATH), ':');
@@ -524,6 +541,7 @@ int n_exec_h(t_nx *nx)
 	}
 	return (-1);
 }
+
 int n2_exec_h(char  *com)
 {
 	if (access(com + 1, F_OK))
@@ -540,6 +558,7 @@ int n2_exec_h(char  *com)
 	}
 	return (1);
 }
+
 char *exec_h(t_ev *ev, char *com)
 {
 	t_nx	nx;
@@ -557,21 +576,23 @@ char *exec_h(t_ev *ev, char *com)
 	if (nx.PATHS)
 		freesplit(nx.PATHS);
 	if (ft_srch(com + 1, '/'))
-		{
-			if (!n2_exec_h(com))
-				return (0); 
-			else
-				return (mft_strdup(com + 1));
-		}
+	{
+		if (!n2_exec_h(com))
+			return (0);
+		else
+			return (mft_strdup(com + 1));
+	}
 	gv.e_s = 127;
 	fprintf(stderr, "minishell: %s: command not found\n", com + 1);
 	return (0);
 }
+
 void	w_resetsig(int *stat, int id)
 {
 	waitpid(id, stat, 0);
 	signal(SIGQUIT, SIG_IGN);	
 }
+
 int exec(char **args, t_ev *ev)
 {
 	char	*path;
@@ -592,7 +613,7 @@ int exec(char **args, t_ev *ev)
 	{
 		signal(SIGQUIT, SIG_DFL); //check;
 		signal(SIGINT, SIG_DFL); //check;
-		execve(path , args, ft_conv(ev));
+		execve(path, args, ft_conv(ev));
 		handle_errors(args[0]);
 	}
 	w_resetsig(&stat, id);
@@ -600,6 +621,7 @@ int exec(char **args, t_ev *ev)
 		free(path);
 	return (ft_exit_status(stat));
 }
+
 int ft_execp(char **args, t_ev *ev)
 {
 	char	*path;
@@ -617,6 +639,7 @@ int ft_execp(char **args, t_ev *ev)
 	handle_errors(args[0]);
 	return (0);
 }
+
 int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
 	if (v == 0)
@@ -664,6 +687,7 @@ t_cmdl	*v_pars(char *str, int *a)
 	cmdl[i].args = 0;
 	return (cmdl);
 }
+
 void	fdclose(int n, int *fd)
 {
 	int	i;
@@ -682,6 +706,7 @@ void	zero_fill(t_env *t)
 	t->name = 0;
 	t->next = 0;
 }
+
 char	*ft_get_name(char *str)
 {
 	int		i;
@@ -703,6 +728,7 @@ char	*ft_get_name(char *str)
 	r[j] = 0;
 	return (r);
 }
+
 char	*ft_get_data(char *str)
 {
 	int		i;
@@ -718,6 +744,7 @@ char	*ft_get_data(char *str)
 		r = mft_strdup(&str[i + 1]);
 	return (r);
 }
+
 void	free_t_env(t_env *ev)
 {
 	t_env	*t;
@@ -731,6 +758,7 @@ void	free_t_env(t_env *ev)
 		free(t);
 	}
 }
+
 int	n_fill_env(t_ev *ev)
 {
 	int	i;
@@ -743,6 +771,7 @@ int	n_fill_env(t_ev *ev)
 	}
 	return (i);
 }
+
 t_env	*fill_env(t_ev	*ev)
 {
 	t_env	*r;
@@ -787,13 +816,16 @@ void	ft_close_pipes(int **pipes)
 		}
 	}
 }
+
 void	f_exec(int *stat, int id, t_nread *nread)
 {
 	ft_close_pipes((nread->pd)->pipes);
 	waitpid(id, stat, 0);
-	while (waitpid(-1, NULL, 0) != -1);
+	while (waitpid(-1, NULL, 0) != -1)
+		;
 	ft_exit_status(*stat);
 }
+
 int	mini_hell(char **ev, int s0, int s1, t_nread nread)
 {
 	int		stat;
@@ -821,21 +853,27 @@ int	mini_hell(char **ev, int s0, int s1, t_nread nread)
 		}
 	}
 }
-void	parent_ctlC()
+
+void	parent_ctlC(int i)
 {
+	i = 0;
 	gv.e_s = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
+
 int	main(int ac, char **av, char **ev)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, parent_ctlC);
 	t_nread	nread;
-	int		s0 = dup(0);
-	int	 s1= dup(1);
+	int		s0;
+	int		s1;
+
+	s0 = dup(0);
+	s1= dup(1);
 	gv.e_s = 0;
 	av = 0;
 	(nread.str) = NULL;
