@@ -4,6 +4,7 @@
 void    read_prompt(t_ev *ev_h, t_nread *nread)
 {
     signal(SIGINT, parent_ctlC);
+    signal(SIGQUIT, SIG_IGN);
     if ((nread->str))
         free((nread->str));
     if ((nread->main_env))
@@ -57,7 +58,6 @@ void    one_cmd(int v, int s0, int s1, t_nread *nread)
 
 void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
 {
-    signal(SIGINT, SIG_IGN);
       (*id) = fork(); // check later;
                 if (!(*id))
                 {
@@ -81,8 +81,6 @@ void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
                         exit(1);
                     }
                 } 
-    signal(SIGINT, parent_ctlC);
-    signal(SIGQUIT, SIG_IGN); // handle sigquit
 }
 
 void    pre_exec(int hdoc, t_nread *nread)

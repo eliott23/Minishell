@@ -3,7 +3,6 @@
 
 void    p_quit()
 {
-    fprintf(stderr, "went here\n");
     printf("Quit\n");
 }
 char    **ft_conv(t_ev *ev)
@@ -556,6 +555,11 @@ char *exec_h(t_ev *ev, char *com)
     fprintf(stderr, "minishell: %s: command not found\n", com + 1);
     return (0);
 }
+void    w_resetsig(int *stat, int id)
+{
+	waitpid(id, stat, 0);
+    signal(SIGQUIT, SIG_IGN);    
+}
 int exec(char **args, t_ev *ev)
 {
     char    *path;
@@ -571,7 +575,6 @@ int exec(char **args, t_ev *ev)
     if (!path)
         return (gv.e_s);
     signal(SIGQUIT, p_quit);
-    //add handler for sigint;
     id = fork();
 	if (!id)
     {
@@ -580,9 +583,7 @@ int exec(char **args, t_ev *ev)
         execve(path , args, ft_conv(ev));
         handle_errors(args[0]);
     }
- //rje3 parent handler;
-	waitpid(id, &stat, 0);
-    signal(SIGQUIT, SIG_IGN);
+    w_resetsig(&stat, id);
     if (path)
         free(path);
     return (ft_exit_status(stat));
@@ -774,6 +775,13 @@ void    ft_close_pipes(int **pipes)
         }
     }
 }
+void    f_exec(int *stat, int id, t_nread *nread)
+{
+            ft_close_pipes((nread->pd)->pipes);
+            waitpid(id, stat, 0);
+            while (waitpid(-1, NULL, 0) != -1);
+            ft_exit_status(*stat);
+}
 int mini_hell(char **ev, int s0, int s1, t_nread nread)
 {
     int     stat;
@@ -790,15 +798,14 @@ int mini_hell(char **ev, int s0, int s1, t_nread nread)
         else
         {
             head = (nread.pd)->commands;
+            signal(SIGINT, SIG_IGN);
             while (head)
             {
                 m_cmds(0, &id, head, &nread);
                 head = head->next;
             }
-            ft_close_pipes((nread.pd)->pipes);
-            waitpid(id, &stat, 0);
-            while (waitpid(-1, NULL, 0) != -1);
-            ft_exit_status(stat);
+            f_exec(&stat, id, &nread);
+            signal(SIGINT, parent_ctlC);
         }
     }
 }
