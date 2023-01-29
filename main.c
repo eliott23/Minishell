@@ -855,6 +855,8 @@ int main(int ac, char **av, char **ev)
     (nread.ev_h) = NULL;
     (nread.x_ev_h) = NULL;
     mini_hell(ev, s0, s1, nread);
+    ac = 0;
+}
     // t_ev    *ev_h;
     // t_ev    *x_ev_h;
     // t_data  *pd;
@@ -918,9 +920,3 @@ int main(int ac, char **av, char **ev)
     // }
     // str = readline("minihell");
     // free_t_env(main_ev);
-    ac = 0;
-}
-/*
-    validing the identifier
-    manipulation behavior of bash
-*/
