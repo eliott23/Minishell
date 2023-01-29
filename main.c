@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:41:14 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 17:58:04 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 18:15:48 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**ft_conv(t_ev *ev)
 {
 	char	**env;
 	t_ev	*temp;
-	int	 i;
+	int		i;
 
 	temp = ev;
 	i = 0;
@@ -84,7 +84,7 @@ int	xprt_he(char *arg, t_ev *temp)
 		}
 		if (!temp->next && ft_srch(arg, '='))
 		{
-			ev_alloc(temp,arg);
+			ev_alloc(temp, arg);
 			temp->next->next = NULL;
 			return (0);
 		}
@@ -153,7 +153,7 @@ void	n_xprt_x(t_ev **x_ev_h, int *i, char **args)
 void	xprt_x(t_ev **x_ev_h, char **args, int *i, int *r)
 {
 	t_ev	*temp;
-	int	t;
+	int		t;
 
 	t = *i;
 	while (args[(*i)] && !v_exp(args[(*i)], 0))
@@ -277,10 +277,10 @@ void	n_init(t_ev **temp, t_ev **temp2, t_ev **ev_h, t_ev **x_ev_h)
 
 void	init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
 {
-	int		i;
-	t_ev	*temp;
-	t_ev	*temp2;
-	char	*OLDPWD[] = {"OLDPWD", 0};
+	int			i;
+	t_ev		*temp;
+	t_ev		*temp2;
+	static char	*oldpwd[] = {"OLDPWD", 0};
 
 	if (ev && ev[0] && ev_h)
 	{
@@ -300,8 +300,8 @@ void	init(char **ev, t_ev **ev_h, t_ev **x_ev_h)
 		temp->next = NULL;
 		temp2->next = NULL;
 	}
-	unset(ev_h, x_ev_h, OLDPWD);
-	xprt(ev_h, x_ev_h, OLDPWD);
+	unset(ev_h, x_ev_h, oldpwd);
+	xprt(ev_h, x_ev_h, oldpwd);
 }
 
 void	freesplit(char **s)
@@ -324,7 +324,8 @@ int	nn_cd_h(t_ncd *ncd)
 {
 	if ((ncd->t) == -1)
 	{
-		printf("cd : %s: %s\n", &(ncd->temp)->var[(ncd->i) + 1], strerror(errno));
+		printf("cd : %s: %s\n", \
+				&(ncd->temp)->var[(ncd->i) + 1], strerror(errno));
 		free((ncd->t_OLDPWD));
 		return (0);
 	}
@@ -344,10 +345,10 @@ int	n_cd_h(t_ncd *ncd)
 				if (!nn_cd_h(ncd))
 					return (0);
 				(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
-				(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=",(ncd->t_OLDPWD));
+				(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=", (ncd->t_OLDPWD));
 				free((ncd->t_OLDPWD));
 				(ncd->t_PWD) = getcwd((ncd->t_PWD), 0);
-				(ncd->OLD_PWD)[1] = myft_strjoin("PWD=",(ncd->t_PWD));
+				(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_PWD));
 				free((ncd->t_PWD));
 				(ncd->OLD_PWD)[2] = 0;
 				xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD));
@@ -393,7 +394,7 @@ int	n_cd(t_ncd *ncd, char **args)
 			return (0);
 		}
 		(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
-		(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=",(ncd->t_OLDPWD));
+		(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=", (ncd->t_OLDPWD));
 		free((ncd->t_OLDPWD));
 		(ncd->t_PWD) = getcwd((ncd->t_PWD), 0);
 		(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_PWD));
@@ -407,7 +408,7 @@ int	n_cd(t_ncd *ncd, char **args)
 	return (1);
 }
 
-int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
+int	cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
 	t_ncd	ncd;
 
@@ -423,14 +424,14 @@ int cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 	return (0);
 }
 
-int pwd(void)
+int	pwd(void)
 {
-	char	*PWD;
+	char	*pwd;
 
-	PWD = NULL;
-	PWD = getcwd(PWD, 0);
-	printf("%s\n", PWD);
-	free(PWD);
+	pwd = NULL;
+	pwd = getcwd(pwd, 0);
+	printf("%s\n", pwd);
+	free(pwd);
 	return (0);
 }
 
@@ -452,8 +453,8 @@ int is_an_option(char *str)
 
 int echo(char **args)
 {
-	int i;
-	int n_l;
+	int	i;
+	int	n_l;
 
 	i = 0;
 	n_l = 1;
@@ -485,10 +486,10 @@ void	handle_errors(char *cmd)
 		exit(0);
 	if (!cmd[0])
 	{
-		fprintf(stderr, "Minishell : %s : Command not found\n", cmd); //check
+		fprintf(stderr, "Minishell : %s : Command not found\n", cmd);
 		exit(127);
 	}
-	fd = open(cmd, O_RDWR);	 //careful!!!!;
+	fd = open(cmd, O_RDWR);	
 	if (fd < 0 && ft_srch(cmd, '/'))
 	{
 		fprintf(stderr, "%s : %s\n", cmd, strerror(errno));
@@ -542,7 +543,7 @@ int n_exec_h(t_nx *nx)
 	return (-1);
 }
 
-int n2_exec_h(char  *com)
+int n2_exec_h(char *com)
 {
 	if (access(com + 1, F_OK))
 	{
@@ -562,7 +563,7 @@ int n2_exec_h(char  *com)
 char *exec_h(t_ev *ev, char *com)
 {
 	t_nx	nx;
-	int	 r;
+	int		r;
 
 	nx.i = 0;
 	nx.PATHS = NULL;
@@ -597,8 +598,8 @@ int exec(char **args, t_ev *ev)
 {
 	char	*path;
 	char	*com;
-	int	 id;
-	int	 stat;
+	int		id;
+	int		stat;
 
 	com = myft_strjoin("/", args[0]);
 	if (!com)
@@ -647,8 +648,8 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 	else if (v == 1)
 		return (unset(ev_h, x_ev_h, args + 1));
 	else if (v == 2)
-		return (env(*ev_h)); //pottential issue regarding if an unwanted argument was provided;
-	else if(v == 3)
+		return (env(*ev_h));
+	else if (v == 3)
 		return (cd(ev_h, x_ev_h, args));
 	else if (v == 4)
 		return (pwd());
@@ -665,27 +666,7 @@ int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 		return (exec(args, *ev_h));
 	else
 		return (ft_execp(args, *ev_h));
-	return(-1);
-}
-
-t_cmdl	*v_pars(char *str, int *a)
-{
-	char	**coml;
-	int count = 0;
-	int i = 0;
-
-	coml = ft_split(str, '|');
-	while (coml[count])
-		count++;
-	*a = count;
-	t_cmdl *cmdl = malloc(sizeof(t_cmdl) * (count + 1));
-	while (i < count)
-	{
-		cmdl[i].args = ft_split(coml[i], ' ');
-		i++;
-	}
-	cmdl[i].args = 0;
-	return (cmdl);
+	return (-1);
 }
 
 void	fdclose(int n, int *fd)
@@ -866,12 +847,12 @@ void	parent_ctlC(int i)
 
 int	main(int ac, char **av, char **ev)
 {
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, parent_ctlC);
 	t_nread	nread;
 	int		s0;
 	int		s1;
 
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, parent_ctlC);
 	s0 = dup(0);
 	s1= dup(1);
 	gv.e_s = 0;
