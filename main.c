@@ -571,6 +571,7 @@ int exec(char **args, t_ev *ev)
     if (!path)
         return (gv.e_s);
     signal(SIGQUIT, p_quit);
+    //add handler for sigint;
     id = fork();
 	if (!id)
     {
@@ -578,6 +579,7 @@ int exec(char **args, t_ev *ev)
         execve(path , args, ft_conv(ev));
         handle_errors(args[0]);
     }
+ //rje3 parent handler;
 	waitpid(id, &stat, 0);
     signal(SIGQUIT, SIG_IGN);
     if (path)
@@ -802,10 +804,10 @@ int mini_hell(char **ev, int s0, int s1, t_nread nread)
 void    parent_ctlC()
 {
     gv.e_s = 1;
-    // write(1, "\n", 1);
-    // rl_on_new_line();
-    // rl_replace_line("", 0);
-    // rl_redisplay();
+    write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 int main(int ac, char **av, char **ev)
 {

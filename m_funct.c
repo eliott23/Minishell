@@ -55,9 +55,11 @@ void    one_cmd(int v, int s0, int s1, t_nread *nread)
 
 void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
 {
+    signal(SIGINT, SIG_IGN);
       (*id) = fork(); // check later;
                 if (!(*id))
                 {
+                    signal(SIGINT, SIG_DFL);
                     if (!head->error_file)
                     {
                             if (head->cmd_id != 1 || head->infile || head->has_heredoc)
@@ -77,6 +79,7 @@ void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)
                         exit(1);
                     }
                 } 
+    signal(SIGINT, parent_ctlC);
     signal(SIGQUIT, SIG_IGN); // handle sigquit
 }
 
