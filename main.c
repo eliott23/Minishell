@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:41:14 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 18:15:48 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 18:22:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,9 +435,9 @@ int	pwd(void)
 	return (0);
 }
 
-int is_an_option(char *str)
+int	is_an_option(char *str)
 {
-	int i;
+	int	i;
 
 	if (!str)
 		return (0);
@@ -451,7 +451,7 @@ int is_an_option(char *str)
 	return (0);
 }
 
-int echo(char **args)
+int	echo(char **args)
 {
 	int	i;
 	int	n_l;
@@ -470,7 +470,7 @@ int echo(char **args)
 			printf("%s", args[i]);
 			i++;
 			if (args[i])
-				printf(" ");	//weirdoooooooo
+				printf(" ");//weirdoooooooo
 		}
 		if (n_l)
 			printf("\n");
@@ -480,7 +480,7 @@ int echo(char **args)
 
 void	handle_errors(char *cmd)
 {
-	int fd;
+	int	fd;
 
 	if (!cmd)
 		exit(0);
@@ -489,7 +489,7 @@ void	handle_errors(char *cmd)
 		fprintf(stderr, "Minishell : %s : Command not found\n", cmd);
 		exit(127);
 	}
-	fd = open(cmd, O_RDWR);	
+	fd = open(cmd, O_RDWR);
 	if (fd < 0 && ft_srch(cmd, '/'))
 	{
 		fprintf(stderr, "%s : %s\n", cmd, strerror(errno));
@@ -500,7 +500,7 @@ void	handle_errors(char *cmd)
 	exit(126);
 }
 
-int nn_exec_h(t_nx *nx)
+int	nn_exec_h(t_nx *nx)
 {
 	while ((nx->PATHS)[(nx->i)])
 	{
@@ -523,9 +523,9 @@ int nn_exec_h(t_nx *nx)
 	return (-1);
 }
 
-int n_exec_h(t_nx *nx)
+int	n_exec_h(t_nx *nx)
 {
-	int i;
+	int	i;
 
 	while ((nx->ev) && !ft_srch((nx->com) + 1, '/'))
 	{
@@ -543,7 +543,7 @@ int n_exec_h(t_nx *nx)
 	return (-1);
 }
 
-int n2_exec_h(char *com)
+int	n2_exec_h(char *com)
 {
 	if (access(com + 1, F_OK))
 	{
@@ -554,13 +554,13 @@ int n2_exec_h(char *com)
 	if (access(com + 1, X_OK))
 	{
 		fprintf(stderr, "%s: %s\n", com + 1, strerror(errno));
-		gv.e_s = 126;  //check the exist status of execve in this case;
+		gv.e_s = 126;//check the exist status of execve in this case;
 		return (0);
 	}
 	return (1);
 }
 
-char *exec_h(t_ev *ev, char *com)
+char	*exec_h(t_ev *ev, char *com)
 {
 	t_nx	nx;
 	int		r;
@@ -591,10 +591,10 @@ char *exec_h(t_ev *ev, char *com)
 void	w_resetsig(int *stat, int id)
 {
 	waitpid(id, stat, 0);
-	signal(SIGQUIT, SIG_IGN);	
+	signal(SIGQUIT, SIG_IGN);
 }
 
-int exec(char **args, t_ev *ev)
+int	exec(char **args, t_ev *ev)
 {
 	char	*path;
 	char	*com;
@@ -623,7 +623,7 @@ int exec(char **args, t_ev *ev)
 	return (ft_exit_status(stat));
 }
 
-int ft_execp(char **args, t_ev *ev)
+int	ft_execp(char **args, t_ev *ev)
 {
 	char	*path;
 	char	*com;
@@ -641,7 +641,7 @@ int ft_execp(char **args, t_ev *ev)
 	return (0);
 }
 
-int what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
+int	what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
 	if (v == 0)
 		return (xprt(ev_h, x_ev_h, args + 1));
@@ -811,7 +811,7 @@ int	mini_hell(char **ev, int s0, int s1, t_nread nread)
 {
 	int		stat;
 	t_cmd	*head;
-	int	id;
+	int		id;
 
 	id = 0;
 	init(ev, &(nread.ev_h), &(nread.x_ev_h));
@@ -835,7 +835,7 @@ int	mini_hell(char **ev, int s0, int s1, t_nread nread)
 	}
 }
 
-void	parent_ctlC(int i)
+void	parent_ctlc(int i)
 {
 	i = 0;
 	gv.e_s = 1;
@@ -854,7 +854,7 @@ int	main(int ac, char **av, char **ev)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, parent_ctlC);
 	s0 = dup(0);
-	s1= dup(1);
+	s1 = dup(1);
 	gv.e_s = 0;
 	av = 0;
 	(nread.str) = NULL;

@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:05:09 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 17:18:05 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/29 18:23:07 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	read_prompt(t_ev *ev_h, t_nread *nread)
 {
-	signal(SIGINT, parent_ctlC);
+	signal(SIGINT, parent_ctlc);
 	signal(SIGQUIT, SIG_IGN);
 	if ((nread->str))
 		free((nread->str));
@@ -66,7 +66,7 @@ void	one_cmd(int v, int s0, int s1, t_nread *nread)
 				(nread->pd)->commands->error_file, strerror((nread->t_errno)), (nread->t_errno));
 		gv.e_s = 1;
 	}
-	signal(SIGINT, parent_ctlC);
+	signal(SIGINT, parent_ctlc);
 }
 
 void	m_cmds(int v, int *id, t_cmd *head, t_nread *nread)
