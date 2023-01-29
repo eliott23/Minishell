@@ -29,6 +29,7 @@ void    read_prompt(t_ev *ev_h, t_nread *nread)
 
 void    one_cmd(int v, int s0, int s1, t_nread *nread)
 {
+    signal(SIGINT, SIG_IGN);
       if (!(nread->pd)->commands->error_file)
             {
                 v = m_parsing((nread->pd)->commands->main_args);
@@ -51,6 +52,7 @@ void    one_cmd(int v, int s0, int s1, t_nread *nread)
                 fprintf(stderr, "%s : %s errno==%d\n", (nread->pd)->commands->error_file, strerror((nread->t_errno)), (nread->t_errno));
                 gv.e_s = 1;
             }
+    signal(SIGINT, parent_ctlC);
 }
 
 void    m_cmds(int v, int *id, t_cmd *head, t_nread  *nread)

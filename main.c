@@ -576,6 +576,7 @@ int exec(char **args, t_ev *ev)
 	if (!id)
     {
         signal(SIGQUIT, SIG_DFL); //check;
+        signal(SIGINT, SIG_DFL); //check;
         execve(path , args, ft_conv(ev));
         handle_errors(args[0]);
     }
