@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:13 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/29 18:28:11 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:51:15 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <errno.h>
 # include "structures.h"
 # include "macros.h"
-#include "../m_shell.h"
+# include "../m_shell.h"
 
-typedef	struct gv
+typedef struct gv
 {
 	int	e_s;
 	int	flag;
@@ -31,7 +31,7 @@ typedef	struct gv
 
 t_gv	gv;
 
-void		h_c();
+void		h_c(int i);
 void		parent_ctlc(int i);
 void		ft_putstr(char *s);
 char		*ft_strjoin(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/21 22:31:10 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/22 22:37:24 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:50:34 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ char	*mft_strdup(const char *s1)
 	return (rtrn);
 }
 
-void	h_c(void)
+void	h_c(int i)
 {
+	i = 0;
 	gv.e_s = 1;
 	gv.flag = -2;
 	write(1, "\n", 1);
