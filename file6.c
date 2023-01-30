@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:59 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:42:49 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:54:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	nn_exec_h(t_nx *nx)
 			else
 			{
 				free((nx->path));
-				gv.e_s = 126;
+				g_v.e_s = 126;
 				return (0);
 			}
 		}
@@ -61,13 +61,13 @@ int	n2_exec_h(char *com)
 	if (access(com + 1, F_OK))
 	{
 		fprintf(stderr, "minishell: %s: no such file or directory\n", com + 1);
-		gv.e_s = 127;
+		g_v.e_s = 127;
 		return (0);
 	}
 	if (access(com + 1, X_OK))
 	{
 		fprintf(stderr, "%s: %s\n", com + 1, strerror(errno));
-		gv.e_s = 126;
+		g_v.e_s = 126;
 		return (0);
 	}
 	return (1);
@@ -96,7 +96,7 @@ char	*exec_h(t_ev *ev, char *com)
 		else
 			return (mft_strdup(com + 1));
 	}
-	gv.e_s = 127;
+	g_v.e_s = 127;
 	fprintf(stderr, "minishell: %s: command not found\n", com + 1);
 	return (0);
 }

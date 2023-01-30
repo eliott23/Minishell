@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:41:14 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 18:31:41 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:54:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	mini_hell(char **ev, int s0, int s1, t_nread nread)
 void	parent_ctlc(int i)
 {
 	i = 0;
-	gv.e_s = 1;
+	g_v.e_s = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -86,7 +86,7 @@ int	main(int ac, char **av, char **ev)
 	signal(SIGINT, parent_ctlc);
 	s0 = dup(0);
 	s1 = dup(1);
-	gv.e_s = 0;
+	g_v.e_s = 0;
 	av = 0;
 	(nread.str) = NULL;
 	(nread.pd) = NULL;

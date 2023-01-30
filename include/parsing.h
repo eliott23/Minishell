@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:12:13 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/30 18:51:15 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:53:11 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct gv
 	int	flag;
 }	t_gv;
 
-t_gv	gv;
+t_gv	g_v;
 
 void		h_c(int i);
 void		parent_ctlc(int i);

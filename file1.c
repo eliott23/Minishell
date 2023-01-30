@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:46 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 20:27:12 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:54:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@ int	ft_exit_status(int status)
 {
 	if (WIFEXITED(status))
 	{
-		gv.e_s = WEXITSTATUS(status);
-		return (gv.e_s);
+		g_v.e_s = WEXITSTATUS(status);
+		return (g_v.e_s);
 	}
 	else if (WIFSIGNALED(status))
 	{
-		gv.e_s = status + 128;
-		return (gv.e_s);
+		g_v.e_s = status + 128;
+		return (g_v.e_s);
 	}
-	return (gv.e_s);
+	return (g_v.e_s);
 }
 
 int	env(t_ev *ev_h)

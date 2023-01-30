@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:10:46 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/30 18:11:32 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:56:12 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 	i_heredoc(&trigger, &d, &res);
 	while (limiters)
 	{
-		gv.flag = 0;
+		g_v.flag = 0;
 		s = readline("haredoc> ");
-		if (gv.flag && set_trigger(&trigger))
+		if (g_v.flag && set_trigger(&trigger))
 			break ;
 		if (!s || !ft_strcmp(s, limiters->s))
 			limiter_found(data, &limiters, &res, s);

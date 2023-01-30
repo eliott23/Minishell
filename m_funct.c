@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:05:09 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 18:23:07 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:54:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	one_cmd(int v, int s0, int s1, t_nread *nread)
 			dup2((nread->pd)->commands->write_end, 1);
 			close((nread->pd)->commands->write_end);
 		}
-		gv.e_s = what_to_call(v, &(nread->ev_h), \
+		g_v.e_s = what_to_call(v, &(nread->ev_h), \
 		&(nread->x_ev_h), (nread->pd)->commands->main_args);
 		dup2(s0, 0);
 		dup2(s1, 1);
@@ -111,7 +111,7 @@ void	pre_exec(int hdoc, t_nread *nread)
 		{
 			if ((nread->pd)->err)
 				fprintf(stderr, "%s\n", (nread->pd)->err);
-			gv.e_s = 258;
+			g_v.e_s = 258;
 		}
 		read_prompt((nread->ev_h), nread);
 		hdoc = run_heredoc(nread->pd, (nread->pd)->heredoc);

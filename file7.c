@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:27:01 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 20:27:12 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:54:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	exec(char **args, t_ev *ev)
 	path = exec_h(ev, com);
 	free(com);
 	if (!path)
-		return (gv.e_s);
+		return (g_v.e_s);
 	signal(SIGQUIT, p_quit);
 	id = fork();
 	if (!id)
@@ -54,7 +54,7 @@ int	ft_execp(char **args, t_ev *ev)
 	signal(SIGQUIT, p_quit);
 	free(com);
 	if (!path)
-		exit(gv.e_s);
+		exit(g_v.e_s);
 	execve(path, args, ft_conv(ev));
 	handle_errors(args[0]);
 	return (0);

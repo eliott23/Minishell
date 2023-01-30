@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/21 22:31:10 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:50:34 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:54:38 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char	*mft_strdup(const char *s1)
 void	h_c(int i)
 {
 	i = 0;
-	gv.e_s = 1;
-	gv.flag = -2;
+	g_v.e_s = 1;
+	g_v.flag = -2;
 	write(1, "\n", 1);
 	close(0);
 }
@@ -47,5 +47,5 @@ void	error_one_cmd(t_nread *nread)
 	fprintf(stderr, "%s : %s\n", \
 	(nread->pd)->commands->error_file, \
 	strerror((nread->t_errno)));
-	gv.e_s = 1;
+	g_v.e_s = 1;
 }
