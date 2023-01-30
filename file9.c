@@ -20,3 +20,9 @@ void	i_heredoc(int *trigger, int *d, char **res)
 	signal(SIGINT, h_c);
 	*d = dup(0);
 }
+
+void	f_heredoc(t_data *data, t_queue *limiters, char *s, char *res)
+{
+	signal(SIGINT, parent_ctlc);
+	set_status(data, limiters, s, res);
+}

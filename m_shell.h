@@ -47,6 +47,8 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 } t_nread;
 
+void	set_status(t_data *data, t_queue *limiter, char *s, char *res);
+void	f_heredoc(t_data *data, t_queue *limiters, char *s, char *res);
 void	i_heredoc(int *trigger, int *d, char **res);
 void	error_one_cmd(t_nread *nread);
 t_env	*fill_env(t_ev	*ev);

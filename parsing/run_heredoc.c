@@ -83,8 +83,7 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 	}
 	if (trigger)
 	{
-		signal(SIGINT, parent_ctlc);
-		set_status(data, limiters, s, res);
+		f_heredoc(data, limiters, s, res);
 		dup2(d, 0);
 		return (-1);
 	}
