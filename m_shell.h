@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 18:30:21 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:40:19 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:43:02 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ typedef struct ncd{
 	int	 	i;
 }t_ncd;
 typedef struct nx{
-	char	*PATH;
-	char	**PATHS;
+	char	*path;
+	char	**paths;
 	int		i;
 	t_ev	*ev;
 	char	*com;

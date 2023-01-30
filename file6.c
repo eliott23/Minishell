@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:59 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 20:27:12 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:42:49 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,23 @@
 
 int	nn_exec_h(t_nx *nx)
 {
-	while ((nx->PATHS)[(nx->i)])
+	while ((nx->paths)[(nx->i)])
 	{
-		(nx->PATH) = myft_strjoin((nx->PATHS)[(nx->i)], (nx->com));
-		if (!access((nx->PATH), F_OK))
+		(nx->path) = myft_strjoin((nx->paths)[(nx->i)], (nx->com));
+		if (!access((nx->path), F_OK))
 		{
-			freesplit((nx->PATHS));
-			if (!access((nx->PATH), X_OK))
+			freesplit((nx->paths));
+			if (!access((nx->path), X_OK))
 				return (1);
 			else
 			{
-				free((nx->PATH));
+				free((nx->path));
 				gv.e_s = 126;
 				return (0);
 			}
 		}
 		(nx->i)++;
-		free((nx->PATH));
+		free((nx->path));
 	}
 	return (-1);
 }
@@ -44,9 +44,9 @@ int	n_exec_h(t_nx *nx)
 	{
 		if (ev_cmp((nx->ev)->var, "PATH"))
 		{
-			(nx->PATH) = mft_strdup((nx->ev)->var + 5);
-			(nx->PATHS) = ft_split((nx->PATH), ':');
-			free((nx->PATH));
+			(nx->path) = mft_strdup((nx->ev)->var + 5);
+			(nx->paths) = ft_split((nx->path), ':');
+			free((nx->path));
 			i = nn_exec_h(nx);
 			if (i != -1)
 				return (i);
@@ -79,16 +79,16 @@ char	*exec_h(t_ev *ev, char *com)
 	int		r;
 
 	nx.i = 0;
-	nx.PATHS = NULL;
+	nx.paths = NULL;
 	nx.ev = ev;
 	nx.com = com;
 	r = n_exec_h(&nx);
 	if (!r)
 		return (0);
 	else if (r == 1)
-		return (nx.PATH);
-	if (nx.PATHS)
-		freesplit(nx.PATHS);
+		return (nx.path);
+	if (nx.paths)
+		freesplit(nx.paths);
 	if (ft_srch(com + 1, '/'))
 	{
 		if (!n2_exec_h(com))
