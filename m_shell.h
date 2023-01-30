@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 18:30:21 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:35:11 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:38:55 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct ncd{
 	t_ev	**x_ev_h;
 	t_ev	*temp;
 	char	*t_oldpwd;
-	char	*t_PWD;
+	char	*t_pwd;
 	char	**OLD_PWD;
 	int	 	t;
 	int	 	i;

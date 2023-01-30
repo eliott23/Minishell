@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:54 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:35:04 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:38:43 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int	n_cd_h(t_ncd *ncd)
 				(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
 				(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
 				free((ncd->t_oldpwd));
-				(ncd->t_PWD) = getcwd((ncd->t_PWD), 0);
-				(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_PWD));
-				free((ncd->t_PWD));
+				(ncd->t_pwd) = getcwd((ncd->t_pwd), 0);
+				(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
+				free((ncd->t_pwd));
 				(ncd->OLD_PWD)[2] = 0;
 				xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD));
 				freesplit((ncd->OLD_PWD));
@@ -75,7 +75,7 @@ int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 	t_ncd	ncd;
 
 	ncd.t_oldpwd = NULL;
-	ncd.t_PWD = NULL;
+	ncd.t_pwd = NULL;
 	ncd.i = 0;
 	ncd.temp = *ev_h;
 	ncd.ev_h = ev_h;
@@ -105,9 +105,9 @@ int	n_cd(t_ncd *ncd, char **args)
 		(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
 		(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
 		free((ncd->t_oldpwd));
-		(ncd->t_PWD) = getcwd((ncd->t_PWD), 0);
-		(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_PWD));
-		free((ncd->t_PWD));
+		(ncd->t_pwd) = getcwd((ncd->t_pwd), 0);
+		(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
+		free((ncd->t_pwd));
 		(ncd->OLD_PWD)[2] = 0;
 		xprt(ncd->ev_h, ncd->x_ev_h, (ncd->OLD_PWD));
 		freesplit((ncd->OLD_PWD));
