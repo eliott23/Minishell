@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:56 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/29 20:27:12 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:35:04 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	cd(t_ev **ev_h, t_ev **x_ev_h, char **args)
 {
 	t_ncd	ncd;
 
-	ncd.t_OLDPWD = NULL;
+	ncd.t_oldpwd = NULL;
 	ncd.t_PWD = NULL;
 	ncd.ev_h = ev_h;
 	ncd.x_ev_h = x_ev_h;
