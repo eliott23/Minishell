@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:54 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:38:43 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:40:07 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,15 @@ int	n_cd_h(t_ncd *ncd)
 				(ncd->t) = chdir(&(ncd->temp)->var[(ncd->i) + 1]);
 				if (!nn_cd_h(ncd))
 					return (0);
-				(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
-				(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
+				(ncd->old_pwd) = malloc(sizeof(char *) * 3);
+				(ncd->old_pwd)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
 				free((ncd->t_oldpwd));
 				(ncd->t_pwd) = getcwd((ncd->t_pwd), 0);
-				(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
+				(ncd->old_pwd)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
 				free((ncd->t_pwd));
-				(ncd->OLD_PWD)[2] = 0;
-				xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->OLD_PWD));
-				freesplit((ncd->OLD_PWD));
+				(ncd->old_pwd)[2] = 0;
+				xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->old_pwd));
+				freesplit((ncd->old_pwd));
 				return (0);
 			}
 			(ncd->i)++;
@@ -102,15 +102,15 @@ int	n_cd(t_ncd *ncd, char **args)
 			free((ncd->t_oldpwd));
 			return (0);
 		}
-		(ncd->OLD_PWD) = malloc(sizeof(char *) * 3);
-		(ncd->OLD_PWD)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
+		(ncd->old_pwd) = malloc(sizeof(char *) * 3);
+		(ncd->old_pwd)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
 		free((ncd->t_oldpwd));
 		(ncd->t_pwd) = getcwd((ncd->t_pwd), 0);
-		(ncd->OLD_PWD)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
+		(ncd->old_pwd)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
 		free((ncd->t_pwd));
-		(ncd->OLD_PWD)[2] = 0;
-		xprt(ncd->ev_h, ncd->x_ev_h, (ncd->OLD_PWD));
-		freesplit((ncd->OLD_PWD));
+		(ncd->old_pwd)[2] = 0;
+		xprt(ncd->ev_h, ncd->x_ev_h, (ncd->old_pwd));
+		freesplit((ncd->old_pwd));
 	}
 	else
 		cd_h(ncd->ev_h, ncd->x_ev_h);
