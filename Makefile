@@ -1,4 +1,4 @@
-FLAGS=-Wall -Wextra -Werror -Werror -Wall -Wextra -lreadline -L /goinfre/aababach/.brew/opt/readline/lib -I /goinfre/aababach/.brew/opt/readline/include
+FLAGS=-Werror -Wall -Wextra -lreadline -L /goinfre/aababach/.brew/opt/readline/lib -I /goinfre/aababach/.brew/opt/readline/include
 
 NAME=minishell\
 
@@ -88,7 +88,7 @@ parsing/redirect.o\
 parsing/run_heredoc.o\
 parsing/variables/expansion.o\
 parsing/variables/expansion1.o\
-parsing/variables/get_dollars.o
+parsing/variables/get_dollars.o\
 
 all:$(NAME) 
 
