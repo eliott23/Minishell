@@ -6,7 +6,7 @@
 /*   By: hel-mefe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:10:46 by hel-mefe          #+#    #+#             */
-/*   Updated: 2023/01/29 21:54:44 by aababach         ###   ########.fr       */
+/*   Updated: 2023/01/30 18:11:32 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ int	run_heredoc(t_data *data, t_queue *limiters)
 	int		trigger;
 	int		d;
 
-	trigger = 0;
-	res = NULL;
-	signal(SIGINT, h_c);
-	d = dup(0);
+	i_heredoc(&trigger, &d, &res);
 	while (limiters)
 	{
 		gv.flag = 0;
