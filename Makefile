@@ -1,4 +1,6 @@
-FLAGS=-Werror -Wall -Wextra -lreadline -L /goinfre/aababach/.brew/opt/readline/lib -I /goinfre/aababach/.brew/opt/readline/include
+FLAGS=-Werror -Wall -Wextra -I /goinfre/aababach/.brew/opt/readline/include\
+
+LIBRARY=-L /goinfre/aababach/.brew/opt/readline/lib -lreadline\
 
 NAME=minishell\
 
@@ -93,7 +95,7 @@ parsing/variables/get_dollars.o\
 all:$(NAME) 
 
 $(NAME):$(OBJ)
-	cc $(FLAGS) -o $@ $^
+	cc $(FLAGS) $(LIBRARY) -o $@ $^
 
 $(OBJ):$(SRC)
 	cc $(FLAGS) -c $^
