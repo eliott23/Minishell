@@ -96,8 +96,6 @@ expansion.o\
 expansion1.o\
 get_dollars.o\
 
-# OBJ := ${SRC:.c=.o}
-
 all:$(NAME) 
 
 $(NAME):$(OBJ)
