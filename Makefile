@@ -13,12 +13,14 @@ file5.c\
 file6.c\
 file7.c\
 file8.c\
+file9.c\
 ft_split.c\
 m_funct.c\
 m_parsing.c\
 m_tools.c\
 tools.c\
 tools_1.c\
+m_tools2.c\
 parsing/buckets.c\
 parsing/cmd.c\
 parsing/data_structures/commands.c\
@@ -57,45 +59,49 @@ file5.o\
 file6.o\
 file7.o\
 file8.o\
+file9.o\
 ft_split.o\
 m_funct.o\
 m_parsing.o\
 m_tools.o\
 tools.o\
 tools_1.o\
-parsing/buckets.o\
-parsing/cmd.o\
-parsing/data_structures/commands.o\
-parsing/data_structures/dollars.o\
-parsing/data_structures/heredocs.o\
-parsing/data_structures/queue.o\
-parsing/destroy.o\
-parsing/errors.o\
-parsing/expressions1.o\
-parsing/expressions2.o\
-parsing/functions/builtins.o\
-parsing/functions/compare.o\
-parsing/functions/conditions.o\
-parsing/functions/conditions2.o\
-parsing/functions/itoa.o\
-parsing/functions/join_strings.o\
-parsing/functions/quotes.o\
-parsing/functions/search.o\
-parsing/functions/strings.o\
-parsing/help_destroy.o\
-parsing/here_doc.o\
-parsing/parsing.o\
-parsing/prompt.o\
-parsing/redirect.o\
-parsing/run_heredoc.o\
-parsing/variables/expansion.o\
-parsing/variables/expansion1.o\
-parsing/variables/get_dollars.o\
+m_tools2.o\
+buckets.o\
+cmd.o\
+commands.o\
+dollars.o\
+heredocs.o\
+queue.o\
+destroy.o\
+errors.o\
+expressions1.o\
+expressions2.o\
+builtins.o\
+compare.o\
+conditions.o\
+conditions2.o\
+itoa.o\
+join_strings.o\
+quotes.o\
+search.o\
+strings.o\
+help_destroy.o\
+here_doc.o\
+parsing.o\
+prompt.o\
+redirect.o\
+run_heredoc.o\
+expansion.o\
+expansion1.o\
+get_dollars.o\
+
+# OBJ := ${SRC:.c=.o}
 
 all:$(NAME) 
 
 $(NAME):$(OBJ)
-	cc $(FLAGS) $(LIBRARY) -o $@ $^
+	cc $(FLAGS) $(LIBRARY) -o $(NAME) $(OBJ)
 
 $(OBJ):$(SRC)
 	cc $(FLAGS) -c $^
