@@ -6,7 +6,7 @@
 /*   By: aababach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 20:26:54 by aababach          #+#    #+#             */
-/*   Updated: 2023/01/30 18:40:07 by aababach         ###   ########.fr       */
+/*   Updated: 2023/02/01 21:34:47 by aababach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,14 @@ int	n_cd(t_ncd *ncd, char **args)
 		(ncd->t) = chdir(args[1]);
 		if ((ncd->t) == -1)
 		{
-			printf("cd : %s: %s\n", args[1], strerror(errno));
+			fprintf(stderr, "cd : %s: %s\n", args[1], strerror(errno));
 			free((ncd->t_oldpwd));
 			return (0);
 		}
 		(ncd->old_pwd) = malloc(sizeof(char *) * 3);
 		(ncd->old_pwd)[0] = myft_strjoin("OLDPWD=", (ncd->t_oldpwd));
+		if (!fix_cd(ncd))
+			return (1);
 		free((ncd->t_oldpwd));
 		(ncd->t_pwd) = getcwd((ncd->t_pwd), 0);
 		(ncd->old_pwd)[1] = myft_strjoin("PWD=", (ncd->t_pwd));
