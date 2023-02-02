@@ -5,7 +5,7 @@ LIBRARY=-L /goinfre/aababach/.brew/opt/readline/lib -lreadline\
 NAME=minishell\
 
 SRC=main.c\
-errors.c\
+m_errors.c\
 file1.c\
 file2.c\
 file3.c\
@@ -53,6 +53,7 @@ parsing/variables/get_dollars.c\
 
 OBJ=main.o\
 file1.o\
+m_errors.o\
 file2.o\
 file3.o\
 file4.o\
