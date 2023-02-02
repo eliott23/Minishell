@@ -41,3 +41,16 @@ char	*build_error(char *s1, char *s2, char *s3, char *s4)
 		free(s4);
 	return (res);
 }
+
+void	ihn(char **str, int caller, char *s)
+{
+	ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup(str[caller]), \
+	ft_strdup(": `"), ft_strjoin(s, "': not a valid identifier\n"), \
+	0), 1);
+}
+
+void	ihn2(char **args)
+{
+	ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("cd : "), \
+	ft_strdup(args[1]), ft_strdup(": "), ft_strjoin(strerror(errno), "\n")), 1);
+}

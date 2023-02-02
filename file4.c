@@ -98,9 +98,7 @@ int	n_cd(t_ncd *ncd, char **args)
 		(ncd->t) = chdir(args[1]);
 		if ((ncd->t) == -1)
 		{
-			ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("cd : "), \
-			ft_strdup(args[1]), ft_strdup(": "), ft_strjoin(strerror(errno), "\n")), 1);
-			// fprintf(stderr, "cd : %s: %s\n", args[1], strerror(errno)); [ERROR_EDITED]
+			ihn2(args);
 			free((ncd->t_oldpwd));
 			return (0);
 		}

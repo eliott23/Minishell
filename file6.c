@@ -61,8 +61,8 @@ int	n2_exec_h(char *com)
 	if (access(com + 1, F_OK))
 	{
 		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("minishell: "), \
-		ft_strdup(com + 1), ft_strdup(": no such file or directory\n"), NULL), 1);
-		// fprintf(stderr, "minishell: %s: no such file or directory\n", com + 1); [ERROR_EDITED]
+		ft_strdup(com + 1), \
+		ft_strdup(": no such file or directory\n"), NULL), 1);
 		g_v.e_s = 127;
 		return (0);
 	}
@@ -70,7 +70,6 @@ int	n2_exec_h(char *com)
 	{
 		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup(com + 1), \
 		ft_strdup(": "), ft_strdup(strerror(errno)), ft_strdup("\n")), 1);
-		// fprintf(stderr, "%s: %s\n", com + 1, strerror(errno)); [ERROR_EDITED]
 		g_v.e_s = 126;
 		return (0);
 	}
@@ -103,7 +102,6 @@ char	*exec_h(t_ev *ev, char *com)
 	g_v.e_s = 127;
 	ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("minishell: "), \
 	ft_strdup(com + 1), ft_strdup(": command not found\n"), NULL), 1);
-	// fprintf(stderr, "minishell: %s: command not found\n", com + 1); [ERROR_EDITED]
 	return (0);
 }
 

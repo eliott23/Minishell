@@ -59,6 +59,8 @@ typedef struct nread{
 	t_ev	*x_ev_h;
 }	t_nread;
 
+void			ihn2(char **args);
+void			ihn(char **str, int caller, char *s);
 int				fix_cd(t_ncd *ncd);
 void			set_status(t_data *data, t_queue *limiter, char *s, char *res);
 void			f_heredoc(t_data *data, t_queue *limiters, char *s, char *res);

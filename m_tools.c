@@ -54,7 +54,7 @@ int	n_v_exp(char *s, int caller, char **str, int *i)
 	else
 	{
 		if (caller != -1)
-			fprintf(stderr, "%s: `%s': not a valid identifier\n", str[caller], s);
+			ihn(str, caller, s);
 		return (0);
 	}
 	while (s[(*i)] && s[(*i)] != '=')
@@ -67,7 +67,7 @@ int	n_v_exp(char *s, int caller, char **str, int *i)
 		else
 		{
 			if (caller != -1)
-				fprintf(stderr, "%s: `%s': not a valid identifier\n", str[caller], s);
+				ihn(str, caller, s);
 			return (0);
 		}
 	}
@@ -87,7 +87,7 @@ int	v_exp(char *s, int caller)
 		if (s[i] == '=' && caller == 1)
 		{
 			if (caller != -1)
-				fprintf(stderr, "%s: `%s': not a valid identifier\n", str[caller], s);
+				ihn(str, caller, s);
 			return (0);
 		}
 		return (1);
