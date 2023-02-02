@@ -33,8 +33,9 @@ int	nn_cd_h(t_ncd *ncd)
 {
 	if ((ncd->t) == -1)
 	{
-		fprintf(stderr, "cd : %s: %s\n", \
-				&(ncd->temp)->var[(ncd->i) + 1], strerror(errno));
+		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("cd : "),\
+		ft_strdup(&(ncd->temp)->var[(ncd->i) + 1]), ft_strdup(strerror(errno)), ft_strdup("\n")), 1);
+		g_v.e_s = 1;
 		free((ncd->t_oldpwd));
 		return (0);
 	}
