@@ -64,7 +64,7 @@ int	n_cd_h(t_ncd *ncd)
 				(ncd->old_pwd)[2] = 0;
 				xprt((ncd->ev_h), (ncd->x_ev_h), (ncd->old_pwd));
 				freesplit((ncd->old_pwd));
-				return (0);
+				return (2);
 			}
 			(ncd->i)++;
 		}
@@ -75,6 +75,7 @@ int	n_cd_h(t_ncd *ncd)
 int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 {
 	t_ncd	ncd;
+	int		r;
 
 	ncd.t_oldpwd = NULL;
 	ncd.t_pwd = NULL;
@@ -84,8 +85,11 @@ int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 	ncd.x_ev_h = x_ev_h;
 	while (ncd.temp)
 	{
-		if (!n_cd_h(&ncd))
+		r = n_cd_h(&ncd);
+		if (!r)
 			return (0);
+		if (r == 2)
+			return (1);
 		ncd.temp = ncd.temp->next;
 	}
 	ft_putstr_fd(STDERR_FILENO, "cd: HOME not set\n", 0);
@@ -117,6 +121,6 @@ int	n_cd(t_ncd *ncd, char **args)
 		freesplit((ncd->old_pwd));
 	}
 	else
-		cd_h(ncd->ev_h, ncd->x_ev_h);
+		return (cd_h(ncd->ev_h, ncd->x_ev_h));
 	return (1);
 }
