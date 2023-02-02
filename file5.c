@@ -91,16 +91,24 @@ void	handle_errors(char *cmd)
 		exit(0);
 	if (!cmd[0])
 	{
-		fprintf(stderr, "Minishell : %s : Command not found\n", cmd);
+		// fprintf(stderr, "Minishell : %s : Command not found\n", cmd); [ERROR_EDITED]
+		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("Minishell : "), \
+		ft_strdup(cmd), ft_strdup(" : Command not found\n"), NULL), 1);
 		exit(127);
 	}
 	fd = open(cmd, O_RDWR);
 	if (fd < 0 && ft_srch(cmd, '/'))
 	{
-		fprintf(stderr, "%s : %s\n", cmd, strerror(errno));
+		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup(cmd), \
+		ft_strdup(" : "), ft_strdup(strerror(errno)), ft_strdup("\n")), 1);
+		// fprintf(stderr, "%s : %s\n", cmd, strerror(errno)); [ERROR_EDITED]
 		close(fd);
 	}
 	else if (ft_srch(cmd, '/'))
-		fprintf(stderr, "%s : Command not found\n", cmd);
+	{
+		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup(cmd), \
+		ft_strdup(" : Command not found\n"), NULL, NULL), 1);
+		// fprintf(stderr, "%s : Command not found\n", cmd); [ERROR_EDITED]
+	}
 	exit(126);
 }

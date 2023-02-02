@@ -5,6 +5,7 @@ LIBRARY=-L /goinfre/aababach/.brew/opt/readline/lib -lreadline\
 NAME=minishell\
 
 SRC=main.c\
+errors.c\
 file1.c\
 file2.c\
 file3.c\

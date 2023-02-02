@@ -76,7 +76,9 @@ int	what_to_call(int v, t_ev **ev_h, t_ev **x_ev_h, char **args)
 		return (echo(args + 1));
 	else if (v == 6)
 	{
-		fprintf(stderr, "exit\n");
+		ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("exit\n"), \
+		NULL, NULL, NULL), 1);
+		// fprintf(stderr, "exit\n"); [ERROR_EDITED]
 		if (args && args[1])
 			exit ((char)ft_atoi(args[1]));
 		exit(0);

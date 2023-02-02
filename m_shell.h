@@ -129,5 +129,6 @@ char			**ft_split(char const *s, char c);
 int				m_parsing(char **av);
 char			*myft_strjoin(char const *s1, char const *s2);
 int				len(char *s);
-
+char			*build_error(char *s1, char *s2, char *s3, char *s4);
+void			ft_putstr_fd(int fd, const char *s, int free_bool);
 #endif

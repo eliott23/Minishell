@@ -44,7 +44,9 @@ void	h_c(int i)
 
 void	error_one_cmd(t_nread *nread)
 {
-	fprintf(stderr, "%s : %s\n", \
+	ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup((nread->pd)->commands->error_file), ft_strdup(" : "), \
+	ft_strdup(strerror(nread->t_errno)), ft_strdup("\n")), 1);
+	// [ERROR_EDITED] - fprintf(stderr, "%s : %s\n", \
 	(nread->pd)->commands->error_file, \
 	strerror((nread->t_errno)));
 	g_v.e_s = 1;
