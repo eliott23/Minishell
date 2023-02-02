@@ -33,7 +33,7 @@ int	nn_cd_h(t_ncd *ncd)
 {
 	if ((ncd->t) == -1)
 	{
-		printf("cd : %s: %s\n", \
+		fprintf(stderr, "cd : %s: %s\n", \
 				&(ncd->temp)->var[(ncd->i) + 1], strerror(errno));
 		free((ncd->t_oldpwd));
 		return (0);
@@ -86,7 +86,7 @@ int	cd_h(t_ev **ev_h, t_ev **x_ev_h)
 			return (0);
 		ncd.temp = ncd.temp->next;
 	}
-	printf("cd: HOME not set\n");
+	ft_putstr_fd(STDERR_FILENO, "cd: HOME not set\n", 0);
 	return (0);
 }
 
@@ -99,7 +99,7 @@ int	n_cd(t_ncd *ncd, char **args)
 		if ((ncd->t) == -1)
 		{
 			ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup("cd : "), \
-			ft_strdup(args[1]), ft_strdup(": "), ft_strdup(ft_strjoin(strerror, "\n"))), 1);
+			ft_strdup(args[1]), ft_strdup(": "), ft_strjoin(strerror(errno), "\n")), 1);
 			// fprintf(stderr, "cd : %s: %s\n", args[1], strerror(errno)); [ERROR_EDITED]
 			free((ncd->t_oldpwd));
 			return (0);

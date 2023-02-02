@@ -49,26 +49,25 @@ int	ev_cmp(char *s1, char *s2)
 int	n_v_exp(char *s, int caller, char **str, int *i)
 {
 	if ((s[(*i)] >= 'a' && s[(*i)] <= 'z') \
-		|| (s[(*i)] >= 'A' && s[(*i)] <= 'Z')
-		|| s[(*i)] == '_')
+	|| (s[(*i)] >= 'A' && s[(*i)] <= 'Z') || s[(*i)] == '_')
 		(*i)++;
 	else
 	{
 		if (caller != -1)
-			printf("%s: `%s': not a valid identifier\n", str[caller], s);
+			fprintf(stderr, "%s: `%s': not a valid identifier\n", str[caller], s);
 		return (0);
 	}
 	while (s[(*i)] && s[(*i)] != '=')
 	{
 		if ((s[(*i)] >= '0' && s[(*i)] <= '9') || \
-			(s[(*i)] >= 'a' && s[(*i)] <= 'z') \
+		(s[(*i)] >= 'a' && s[(*i)] <= 'z') \
 			|| (s[(*i)] >= 'A' && s[(*i)] <= 'Z')
 			|| s[(*i)] == '_')
 			(*i)++;
 		else
 		{
 			if (caller != -1)
-				printf("%s: `%s': not a valid identifier\n", str[caller], s);
+				fprintf(stderr, "%s: `%s': not a valid identifier\n", str[caller], s);
 			return (0);
 		}
 	}
@@ -88,7 +87,7 @@ int	v_exp(char *s, int caller)
 		if (s[i] == '=' && caller == 1)
 		{
 			if (caller != -1)
-				printf("%s: `%s': not a valid identifier\n", str[caller], s);
+				fprintf(stderr, "%s: `%s': not a valid identifier\n", str[caller], s);
 			return (0);
 		}
 		return (1);

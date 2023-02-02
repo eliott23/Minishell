@@ -70,8 +70,6 @@ void	error_m_cmds(t_cmd *head, t_nread *nread)
 {
 	ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup(head->error_file), \
 	ft_strdup(" : "), ft_strdup(strerror(nread->t_errno)), ft_strdup("\n")), 1);
-	// fprintf(stderr, "%s : %s\n", \
-	head->error_file, strerror((nread->t_errno))); [ERROR_EDITED]
 	exit(1);
 }
 
@@ -113,9 +111,9 @@ void	pre_exec(int hdoc, t_nread *nread)
 		{
 			if ((nread->pd)->err)
 			{
-				ft_putstr_fd(STDERR_FILENO, build_error(ft_strdup((nread->pd)->err), \
+				ft_putstr_fd(STDERR_FILENO, \
+				build_error(ft_strdup((nread->pd)->err), \
 				ft_strdup("\n"), NULL, NULL), 1);
-				// fprintf(stderr, "%s\n", (nread->pd)->err); [ERROR_EDITED]
 			}
 			g_v.e_s = 258;
 		}
